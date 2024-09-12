@@ -1,3 +1,4 @@
+// Existing Icons
 export const CableTv = require('../assets/icons/cableTv.png');
 export const BoardbandIcon = require('../assets/icons/boardbandIcon.png');
 export const Challan = require('../assets/icons/challan.png');
@@ -18,13 +19,87 @@ export const Saving = require('../assets/icons/saving.png');
 export const UserIcon = require('../assets/icons/user.png');
 export const Wallet = require('../assets/icons/wallet.png');
 export const Water = require('../assets/icons/water.png');
-
-
+export const Account = require('../assets/icons/account.png');
+export const BirthCalender = require('../assets/icons/calender.png');
+export const CancelRed = require('../assets/icons/cancel_red.png');
+export const CircleDone = require('../assets/icons/circle_done.png');
+export const CircleGray = require('../assets/icons/circleGray.png');
+export const CircleGraySmall = require('../assets/icons/circleGraySmall.png');
+export const CustomerReview = require('../assets/icons/customerReview.png');
+export const Done3 = require('../assets/icons/done3.png');
+export const Downloads = require('../assets/icons/downloads.png');
+export const Earnings = require('../assets/icons/earnings.png');
+export const EmailIcon = require('../assets/icons/email.png');
+export const Exchange = require('../assets/icons/exchange.png');
+export const EyeIcon = require('../assets/icons/eye_icon.png');
+export const EyesClose = require('../assets/icons/eyes_close.png');
+export const FaqQuestion = require('../assets/icons/faq_question.png');
+export const GasIcon = require('../assets/icons/gas_icon2.png');
+export const Invest = require('../assets/icons/invest.png');
+export const Location = require('../assets/icons/location.png');
+export const LockIcon = require('../assets/icons/lock.png');
+export const Logout = require('../assets/icons/logout.png');
+export const MobileIcon = require('../assets/icons/mobileIcon2.png');
+export const MoreIcon = require('../assets/icons/more.png');
+export const NewScanner = require('../assets/icons/new_scanner.jpg');
+export const NoImage = require('../assets/icons/no_image.jpg');
+export const OkGreenIcon = require('../assets/icons/okGreenIcon.png');
+export const PaymentMethod = require('../assets/icons/paymentMethod.png');
+export const Placeholder = require('../assets/icons/placeholder.png');
+export const Portfolio = require('../assets/icons/portfolio.png');
+export const PrepaidMobIcon = require('../assets/icons/prepaid_mob_icon.png');
+export const Privacy = require('../assets/icons/privacy.png');
+export const ProfileIcon = require('../assets/icons/profile.png');
+export const ReferralIconGray = require('../assets/icons/referal_icon_gray.png');
+export const ReferredImg = require('../assets/icons/refered_img.png');
+export const ReferredImg2 = require('../assets/icons/refered_img2.png');
+export const RightArrowGreen = require('../assets/icons/right_arrow_green.png');
+export const SuccessRechargeImg = require('../assets/icons/success_recharge_img.png');
+export const SupportImg = require('../assets/icons/support_img.png');
+export const TelephoneIcon = require('../assets/icons/telephone_icon.png');
+export const TermsAndConditions = require('../assets/icons/terms_and_conditions.png');
+export const TermsConditionIcon = require('../assets/icons/terms_condition_icon.png');
+export const TransferIcon = require('../assets/icons/transfer_icon1.png');
+export const UserDummy = require('../assets/icons/user_dummy.png');
+export const Withdrawal = require('../assets/icons/withdrawal.png');
 
 // -------App Image ----,
 export const WelcomImg =require('../assets/moneyImage/smartWallet.png')
 export const LoginImage =require('../assets/moneyImage/loginImage.png')
 export const ResetPass =require('../assets/moneyImage/resetPass.png')
+export const HelpEmailImage = require('../assets/moneyImage/help_email_image.png');
+export const CcavenueLogo = require('../assets/moneyImage/ccavenue_logo.png');
+export const CreditCardBanner = require('../assets/moneyImage/credit_card_banner.png');
+export const DashboardOne = require('../assets/moneyImage/dashboarOne.png');
+export const ElectricityBanner = require('../assets/moneyImage/electricity_banner.png');
+export const FaqBanner = require('../assets/moneyImage/faq_banner.png');
+export const FaqImage = require('../assets/moneyImage/faqImage.png');
+export const GiftCardBg = require('../assets/moneyImage/gift_card_bg.jpg');
+export const HelpAddressImg = require('../assets/moneyImage/help_address_img111.png');
+export const HelpMobileImage = require('../assets/moneyImage/help_mobile_image.png');
+export const HelpAddress = require('../assets/moneyImage/helpAddress.png');
+export const HelpEmail = require('../assets/moneyImage/helpEmail.png');
+export const HelpSupportPng = require('../assets/moneyImage/helpSupportpng.png');
+export const HomeBanner = require('../assets/moneyImage/home_banner111.png');
+export const InsuranceIcon = require('../assets/moneyImage/insurance_icon1.png');
+export const InvestGreen = require('../assets/moneyImage/investGreen.png');
+export const PayAnywhere = require('../assets/moneyImage/pay_anywhere.png');
+export const PayAnywhereAlt = require('../assets/moneyImage/payAnywhere.png');
+export const ProfileBackImage = require('../assets/moneyImage/profile_back_image.jpg');
+export const QrImage1 = require('../assets/moneyImage/qr_image1.jpeg');
+export const QrImage2 = require('../assets/moneyImage/qr_image2.jpeg');
+export const QuickLogo = require('../assets/moneyImage/quickLOGO.png');
+export const RazorpayIcon = require('../assets/moneyImage/razorpay_icon.png');
+export const Razorpay = require('../assets/moneyImage/razorpay.png');
+export const RegistrationImg = require('../assets/moneyImage/registration_img.png');
+export const RewardImg = require('../assets/moneyImage/reward_img.png');
+export const TotalInvestImg = require('../assets/moneyImage/total_invest_img.png');
+export const TotalProfitImg = require('../assets/moneyImage/total_profit_img.png');
+export const TrackStatement = require('../assets/moneyImage/track_statement.png');
+export const WRemove = require('../assets/moneyImage/w_remove.png');
+export const WithdrawalOne = require('../assets/moneyImage/withdrawalOne.png');
+export const WithdrawalTwo = require('../assets/moneyImage/withdrawalTwo.png');
+
 
 
 // -------Banner Image ----,
