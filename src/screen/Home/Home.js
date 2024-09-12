@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
-  Alert,
   Text,
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
@@ -40,8 +39,9 @@ const Home = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
-        showsVerticalScrollIndicator={false}>
+        contentContainerStyle={styles.scrollViewContainer}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.containLog}>
           <Text style={styles.headText}>Hello John</Text>
          <ImageSlider/>
@@ -174,30 +174,33 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     backgroundColor: Colors.White,
   },
+  scrollViewContainer: {
+    flexGrow: 1,
+    paddingHorizontal: 15,
+  },
   headText: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '600',
     color: Colors.themeColor,
     marginVertical: 10,
   },
   containLog: {
-    paddingHorizontal: 15,
+    paddingBottom: 20,
   },
   imageStyle: {
-    width: 350,
+    width: '100%',
     height: 160,
-    resizeMode: 'contain',
-    alignSelf: 'center',
-    marginTop: 15,
+    resizeMode: 'cover',
+    borderRadius: 15,
+    marginVertical: 10,
   },
   blackText: {
-    fontSize: 15.5,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '500',
     color: Colors.Black,
-    marginTop: 15,
+    marginVertical: 10,
   },
   viewCard: {
     borderRadius: 15,

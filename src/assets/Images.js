@@ -61,6 +61,10 @@ export const TermsConditionIcon = require('../assets/icons/terms_condition_icon.
 export const TransferIcon = require('../assets/icons/transfer_icon1.png');
 export const UserDummy = require('../assets/icons/user_dummy.png');
 export const Withdrawal = require('../assets/icons/withdrawal.png');
+export const UpArrow = require('../assets/icons/UpArrow.png');
+export const DoubleDown = require('../assets/icons/DoubleDown.png');
+export const DownArrow = require('../assets/icons/DownArrow.png');
+export const LeftArrow = require('../assets/icons/LeftArrow.png');
 
 // -------App Image ----,
 export const WelcomImg =require('../assets/moneyImage/smartWallet.png')
