@@ -11,6 +11,8 @@ import ChangePassword from '../screen/authScreen/ChangePassword';
 import PersonalInfo from '../screen/authScreen/PersonalInfo';
 import Home from '../screen/Home/Home';
 import Profile from '../screen/Profile/Profile';
+import Faq from '../screen/Setting/Faq';
+import HelpAndSupport from '../screen/Setting/HelpAndSupport';
 
 
 
@@ -39,6 +41,8 @@ const NavigationScreen = () => {
         <Stack.Screen name='PersonalInfo' component={PersonalInfo} options={{headerShown:false}}/>
         <Stack.Screen name='Home' component={Home} options={{headerShown:false}}/>
         <Stack.Screen name='Profile' component={Profile} options={{headerShown:false}}/>
+        <Stack.Screen name='Faq' component={Faq} options={{headerShown:false}}/>
+        <Stack.Screen name='HelpAndSupport' component={HelpAndSupport} options={{headerShown:false}}/>
         </Stack.Navigator>
     </NavigationContainer>
   );

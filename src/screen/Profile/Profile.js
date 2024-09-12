@@ -1,69 +1,121 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { CustomerReview, DownArrow, FaqImage, FaqQuestion, Logout, Privacy, ProfileIcon, ReferredImg, SupportImg, UpArrow } from '../../assets/Images';
+import LinearGradient from 'react-native-linear-gradient';
 
-export default function Profile() {
+const userData = {
+  "name": "Mr. Dhruv Soni",
+  "email": "dhruv@gmail.com",
+  "mobile": "200022342",
+  "dob": "10-09-2023",
+  "transactions": [
+    { "id": "1", "amount": "$100", "date": "2024-09-01" },
+    { "id": "2", "amount": "$50", "date": "2024-09-10" }
+  ]
+};
+const Profile = ({ navigation }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    setUser(userData);
+  }, []);
+
+  const toggleExpand = () => setIsExpanded(prevState => !prevState);
+
+  if (!user) {
+    return <Text>Loading...</Text>; // Placeholder for loading state
+  }
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.box}>
-        <Text style={styles.title}>Profile Icon</Text>
-        <Text style={styles.subtitle}>My Profile</Text>
-        <Text style={styles.arrow}>↑/↓</Text>
-      </View>
+    <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.box}>
+          <Image source={ProfileIcon} style={styles.iconStyle} />
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '90%', alignItems: 'center' }}>
+            <Text style={styles.subtitle}>My Profile</Text>
+            <TouchableOpacity onPress={toggleExpand}>
+              <Image source={isExpanded ? UpArrow : DownArrow} style={styles.iconStyle} />
+            </TouchableOpacity>
+          </View>
+        </View>
 
-      <View style={styles.box}>
-        <Text style={styles.title}>Column</Text>
-        <Text style={styles.text}>Name</Text>
-        <Text style={styles.text}>Email</Text>
-        <Text style={styles.text}>Mob</Text>
-        <Text style={styles.text}>DOB</Text>
-      </View>
+        {isExpanded && (
+          <View style={styles.box2}>
+            <Text style={styles.text}>Name: {user.name}</Text>
+            <Text style={styles.text}>Email: {user.email}</Text>
+            <Text style={styles.text}>Mobile: {user.mobile}</Text>
+            <Text style={styles.text}>DOB: {user.dob}</Text>
+          </View>
+        )}
 
-      <View style={styles.box}>
-        
-        <Text style={styles.title}>Transaction History</Text>
-      </View>
+        <TouchableOpacity style={styles.box}>
+          <Image source={ProfileIcon} style={styles.iconStyle} />
+          <Text style={styles.subtitle}>Transaction History</Text>
+        </TouchableOpacity>
 
-      <View style={styles.box}>
-        <Text style={styles.title}>FAQ</Text>
-      </View>
+        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('Faq')}>
+          <Image source={FaqQuestion} style={styles.iconStyle} />
+          <Text style={styles.subtitle}>FAQ</Text>
+        </TouchableOpacity>
 
-      <View style={styles.box}>
-        <Text style={styles.title}>Referred</Text>
-      </View>
+        <TouchableOpacity style={styles.box}>
+          <Image source={ReferredImg} style={styles.iconStyle} />
+          <Text style={styles.subtitle}>Referred</Text>
+        </TouchableOpacity>
 
-      <View style={styles.box}>
-        <Text style={styles.title}>Terms and Conditions</Text>
-      </View>
+        <TouchableOpacity style={styles.box}>
+          <Image source={ProfileIcon} style={styles.iconStyle} />
+          <Text style={styles.subtitle}>Terms and Conditions</Text>
+        </TouchableOpacity>
 
-      <View style={styles.box}>
-        <Text style={styles.title}>Privacy and Policy</Text>
-      </View>
+        <TouchableOpacity style={styles.box}>
+          <Image source={Privacy} style={styles.iconStyle} />
+          <Text style={styles.subtitle}>Privacy and Policy</Text>
+        </TouchableOpacity>
 
-      <View style={styles.box}>
-        <Text style={styles.title}>Rate Us</Text>
-      </View>
+        <TouchableOpacity style={styles.box}>
+          <Image source={CustomerReview} style={styles.iconStyle} />
+          <Text style={styles.subtitle}>Rate Us</Text>
+        </TouchableOpacity>
 
-      <View style={styles.box}>
-        <Text style={styles.title}>Help and Support</Text>
-      </View>
+        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('HelpAndSupport')}>
+          <Image source={SupportImg} style={styles.iconStyle} />
+          <Text style={styles.subtitle}>Help and Support</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.box}>
-        <Text style={styles.title}>Sign Out</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity style={styles.box}>
+          <Image source={Logout} style={styles.iconStyle} />
+          <Text style={styles.subtitle}>Sign Out</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: '#f8f8f8', // Background color of the page
-    padding: 16,
+    padding: 6,
+    paddingTop: 15,
   },
   box: {
     backgroundColor: 'white',
     borderRadius: 10,
-    padding: 16,
+    padding: 8,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  box2: {
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 8,
     marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -88,4 +140,14 @@ const styles = StyleSheet.create({
     color: '#333',
     marginTop: 8,
   },
+  iconStyle: {
+    width: 30,
+    height: 20,
+    resizeMode: 'contain',
+    marginVertical: 6,
+    marginRight: 5,
+  },
 });
+
+
+export default Profile;
