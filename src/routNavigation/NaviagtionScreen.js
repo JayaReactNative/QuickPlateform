@@ -10,6 +10,7 @@ import OTPscreen from '../screen/authScreen/OTPscreen';
 import ChangePassword from '../screen/authScreen/ChangePassword';
 import PersonalInfo from '../screen/authScreen/PersonalInfo';
 import Home from '../screen/Home/Home';
+import Profile from '../screen/Profile/Profile';
 
 
 
@@ -28,7 +29,7 @@ const Stack = createNativeStackNavigator()
 const NavigationScreen = () => {
  return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName='Home'>
+        <Stack.Navigator initialRouteName='Profile'>
         <Stack.Screen name='Splash' component={Splash} options={{headerShown:false}}/>
         <Stack.Screen name='WelcomeScreen' component={WelcomeScreen} options={{headerShown:false}}/>
         <Stack.Screen name='Login' component={Login} options={{headerShown:false}}/>
@@ -37,6 +38,7 @@ const NavigationScreen = () => {
         <Stack.Screen name='ChangePassword' component={ChangePassword} options={{headerShown:false}}/>
         <Stack.Screen name='PersonalInfo' component={PersonalInfo} options={{headerShown:false}}/>
         <Stack.Screen name='Home' component={Home} options={{headerShown:false}}/>
+        <Stack.Screen name='Profile' component={Profile} options={{headerShown:false}}/>
         </Stack.Navigator>
     </NavigationContainer>
   );
