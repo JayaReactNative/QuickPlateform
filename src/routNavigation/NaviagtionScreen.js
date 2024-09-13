@@ -21,6 +21,7 @@ import Faq from '../screen/Setting/Faq';
 import HelpAndSupport from '../screen/Setting/HelpAndSupport';
 import ScannerCode from '../screen/Home/ScannerCode';
 import CapitalWithdrawal from '../screen/Home/CapitalWithdrawal';
+import TermsAndCondition from '../screen/Setting/TermsAndCondition';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator(); // Create the Tab Navigator
@@ -216,6 +217,7 @@ const NavigationScreen = () => {
         <Stack.Screen name='HelpAndSupport' component={HelpAndSupport} options={{headerShown:false}}/>
         <Stack.Screen name='ScannerCode' component={ScannerCode} options={{headerShown:false}}/>
         <Stack.Screen name='CapitalWithdrawal' component={CapitalWithdrawal} options={{headerShown:false}}/>
+        <Stack.Screen name='TermsAndCondition' component={TermsAndCondition} options={{headerShown:false}}/>
 
         {/* Add Tab Navigation as a screen in Stack Navigator */}
         <Stack.Screen
