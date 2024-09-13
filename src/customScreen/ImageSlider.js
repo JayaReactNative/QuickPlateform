@@ -21,6 +21,7 @@ const ImageSlider = () => {
         autoplayLoop
         index={0}
         showPagination
+        paginationStyleItem={{height:10,width:10}}
         data={images}
         renderItem={({ item }) => (
           <View style={styles.child}>

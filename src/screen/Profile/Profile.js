@@ -25,7 +25,7 @@ const Profile = ({ navigation }) => {
   const toggleExpand = () => setIsExpanded(prevState => !prevState);
 
   if (!user) {
-    return <Text>Loading...</Text>; // Placeholder for loading state
+    return <Text>Loading...</Text>; 
   }
 
   return (
@@ -99,7 +99,7 @@ const Profile = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 6,
+    paddingHorizontal: 6,
     paddingTop: 15,
   },
   box: {

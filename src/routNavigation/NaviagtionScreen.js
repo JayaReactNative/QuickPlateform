@@ -24,9 +24,8 @@ import CapitalWithdrawal from '../screen/Home/CapitalWithdrawal';
 import TermsAndCondition from '../screen/Setting/TermsAndCondition';
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator(); // Create the Tab Navigator
+const Tab = createBottomTabNavigator(); 
 
-// Bottom Tab Navigator
 const TabNavigation = () => {
   return (
     <Tab.Navigator
