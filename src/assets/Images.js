@@ -22,6 +22,7 @@ export const Water = require('../assets/icons/water.png');
 export const Accounticon = require('../assets/icons/account.png');
 export const BirthCalender = require('../assets/icons/calender.png');
 export const CancelRed = require('../assets/icons/cancel_red.png');
+export const Delete = require('../assets/icons/delete.png');
 export const CircleDone = require('../assets/icons/circle_done.png');
 export const CircleGray = require('../assets/icons/circleGray.png');
 export const CircleGraySmall = require('../assets/icons/circleGraySmall.png');
