@@ -64,7 +64,7 @@ const Profile = ({ navigation }) => {
           <Text style={styles.subtitle}>Referred</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.box}>
+        <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('TermsAndCondition')}>
           <Image source={ProfileIcon} style={styles.iconStyle} />
           <Text style={styles.subtitle}>Terms and Conditions</Text>
         </TouchableOpacity>

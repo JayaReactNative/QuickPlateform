@@ -11,16 +11,17 @@ import PasswordScreen from '../screen/authScreen/PasswordScreen';
 import OTPscreen from '../screen/authScreen/OTPscreen';
 import ChangePassword from '../screen/authScreen/ChangePassword';
 import PersonalInfo from '../screen/authScreen/PersonalInfo';
-import Home from '../screen/Home/Home'; // Your Home Screen
+// import Home from '../screen/Home/Home'; // Your Home Screen
 import Profile from '../screen/Profile/Profile'; // Your Profile Screen
 import {MoreIcon, ProfileIcon,PortfolioIcon, Accounticon} from '../assets/Images';
 import {Colors} from '../assets/Colors';
 import Portfolio from '../screen/Portfolio/Portfolio';
 import Account from '../screen/Account/Account';
 import Home from '../screen/Home/Home';
-import Profile from '../screen/Profile/Profile';
+// import Profile from '../screen/Profile/Profile';
 import Faq from '../screen/Setting/Faq';
 import HelpAndSupport from '../screen/Setting/HelpAndSupport';
+import TermsAndCondition from '../screen/Setting/TermsAndCondition';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator(); // Create the Tab Navigator
@@ -207,6 +208,7 @@ const NavigationScreen = () => {
         />
         <Stack.Screen name='Faq' component={Faq} options={{headerShown:false}}/>
         <Stack.Screen name='HelpAndSupport' component={HelpAndSupport} options={{headerShown:false}}/>
+        <Stack.Screen name='TermsAndCondition' component={TermsAndCondition} options={{headerShown:false}}/>
 
         {/* Add Tab Navigation as a screen in Stack Navigator */}
         <Stack.Screen
