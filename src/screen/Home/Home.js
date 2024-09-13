@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -6,13 +6,15 @@ import {
   Image,
   ScrollView,
   Text,
+  TouchableOpacity,
+  Modal,
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import {
-  banner,
   BoardbandIcon,
-  CableTv,
+  CancelRed,
   Challan,
+  Delete,
   ElectricityIcon,
   GasIcon,
   Housing,
@@ -24,7 +26,9 @@ import {
   MoreIcon,
   Municipal,
   NetworkIcon,
+  NewScanner,
   PostPaidIcon,
+  QrImage2,
   RechargeIcon,
   RightArrowGreen,
   TotalInvestImg,
@@ -34,17 +38,20 @@ import {
   WRemove,
 } from '../../assets/Images';
 import ImageSlider from '../../customScreen/ImageSlider';
+import {colors} from 'react-native-swiper-flatlist/src/themes';
 
-const Home = () => {
+const Home = ({navigation}) => {
+  const [activeTab, setActiveTab] = useState('Invest');
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         <View style={styles.containLog}>
           <Text style={styles.headText}>Hello John</Text>
-         <ImageSlider/>
+          <ImageSlider />
 
           {/* ----------not get image */}
           <View style={styles.rowView}>
@@ -123,18 +130,77 @@ const Home = () => {
 
           <Text style={styles.blackText}>Favorites</Text>
           <View style={styles.rowView}>
-            <View style={styles.viewCard}>
-              <Image source={Invest} style={styles.iconStyle} />
-              <Text style={styles.iconName}>Invest</Text>
-            </View>
-            <View style={styles.viewCard}>
-              <Image source={Withdrawal} style={styles.iconStyle} />
-              <Text style={styles.iconName}>Withdrawal</Text>
-            </View>
-            <View style={styles.viewCard}>
-              <Image source={MoreIcon} style={styles.iconStyle} />
-              <Text style={styles.iconName}>Reward</Text>
-            </View>
+            <TouchableOpacity
+              style={[
+                styles.viewCard,
+                activeTab === 'Invest' && {backgroundColor: Colors.themeColor},
+              ]}
+              onPress={() => {
+                setActiveTab('Invest'), setModalVisible(!modalVisible);
+              }}>
+              <Image
+                source={Invest}
+                style={[
+                  styles.iconStyle,
+                  activeTab === 'Invest' && {tintColor: 'white'},
+                ]}
+              />
+              <Text
+                style={[
+                  styles.iconName,
+                  activeTab === 'Invest' && {color: 'white'},
+                ]}>
+                Invest
+              </Text>
+            </TouchableOpacity>
+
+            {/* Withdrawal Tab */}
+            <TouchableOpacity
+              style={[
+                styles.viewCard,
+                activeTab === 'Withdrawal' && {
+                  backgroundColor: Colors.themeColor,
+                },
+              ]}
+              onPress={() => setActiveTab('Withdrawal')}>
+              <Image
+                source={Withdrawal}
+                style={[
+                  styles.iconStyle,
+                  activeTab === 'Withdrawal' && {tintColor: 'white'},
+                ]}
+              />
+              <Text
+                style={[
+                  styles.iconName,
+                  activeTab === 'Withdrawal' && {color: 'white'},
+                ]}>
+                Withdrawal
+              </Text>
+            </TouchableOpacity>
+
+            {/* Reward Tab */}
+            <TouchableOpacity
+              style={[
+                styles.viewCard,
+                activeTab === 'Reward' && {backgroundColor: Colors.themeColor},
+              ]}
+              onPress={() => setActiveTab('Reward')}>
+              <Image
+                source={MoreIcon}
+                style={[
+                  styles.iconStyle,
+                  activeTab === 'Reward' && {tintColor: 'white'},
+                ]}
+              />
+              <Text
+                style={[
+                  styles.iconName,
+                  activeTab === 'Reward' && {color: 'white'},
+                ]}>
+                Reward
+              </Text>
+            </TouchableOpacity>
           </View>
 
           <Text style={styles.blackText}>Recent</Text>
@@ -153,16 +219,83 @@ const Home = () => {
             </View>
           </View>
 
-          <View style={styles.captialCard}>
+          <TouchableOpacity style={styles.captialCard} onPress={()=>navigation.navigate('CapitalWithdrawal')}>
             <Image source={WRemove} style={styles.iconRecentStyle} />
-            <View style={{justifyContent:'space-between',alignItems:"center",flexDirection:'row',width:'70%'}}>
-            <Text style={styles.blackText}>Capital Withdrawal</Text>
-            <Image
-              source={RightArrowGreen}
-              style={{width: 30, height: 20, resizeMode: 'contain',marginTop: 15,}}
-            />
+            <View
+              style={{
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: 'row',
+                width: '70%',
+              }}>
+              <Text style={styles.blackText}>Capital Withdrawal</Text>
+              <Image
+                source={RightArrowGreen}
+                style={{
+                  width: 30,
+                  height: 20,
+                  resizeMode: 'contain',
+                  marginTop: 15,
+                }}
+              />
             </View>
-          </View>
+          </TouchableOpacity>
+
+          <Modal
+            transparent={true}
+            visible={modalVisible}
+            animationType="none"
+            onRequestClose={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalGrey}>
+                <View style={styles.modalCart}>
+                  <TouchableOpacity
+                    style={{alignSelf: 'flex-end', marginTop: 7}}
+                    onPress={() => setModalVisible(false)}>
+                    <Image
+                      source={Delete}
+                      style={{width: 30, height: 23, resizeMode: 'contain'}}
+                    />
+                  </TouchableOpacity>
+                  <Text
+                    style={[
+                      styles.blackText,
+                      {fontWeight: '700', marginTop: 16},
+                    ]}>
+                    Select Payment Mode
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('ScannerCode'),
+                        setModalVisible(false);
+                    }}
+                    style={[
+                      styles.captialCard,
+                      {
+                        backgroundColor: Colors.White,
+                        padding: 10,
+                        width: 320,
+                        marginTop: 8,
+                      },
+                    ]}>
+                    <Image source={QrImage2} style={{height: 50, width: 50}} />
+                    <View style={{marginLeft: 17}}>
+                      <Text
+                        style={[
+                          styles.iconRecentName,
+                          {color: colors.headText},
+                        ]}>
+                        QR Scan Payment
+                      </Text>
+                      <Text style={styles.iconRecentName}>
+                        Quickly Platforms
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -179,6 +312,7 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
     paddingHorizontal: 15,
+    paddingBottom:35
   },
   headText: {
     fontSize: 18,
@@ -293,8 +427,34 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    shadowOpacity: 0.45,
+    shadowRadius: 4.9,
     elevation: 5,
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalCart: {
+    width: '100%',
+    backgroundColor: '#f2f2f2',
+    alignSelf: 'center',
+    alignItems: 'center',
+    padding: 15,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+  },
+  modalGrey: {
+    width: '100%',
+    backgroundColor: 'white',
+    alignSelf: 'center',
+    alignItems: 'center',
+    padding: 10,
+    paddingTop: 20,
+    paddingVertical: 12,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
   },
 });

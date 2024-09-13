@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, SafeAreaView } from 'react-native';
 import { CustomerReview, DownArrow, FaqImage, FaqQuestion, Logout, Privacy, ProfileIcon, ReferredImg, SupportImg, UpArrow } from '../../assets/Images';
 import LinearGradient from 'react-native-linear-gradient';
+import { Colors } from '../../assets/Colors';
 
 const userData = {
   "name": "Mr. Dhruv Soni",
@@ -29,7 +30,8 @@ const Profile = ({ navigation }) => {
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
-      <ScrollView contentContainerStyle={styles.container}>
+      <SafeAreaView>   
+      <ScrollView contentContainerStyle={{flexGrow:1,paddingBottom:85}} showsVerticalScrollIndicator={false}>
         <View style={styles.box}>
           <Image source={ProfileIcon} style={styles.iconStyle} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '90%', alignItems: 'center' }}>
@@ -42,10 +44,10 @@ const Profile = ({ navigation }) => {
 
         {isExpanded && (
           <View style={styles.box2}>
-            <Text style={styles.text}>Name: {user.name}</Text>
-            <Text style={styles.text}>Email: {user.email}</Text>
-            <Text style={styles.text}>Mobile: {user.mobile}</Text>
-            <Text style={styles.text}>DOB: {user.dob}</Text>
+            <Text style={[styles.text,{fontWeight:'600',fontSize:16}]}>Name:- {user.name}</Text>
+            <Text style={styles.text}>Email:- {user.email}</Text>
+            <Text style={styles.text}>Mobile:-{user.mobile}</Text>
+            <Text style={styles.text}>D.O.B.- {user.dob}</Text>
           </View>
         )}
 
@@ -89,13 +91,14 @@ const Profile = ({ navigation }) => {
           <Text style={styles.subtitle}>Sign Out</Text>
         </TouchableOpacity>
       </ScrollView>
+      </SafeAreaView>
     </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     padding: 6,
     paddingTop: 15,
   },
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 8,
-    marginBottom: 16,
+    marginTop: 15,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -116,7 +119,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 8,
-    marginBottom: 16,
+    marginVertical: 7,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -128,11 +131,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 15,
+    fontWeight:'600',
     color: '#666',
   },
   text: {
     fontSize: 14,
+    color:Colors.Grey,
     marginVertical: 4,
   },
   arrow: {
@@ -142,7 +147,7 @@ const styles = StyleSheet.create({
   },
   iconStyle: {
     width: 30,
-    height: 20,
+    height: 25,
     resizeMode: 'contain',
     marginVertical: 6,
     marginRight: 5,

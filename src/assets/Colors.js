@@ -12,6 +12,6 @@ export const Colors ={
     LightGrey:'lightgrey',
     Orange:"#FF7622",
     HolderColor:'#919191',
-    themegreen:'#0c6970',
+    themegreen:'#0c5c63',
     ThemelightGreen:'#39b5a9'
 }

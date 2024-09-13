@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 16,
-    backgroundColor: '#F9F9F9', // Light background color
+    backgroundColor: '#F9F9F9', 
     paddingTop: 30,
   },
   bannerContainer: {
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   bannerImage: {
     width: '100%',
     height: 100,
-    borderRadius: 12, // Rounded corners
+    borderRadius: 12, 
     overflow: 'hidden',
     resizeMode: 'cover',
   },
@@ -96,8 +96,6 @@ const styles = StyleSheet.create({
   },
   questionContainer: {
     paddingVertical: 0,
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#E0E0E0', // Subtle border color
   },
   question: {
     fontSize: 16,
@@ -125,12 +123,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
-    flex: 1,
   },
-
   appbarHeader: {
-    // height: 50,
-
     backgroundColor: Colors.themeColor,
     flexDirection: 'row',
     alignItems: 'center',

@@ -11,16 +11,16 @@ import PasswordScreen from '../screen/authScreen/PasswordScreen';
 import OTPscreen from '../screen/authScreen/OTPscreen';
 import ChangePassword from '../screen/authScreen/ChangePassword';
 import PersonalInfo from '../screen/authScreen/PersonalInfo';
-// import Home from '../screen/Home/Home'; // Your Home Screen
-import Profile from '../screen/Profile/Profile'; // Your Profile Screen
+import Home from '../screen/Home/Home';
 import {MoreIcon, ProfileIcon,PortfolioIcon, Accounticon} from '../assets/Images';
 import {Colors} from '../assets/Colors';
 import Portfolio from '../screen/Portfolio/Portfolio';
 import Account from '../screen/Account/Account';
-import Home from '../screen/Home/Home';
-// import Profile from '../screen/Profile/Profile';
+import Profile from '../screen/Profile/Profile';
 import Faq from '../screen/Setting/Faq';
 import HelpAndSupport from '../screen/Setting/HelpAndSupport';
+import ScannerCode from '../screen/Home/ScannerCode';
+import CapitalWithdrawal from '../screen/Home/CapitalWithdrawal';
 import TermsAndCondition from '../screen/Setting/TermsAndCondition';
 
 const Stack = createNativeStackNavigator();
@@ -32,12 +32,19 @@ const TabNavigation = () => {
     <Tab.Navigator
       screenOptions={{
         tabBarActiveTintColor: '#000',
-        tabBarInactiveTintColor: '#ccc',
+        tabBarInactiveTintColor: '#ffff',
         tabBarLabelStyle: {
           fontSize: 13,
           fontWeight: '600',
         },
-        tabBarStyle: {height: 60}, // Adjust height if needed
+        tabBarStyle: {
+          height: 65,
+          paddingBottom: 8,
+          backgroundColor: 'transparent', 
+          position: 'absolute', 
+          borderTopWidth: 0, 
+          elevation: 0, 
+        },
         tabBarBackground: () => (
           <LinearGradient
             colors={[Colors.themegreen, Colors.ThemelightGreen]}
@@ -58,7 +65,7 @@ const TabNavigation = () => {
               style={{
                 fontSize: 13,
                 fontWeight: '600',
-                color: !focused ? '#000' : '#ccc',
+                color: !focused ? '#000' : '#ffff',
               }}>
               DashBoard
             </Text>
@@ -69,7 +76,7 @@ const TabNavigation = () => {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: !focused ? '#000' : '#ccc',
+                tintColor: !focused ? '#000' : '#ffff',                
               }}
             />
           ),
@@ -81,13 +88,13 @@ const TabNavigation = () => {
         name="Portfolio"
         component={Portfolio}
         options={{
-          headerShown: false, // Hides the header for this screen
+          headerShown: false, 
           tabBarLabel: ({focused}) => (
             <Text
               style={{
                 fontSize: 13,
                 fontWeight: '600',
-                color: !focused ? '#000' : '#ccc',
+                color: !focused ? '#000' : '#ffff',
               }}>
              Portfolio
             </Text>
@@ -98,7 +105,7 @@ const TabNavigation = () => {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: !focused ? '#000' : '#ccc',
+                tintColor: !focused ? '#000' : '#ffff',
               }}
             />
           ),
@@ -110,13 +117,13 @@ const TabNavigation = () => {
         name="Account"
         component={Account}
         options={{
-          headerShown: false, // Hides the header for this screen
+          headerShown: false, 
           tabBarLabel: ({focused}) => (
             <Text
               style={{
                 fontSize: 13,
                 fontWeight: '600',
-                color: !focused ? '#000' : '#ccc',
+                color: !focused ? '#000' : '#ffff',
               }}>
              Account
             </Text>
@@ -127,7 +134,7 @@ const TabNavigation = () => {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: !focused ? '#000' : '#ccc',
+                tintColor: !focused ? '#000' : '#ffff',
               }}
             />
           ),
@@ -145,7 +152,7 @@ const TabNavigation = () => {
               style={{
                 fontSize: 13,
                 fontWeight: '600',
-                color: !focused ? '#000' : '#ccc',
+                color: !focused ? '#000' : '#ffff',
               }}>
               Profile
             </Text>
@@ -156,7 +163,7 @@ const TabNavigation = () => {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: !focused ? '#000' : '#ccc',
+                tintColor: !focused ? '#000' : '#ffff',
               }}
             />
           ),
@@ -208,6 +215,8 @@ const NavigationScreen = () => {
         />
         <Stack.Screen name='Faq' component={Faq} options={{headerShown:false}}/>
         <Stack.Screen name='HelpAndSupport' component={HelpAndSupport} options={{headerShown:false}}/>
+        <Stack.Screen name='ScannerCode' component={ScannerCode} options={{headerShown:false}}/>
+        <Stack.Screen name='CapitalWithdrawal' component={CapitalWithdrawal} options={{headerShown:false}}/>
         <Stack.Screen name='TermsAndCondition' component={TermsAndCondition} options={{headerShown:false}}/>
 
         {/* Add Tab Navigation as a screen in Stack Navigator */}
