@@ -96,6 +96,7 @@ const Recharge = ({ navigation }) => {
                 placeholder="Search contacts..."
                 value={search}
                 onChangeText={setSearch}
+                placeholderTextColor={Colors.Grey}
             />
             {loading ? <Text>Loading...</Text> : null}
             <FlatList
@@ -139,6 +140,7 @@ const styles = StyleSheet.create({
         margin: 15,
         paddingHorizontal: 10,
         borderRadius: 5,
+        
     },
     list: {
         marginTop: 10,
