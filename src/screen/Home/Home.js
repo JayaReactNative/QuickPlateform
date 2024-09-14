@@ -71,16 +71,14 @@ const Home = ({ navigation }) => {
             <Text style={styles.blackText}>Recharge</Text>
           <View style={styles.rowView}>
             <TouchableOpacity style={styles.viewCard} onPress={()=>navigation.navigate('DTHScreen')}>
-            <View style={styles.viewCard}>
+
               <Image source={NetworkIcon} style={styles.iconStyle} />
               <Text style={styles.iconName}>DTH</Text>
-            </View>
+
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Recharge')} >
-              <View style={styles.viewCard}>
+            <TouchableOpacity style={styles.viewCard}  onPress={() => navigation.navigate('Recharge')} >
                 <Image source={RechargeIcon} style={styles.iconStyle} />
                 <Text style={styles.iconName}>Recharge</Text>
-              </View>
             </TouchableOpacity>
 
             <View style={styles.viewCard}>

@@ -10,11 +10,13 @@ import {
     Platform,
     Alert,
     TouchableOpacity,
+    SafeAreaView,
 } from 'react-native';
 import Contacts from 'react-native-contacts';
 import { LeftArrow } from '../../assets/Images';
 import { Colors } from '../../assets/Colors';
 // import Icon from 'react-native-vector-icons/MaterialIcons';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Recharge = ({ navigation }) => {
     const [contacts, setContacts] = useState([]);
@@ -83,36 +85,40 @@ const Recharge = ({ navigation }) => {
     );
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    {/* <Icon name="arrow-back" size={24} color="#fff" /> */}
-                    <Image source={LeftArrow} style={styles.backButtonImage} />
-                </TouchableOpacity>
-                <Text style={styles.headerText}>Recharge</Text>
-            </View>
-            <TextInput
-                style={styles.searchInput}
-                placeholder="Search contacts..."
-                value={search}
-                onChangeText={setSearch}
-                placeholderTextColor={Colors.Grey}
-            />
-            {loading ? <Text>Loading...</Text> : null}
-            <FlatList
-                data={filteredContacts}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.recordID}
-                style={styles.list}
-            />
-        </View>
+        <LinearGradient colors={[Colors.themeColor, '#34AEA1']} style={styles.container}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                            {/* <Icon name="arrow-back" size={24} color="#fff" /> */}
+                            <Image source={LeftArrow} style={styles.backButtonImage} />
+                        </TouchableOpacity>
+                        <Text style={styles.headerText}>Recharge</Text>
+                    </View>
+                    <TextInput
+                        style={styles.searchInput}
+                        placeholder="Search contacts..."
+                        value={search}
+                        onChangeText={setSearch}
+                        placeholderTextColor={Colors.Grey}
+                    />
+                    {loading ? <Text>Loading...</Text> : null}
+                    <FlatList
+                        data={filteredContacts}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.recordID}
+                        style={styles.list}
+                    />
+                </View>
+            </SafeAreaView>
+        </LinearGradient>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: Colors.White // '#34AEA1',
     },
     header: {
         backgroundColor: Colors.themeColor, // '#4CAF50'
@@ -134,23 +140,25 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     searchInput: {
-        height: 40,
-        borderColor: '#ddd',
+        // backgroundColor: Colors.themeColor, // '#4CAF50'
+        height: 50,
+        borderColor: '#cccccc',
+        // borderBottomWidth: 1,
         borderWidth: 1,
         margin: 15,
         paddingHorizontal: 10,
-        borderRadius: 5,
-        
+        borderRadius: 15,
+        color: Colors.Grey,
     },
     list: {
-        marginTop: 10,
+        // marginTop: 10,
     },
     contactItem: {
         flexDirection: 'row',
         alignItems: 'center',
         padding: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
+        borderBottomColor: '#cccccc',
     },
     profileCircle: {
         width: 40,
@@ -173,10 +181,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 5,
+        
+        color: '#000',
     },
     textTheme: {
         fontSize: 14,
-        color: '#333',
+        color: '#000',
     },
     backButtonImage: {
         height: 25,

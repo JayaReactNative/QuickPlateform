@@ -31,48 +31,119 @@ const TransactionDeatail = ({navigation}) => {
       reward: '100',
       reason: 'For Date: 11/09/2024, interest 0.01, Name:- Arun Kumar, added to your wallet',
     },
+    {
+      id: '1',
+      reward: '10',
+      reason: 'Reward',
+    },
+    {
+      id: '2',
+      reward: '100',
+      reason: 'For Date: 11/09/2024, interest 0.01, Name:- Arun Kumar, added to your wallet',
+    },
+    {
+      id: '1',
+      reward: '10',
+      reason: 'Reward',
+    },
+    {
+      id: '2',
+      reward: '100',
+      reason: 'For Date: 11/09/2024, interest 0.01, Name:- Arun Kumar, added to your wallet',
+    },
+    {
+      id: '1',
+      reward: '10',
+      reason: 'Reward',
+    },
+    {
+      id: '2',
+      reward: '100',
+      reason: 'For Date: 11/09/2024, interest 0.01, Name:- Arun Kumar, added to your wallet',
+    },
+    {
+      id: '1',
+      reward: '10',
+      reason: 'Reward',
+    },
+    {
+      id: '2',
+      reward: '100',
+      reason: 'For Date: 11/09/2024, interest 0.01, Name:- Arun Kumar, added to your wallet',
+    },
+    {
+      id: '1',
+      reward: '10',
+      reason: 'Reward',
+    },
+    {
+      id: '2',
+      reward: '100',
+      reason: 'For Date: 11/09/2024, interest 0.01, Name:- Arun Kumar, added to your wallet',
+    },
+    {
+      id: '1',
+      reward: '10',
+      reason: 'Reward',
+    },
+    {
+      id: '2',
+      reward: '100',
+      reason: 'For Date: 11/09/2024, interest 0.01, Name:- Arun Kumar, added to your wallet',
+    },
+    {
+      id: '1',
+      reward: '10',
+      reason: 'Reward',
+    },
+    {
+      id: '2',
+      reward: '100',
+      reason: 'For Date: 11/09/2024, interest 0.01, Name:- Arun Kumar, added to your wallet',
+    },
   ];
 
   return (
-    <SafeAreaView style={{flex:1}}>
-    <View style={styles.container}>
-      <View style={styles.appbarHeader}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}>
-          <Image source={LeftArrow} style={styles.backButtonText} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Transcation Details</Text>
-        <View style={styles.backButton} />
-      </View>
+    <LinearGradient colors={['#0C6B72', '#34AEA1']} style={{flex:1}}>
+      <SafeAreaView >
+        <View >
+          <View style={styles.appbarHeader}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+              <Image source={LeftArrow} style={styles.backButtonText} />
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Transcation Details</Text>
+            <View style={styles.backButton} />
+          </View>
 
-      <View style={{marginVertical:10,paddingLeft:20}}>
-      <Text style={[styles.textBoldStyle,{fontSize:16}]}>Portfolio- History </Text>
-      <Text style={[styles.textBoldStyle,{fontSize:16,marginTop:10}]}>Total Earning- ₹ 5.18 </Text>
-      </View>
+          <View style={{marginVertical:10,paddingLeft:20}}>
+            <Text style={[styles.textBoldStyle,{fontSize:16}]}>Portfolio- History </Text>
+            <Text style={[styles.textBoldStyle,{fontSize:16,marginTop:10}]}>Total Earning- ₹ 5.18 </Text>
+          </View>
 
-      <ScrollView style={{flexGrow: 1}}>
-        <FlatList
-          data={rewardData}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => (
-            <View style={styles.modalGrey}>
-              <View style={styles.row}>
-                <Text style={[styles.textBoldStyle]}>Interest: </Text>
-                <Text style={[styles.textStyle]}>₹{item.reward}</Text>
-              </View>
-              <View style={[styles.row, {marginVertical: 5}]}>
-                <Text style={[styles.textBoldStyle]}>Message: </Text>
-                <Text style={[styles.textStyle]}>{item.reason}</Text>
-              </View>
-            </View>
-          )}
-        />
-      </ScrollView>
-    </View>
-    </SafeAreaView>
+
+            <FlatList
+              data={rewardData}
+              keyExtractor={item => item.id}
+              contentContainerStyle={styles.listContainer}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => (
+                <View style={styles.modalGrey}>
+                  <View style={styles.row}>
+                    <Text style={[styles.textBoldStyle]}>Interest: </Text>
+                    <Text style={[styles.textStyle]}>₹{item.reward}</Text>
+                  </View>
+                  <View style={[styles.row, {marginVertical: 5}]}>
+                    <Text style={[styles.textBoldStyle]}>Message: </Text>
+                    <Text style={[styles.textStyle]}>{item.reason}</Text>
+                  </View>
+                </View>
+              )}
+            />
+        </View>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
@@ -88,7 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 15,
     paddingVertical: 15,
-    backgroundColor: Colors.themeColor,
+    // backgroundColor: Colors.themeColor,
   },
   backButtonText: {
     height: 20,
@@ -103,7 +174,8 @@ const styles = StyleSheet.create({
   },
   modalGrey: {
     width: '90%',
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
     alignSelf: 'center',
     padding: 10,
     paddingVertical: 12,
@@ -127,16 +199,16 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     fontSize: 13,
-    color: Colors.Grey,
+    color: Colors.White,
     fontWeight: '400',
     width: 250,
   },
   textBoldStyle: {
     fontSize: 13,
     fontWeight: '600',
-    color: Colors.Grey,
+    color: Colors.White,
   },
   listContainer: {
-    paddingBottom: 110,
+    paddingBottom: 260,
   },
 });
