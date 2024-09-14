@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'darkgrey',
     padding: 4,
-    // width: '95%',
     marginTop: 8,
     backgroundColor: 'white',
   },
@@ -35,6 +34,7 @@ const styles = StyleSheet.create({
     flex: 1,
     color: 'black',
     paddingHorizontal: 15,
+    paddingVertical: 10,
     borderRadius: 8,
     textAlign: 'left',
   }

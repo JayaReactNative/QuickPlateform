@@ -68,8 +68,6 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.White,
     },
     header: {
-        // height: 50,
-
         backgroundColor: Colors.themeColor,
         flexDirection: 'row',
         alignItems: 'center',
@@ -80,7 +78,6 @@ const styles = StyleSheet.create({
     backButton: {
         justifyContent: 'center',
         alignItems: 'center',
-        // width: '30%',
     },
     backButtonText: {
         height: 20,
@@ -99,17 +96,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
     },
     bannerCard: {
-        // width: '100%',
-        // height: 140,
-        // resizeMode: 'cover',
         borderRadius: 10,
-        // marginVertical: 10,
-        elevation: 5, // Shadow for Android
-        shadowColor: '#000', // Shadow for iOS
+        elevation: 5, 
+        shadowColor: '#000', 
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 5,
-        // padding: 30,
         marginTop: 10,
     },
 
@@ -118,30 +110,26 @@ const styles = StyleSheet.create({
         height: 140,
         resizeMode: 'cover',
         borderRadius: 10,
-        // marginVertical: 10,
-
     },
     cardContainer: {
         marginVertical: 10,
     },
     card: {
-        backgroundColor: '#ffff', //Colors.SkyBlue,
-        borderRadius: 15,
+        backgroundColor: '#ffff', 
+        borderRadius: 10,
         padding: 15,
         marginBottom: 15,
         alignItems: 'center',
-        elevation: 3, // Shadow for Android
+        elevation: 5, // Shadow for Android
         shadowColor: '#000', // Shadow for iOS
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
-        shadowRadius: 3,
+        shadowRadius: 3.25,
     },
     cardImage: {
-        width: "100%",
-        height: 150,
-        resizeMode: 'contain',
+        width: 280,
+        height: 170,
         marginBottom: 10,
-        borderRadius: 15,
     },
     cardTitle: {
         fontSize: 16,
@@ -154,7 +142,6 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         color: Colors.Black,
         textAlign: 'center',
-        // paddingHorizontal: 10,
     },
 });
 

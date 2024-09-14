@@ -22,6 +22,9 @@ import HelpAndSupport from '../screen/Setting/HelpAndSupport';
 import ScannerCode from '../screen/Home/ScannerCode';
 import CapitalWithdrawal from '../screen/Home/CapitalWithdrawal';
 import TermsAndCondition from '../screen/Setting/TermsAndCondition';
+import Reward from '../screen/Home/Reward';
+import TransactionDeatail from '../screen/Portfolio/TransactionDeatail';
+import DTHScreen from '../screen/Home/DTHScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator(); 
@@ -37,8 +40,8 @@ const TabNavigation = () => {
           fontWeight: '600',
         },
         tabBarStyle: {
-          height: 65,
-          paddingBottom: 8,
+          height: 85,
+          paddingBottom: 25,
           backgroundColor: 'transparent', 
           position: 'absolute', 
           borderTopWidth: 0, 
@@ -217,6 +220,9 @@ const NavigationScreen = () => {
         <Stack.Screen name='ScannerCode' component={ScannerCode} options={{headerShown:false}}/>
         <Stack.Screen name='CapitalWithdrawal' component={CapitalWithdrawal} options={{headerShown:false}}/>
         <Stack.Screen name='TermsAndCondition' component={TermsAndCondition} options={{headerShown:false}}/>
+        <Stack.Screen name='Reward' component={Reward} options={{headerShown:false}}/>
+        <Stack.Screen name='TransactionDeatail' component={TransactionDeatail} options={{headerShown:false}}/>
+        <Stack.Screen name='DTHScreen' component={DTHScreen} options={{headerShown:false}}/>
 
         {/* Add Tab Navigation as a screen in Stack Navigator */}
         <Stack.Screen
