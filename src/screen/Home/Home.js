@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Modal,
 } from 'react-native';
-import {Colors} from '../../assets/Colors';
+import { Colors } from '../../assets/Colors';
 import {
   BoardbandIcon,
   CancelRed,
@@ -38,9 +38,9 @@ import {
   WRemove,
 } from '../../assets/Images';
 import ImageSlider from '../../customScreen/ImageSlider';
-import {colors} from 'react-native-swiper-flatlist/src/themes';
+import { colors } from 'react-native-swiper-flatlist/src/themes';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('Invest');
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -68,17 +68,19 @@ const Home = ({navigation}) => {
               <Text style={styles.iconName}>Gas</Text>
             </View>
           </View>
-
-          <Text style={styles.blackText}>Recharge</Text>
+            <Text style={styles.blackText}>Recharge</Text>
           <View style={styles.rowView}>
             <View style={styles.viewCard}>
               <Image source={NetworkIcon} style={styles.iconStyle} />
               <Text style={styles.iconName}>DTH</Text>
             </View>
-            <View style={styles.viewCard}>
-              <Image source={RechargeIcon} style={styles.iconStyle} />
-              <Text style={styles.iconName}>Recharge</Text>
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate('Recharge')} >
+              <View style={styles.viewCard}>
+                <Image source={RechargeIcon} style={styles.iconStyle} />
+                <Text style={styles.iconName}>Recharge</Text>
+              </View>
+            </TouchableOpacity>
+
             <View style={styles.viewCard}>
               <Image source={PostPaidIcon} style={styles.iconStyle} />
               <Text style={styles.iconName}>Postpaid</Text>
@@ -133,7 +135,7 @@ const Home = ({navigation}) => {
             <TouchableOpacity
               style={[
                 styles.viewCard,
-                activeTab === 'Invest' && {backgroundColor: Colors.themeColor},
+                activeTab === 'Invest' && { backgroundColor: Colors.themeColor },
               ]}
               onPress={() => {
                 setActiveTab('Invest'), setModalVisible(!modalVisible);
@@ -142,13 +144,13 @@ const Home = ({navigation}) => {
                 source={Invest}
                 style={[
                   styles.iconStyle,
-                  activeTab === 'Invest' && {tintColor: 'white'},
+                  activeTab === 'Invest' && { tintColor: 'white' },
                 ]}
               />
               <Text
                 style={[
                   styles.iconName,
-                  activeTab === 'Invest' && {color: 'white'},
+                  activeTab === 'Invest' && { color: 'white' },
                 ]}>
                 Invest
               </Text>
@@ -167,13 +169,13 @@ const Home = ({navigation}) => {
                 source={Withdrawal}
                 style={[
                   styles.iconStyle,
-                  activeTab === 'Withdrawal' && {tintColor: 'white'},
+                  activeTab === 'Withdrawal' && { tintColor: 'white' },
                 ]}
               />
               <Text
                 style={[
                   styles.iconName,
-                  activeTab === 'Withdrawal' && {color: 'white'},
+                  activeTab === 'Withdrawal' && { color: 'white' },
                 ]}>
                 Withdrawal
               </Text>
@@ -183,20 +185,20 @@ const Home = ({navigation}) => {
             <TouchableOpacity
               style={[
                 styles.viewCard,
-                activeTab === 'Reward' && {backgroundColor: Colors.themeColor},
+                activeTab === 'Reward' && { backgroundColor: Colors.themeColor },
               ]}
               onPress={() => setActiveTab('Reward')}>
               <Image
                 source={MoreIcon}
                 style={[
                   styles.iconStyle,
-                  activeTab === 'Reward' && {tintColor: 'white'},
+                  activeTab === 'Reward' && { tintColor: 'white' },
                 ]}
               />
               <Text
                 style={[
                   styles.iconName,
-                  activeTab === 'Reward' && {color: 'white'},
+                  activeTab === 'Reward' && { color: 'white' },
                 ]}>
                 Reward
               </Text>
@@ -219,7 +221,7 @@ const Home = ({navigation}) => {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.captialCard} onPress={()=>navigation.navigate('CapitalWithdrawal')}>
+          <TouchableOpacity style={styles.captialCard} onPress={() => navigation.navigate('CapitalWithdrawal')}>
             <Image source={WRemove} style={styles.iconRecentStyle} />
             <View
               style={{
@@ -250,17 +252,17 @@ const Home = ({navigation}) => {
               <View style={styles.modalGrey}>
                 <View style={styles.modalCart}>
                   <TouchableOpacity
-                    style={{alignSelf: 'flex-end', marginTop: 7}}
+                    style={{ alignSelf: 'flex-end', marginTop: 7 }}
                     onPress={() => setModalVisible(false)}>
                     <Image
                       source={Delete}
-                      style={{width: 30, height: 23, resizeMode: 'contain'}}
+                      style={{ width: 30, height: 23, resizeMode: 'contain' }}
                     />
                   </TouchableOpacity>
                   <Text
                     style={[
                       styles.blackText,
-                      {fontWeight: '700', marginTop: 16},
+                      { fontWeight: '700', marginTop: 16 },
                     ]}>
                     Select Payment Mode
                   </Text>
@@ -278,12 +280,12 @@ const Home = ({navigation}) => {
                         marginTop: 8,
                       },
                     ]}>
-                    <Image source={QrImage2} style={{height: 50, width: 50}} />
-                    <View style={{marginLeft: 17}}>
+                    <Image source={QrImage2} style={{ height: 50, width: 50 }} />
+                    <View style={{ marginLeft: 17 }}>
                       <Text
                         style={[
                           styles.iconRecentName,
-                          {color: colors.headText},
+                          { color: colors.headText },
                         ]}>
                         QR Scan Payment
                       </Text>
@@ -312,7 +314,7 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
     paddingHorizontal: 15,
-    paddingBottom:35
+    paddingBottom: 35
   },
   headText: {
     fontSize: 18,
