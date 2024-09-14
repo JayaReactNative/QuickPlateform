@@ -12,7 +12,6 @@ import {
 import { Colors } from '../../assets/Colors';
 import {
   BoardbandIcon,
-  CancelRed,
   Challan,
   Delete,
   ElectricityIcon,
@@ -26,7 +25,6 @@ import {
   MoreIcon,
   Municipal,
   NetworkIcon,
-  NewScanner,
   PostPaidIcon,
   QrImage2,
   RechargeIcon,
@@ -38,13 +36,15 @@ import {
   WRemove,
 } from '../../assets/Images';
 import ImageSlider from '../../customScreen/ImageSlider';
-import { colors } from 'react-native-swiper-flatlist/src/themes';
+import {colors} from 'react-native-swiper-flatlist/src/themes';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Home = ({ navigation }) => {
   const [activeTab, setActiveTab] = useState('Invest');
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
+    <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
     <SafeAreaView style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollViewContainer}
@@ -70,10 +70,12 @@ const Home = ({ navigation }) => {
           </View>
             <Text style={styles.blackText}>Recharge</Text>
           <View style={styles.rowView}>
+            <TouchableOpacity style={styles.viewCard} onPress={()=>navigation.navigate('DTHScreen')}>
             <View style={styles.viewCard}>
               <Image source={NetworkIcon} style={styles.iconStyle} />
               <Text style={styles.iconName}>DTH</Text>
             </View>
+            </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Recharge')} >
               <View style={styles.viewCard}>
                 <Image source={RechargeIcon} style={styles.iconStyle} />
@@ -107,7 +109,7 @@ const Home = ({ navigation }) => {
             </View>
           </View>
 
-          <View style={styles.rowView}>
+          <View style={[styles.rowView,{marginTop:0}]}>
             <Text style={styles.blackText}>Comming Soon</Text>
             <Text style={styles.blackText}>View More</Text>
           </View>
@@ -135,7 +137,6 @@ const Home = ({ navigation }) => {
             <TouchableOpacity
               style={[
                 styles.viewCard,
-                activeTab === 'Invest' && { backgroundColor: Colors.themeColor },
               ]}
               onPress={() => {
                 setActiveTab('Invest'), setModalVisible(!modalVisible);
@@ -144,14 +145,11 @@ const Home = ({ navigation }) => {
                 source={Invest}
                 style={[
                   styles.iconStyle,
-                  activeTab === 'Invest' && { tintColor: 'white' },
                 ]}
               />
               <Text
                 style={[
-                  styles.iconName,
-                  activeTab === 'Invest' && { color: 'white' },
-                ]}>
+                  styles.iconName]}>
                 Invest
               </Text>
             </TouchableOpacity>
@@ -160,22 +158,18 @@ const Home = ({ navigation }) => {
             <TouchableOpacity
               style={[
                 styles.viewCard,
-                activeTab === 'Withdrawal' && {
-                  backgroundColor: Colors.themeColor,
-                },
               ]}
-              onPress={() => setActiveTab('Withdrawal')}>
+              onPress={() => {setActiveTab('Withdrawal'),navigation.navigate('Portfolio')}}>
               <Image
                 source={Withdrawal}
                 style={[
-                  styles.iconStyle,
-                  activeTab === 'Withdrawal' && { tintColor: 'white' },
+                  styles.iconStyle
                 ]}
               />
               <Text
                 style={[
                   styles.iconName,
-                  activeTab === 'Withdrawal' && { color: 'white' },
+                  // activeTab === 'Withdrawal' && {color: 'white'},
                 ]}>
                 Withdrawal
               </Text>
@@ -187,7 +181,7 @@ const Home = ({ navigation }) => {
                 styles.viewCard,
                 activeTab === 'Reward' && { backgroundColor: Colors.themeColor },
               ]}
-              onPress={() => setActiveTab('Reward')}>
+              onPress={() => {setActiveTab('Reward'),navigation.navigate('Reward')}}>
               <Image
                 source={MoreIcon}
                 style={[
@@ -228,9 +222,9 @@ const Home = ({ navigation }) => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 flexDirection: 'row',
-                width: '70%',
+                width: '67%',
               }}>
-              <Text style={styles.blackText}>Capital Withdrawal</Text>
+              <Text style={[styles.blackText,{color:Colors.Black}]}>Capital Withdrawal</Text>
               <Image
                 source={RightArrowGreen}
                 style={{
@@ -262,7 +256,7 @@ const Home = ({ navigation }) => {
                   <Text
                     style={[
                       styles.blackText,
-                      { fontWeight: '700', marginTop: 16 },
+                      {fontWeight: '700', marginTop: 16,color:Colors.Black},
                     ]}>
                     Select Payment Mode
                   </Text>
@@ -301,6 +295,7 @@ const Home = ({ navigation }) => {
         </View>
       </ScrollView>
     </SafeAreaView>
+    </LinearGradient>
   );
 };
 
@@ -309,7 +304,6 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.White,
   },
   scrollViewContainer: {
     flexGrow: 1,
@@ -319,7 +313,7 @@ const styles = StyleSheet.create({
   headText: {
     fontSize: 18,
     fontWeight: '600',
-    color: Colors.themeColor,
+    color: Colors.White,
     marginVertical: 10,
   },
   containLog: {
@@ -335,8 +329,8 @@ const styles = StyleSheet.create({
   blackText: {
     fontSize: 16,
     fontWeight: '500',
-    color: Colors.Black,
-    marginVertical: 10,
+    color: Colors.White,
+    marginTop: 15,
   },
   viewCard: {
     borderRadius: 15,
@@ -362,7 +356,7 @@ const styles = StyleSheet.create({
   rowView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 14,
+    marginVertical: 10,
   },
   iconName: {
     fontSize: 13.5,
@@ -370,7 +364,7 @@ const styles = StyleSheet.create({
     color: Colors.Black,
   },
   viewSmallCard: {
-    borderRadius: 15,
+    borderRadius: 14,
     backgroundColor: Colors.SkyBlue,
     padding: 5,
     width: 80,

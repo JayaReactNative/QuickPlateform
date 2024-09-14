@@ -25,13 +25,13 @@ const Profile = ({ navigation }) => {
   const toggleExpand = () => setIsExpanded(prevState => !prevState);
 
   if (!user) {
-    return <Text>Loading...</Text>; // Placeholder for loading state
+    return <Text>Loading...</Text>; 
   }
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
       <SafeAreaView>   
-      <ScrollView contentContainerStyle={{flexGrow:1,paddingBottom:85}} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={{flexGrow:1,paddingBottom:85,marginTop:15}} showsVerticalScrollIndicator={false}>
         <View style={styles.box}>
           <Image source={ProfileIcon} style={styles.iconStyle} />
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '90%', alignItems: 'center' }}>
@@ -99,14 +99,13 @@ const Profile = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 6,
+    paddingHorizontal: 6,
     paddingTop: 15,
   },
   box: {
-    backgroundColor: 'white',
     borderRadius: 10,
     padding: 8,
-    marginTop: 15,
+    marginTop: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -120,6 +119,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 8,
     marginVertical: 7,
+    marginHorizontal: 7,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 15,
     fontWeight:'600',
-    color: '#666',
+    color: '#fff',
   },
   text: {
     fontSize: 14,
@@ -150,7 +150,8 @@ const styles = StyleSheet.create({
     height: 25,
     resizeMode: 'contain',
     marginVertical: 6,
-    marginRight: 5,
+    marginRight: 17,
+    tintColor:'#fff'
   },
 });
 

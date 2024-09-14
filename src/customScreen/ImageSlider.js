@@ -21,6 +21,7 @@ const ImageSlider = () => {
         autoplayLoop
         index={0}
         showPagination
+        paginationStyleItem={{height:10,width:10}}
         data={images}
         renderItem={({ item }) => (
           <View style={styles.child}>
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: 340, 
+    width: 355, 
     height: 200, 
     borderRadius: 10,
     marginRight:33

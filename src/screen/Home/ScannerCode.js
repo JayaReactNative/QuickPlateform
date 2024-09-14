@@ -15,6 +15,7 @@ import {Downloads, LeftArrow, NewScanner, QrImage1} from '../../assets/Images';
 const ScannerCode = ({navigation}) => {
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
+      <SafeAreaView style={{flex:1}}>
       <View style={styles.appbarHeader}>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
@@ -37,6 +38,7 @@ const ScannerCode = ({navigation}) => {
       </View>
       <Text style={[styles.textStyle,{fontWeight:'700',marginTop:50,color:'white'}]}>Minimum Investment amount is Rs 5000/-</Text>
 </ScrollView>
+      </SafeAreaView>
     </LinearGradient>
   );
 };
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
-    paddingVertical: 25,
+    paddingVertical: 15,
   },
   backButtonText: {
     height: 20,
@@ -74,6 +76,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     paddingVertical: 12,
     borderRadius: 15,
+    marginTop:20
   },
   scanImage: {
     width: 200,

@@ -22,12 +22,14 @@ import HelpAndSupport from '../screen/Setting/HelpAndSupport';
 import ScannerCode from '../screen/Home/ScannerCode';
 import CapitalWithdrawal from '../screen/Home/CapitalWithdrawal';
 import TermsAndCondition from '../screen/Setting/TermsAndCondition';
+import Reward from '../screen/Home/Reward';
+import TransactionDeatail from '../screen/Portfolio/TransactionDeatail';
+import DTHScreen from '../screen/Home/DTHScreen';
 import Recharge from '../screen/Home/Recharge';
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator(); // Create the Tab Navigator
+const Tab = createBottomTabNavigator(); 
 
-// Bottom Tab Navigator
 const TabNavigation = () => {
   return (
     <Tab.Navigator
@@ -39,8 +41,8 @@ const TabNavigation = () => {
           fontWeight: '600',
         },
         tabBarStyle: {
-          height: 65,
-          paddingBottom: 8,
+          height: 85,
+          paddingBottom: 25,
           backgroundColor: 'transparent', 
           position: 'absolute', 
           borderTopWidth: 0, 
@@ -219,6 +221,9 @@ const NavigationScreen = () => {
         <Stack.Screen name='ScannerCode' component={ScannerCode} options={{headerShown:false}}/>
         <Stack.Screen name='CapitalWithdrawal' component={CapitalWithdrawal} options={{headerShown:false}}/>
         <Stack.Screen name='TermsAndCondition' component={TermsAndCondition} options={{headerShown:false}}/>
+        <Stack.Screen name='Reward' component={Reward} options={{headerShown:false}}/>
+        <Stack.Screen name='TransactionDeatail' component={TransactionDeatail} options={{headerShown:false}}/>
+        <Stack.Screen name='DTHScreen' component={DTHScreen} options={{headerShown:false}}/>
         <Stack.Screen name='Recharge' component={Recharge} options={{headerShown:false}}/>
 
         {/* Add Tab Navigation as a screen in Stack Navigator */}
