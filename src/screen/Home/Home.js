@@ -54,7 +54,7 @@ const Home = ({ navigation }) => {
           <ImageSlider />
 
           {/* ----------not get image */}
-          <View style={styles.rowView}>
+          <View style={[styles.rowView,{marginTop:40}]}>
             <View style={styles.viewCard}>
               <Image source={TransferIcon} style={styles.iconStyle} />
               <Text style={styles.iconName}>Transfer</Text>
@@ -68,19 +68,17 @@ const Home = ({ navigation }) => {
               <Text style={styles.iconName}>Gas</Text>
             </View>
           </View>
+
             <Text style={styles.blackText}>Recharge</Text>
           <View style={styles.rowView}>
-            <TouchableOpacity style={styles.viewCard} onPress={()=>navigation.navigate('DTHScreen')}>
-            <View style={styles.viewCard}>
+            <TouchableOpacity style={styles.viewCard} onPress={()=>navigation.navigate('DTHScreen')}>   
               <Image source={NetworkIcon} style={styles.iconStyle} />
               <Text style={styles.iconName}>DTH</Text>
-            </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Recharge')} >
-              <View style={styles.viewCard}>
+
+            <TouchableOpacity style={styles.viewCard} onPress={() => navigation.navigate('Recharge')} >
                 <Image source={RechargeIcon} style={styles.iconStyle} />
                 <Text style={styles.iconName}>Recharge</Text>
-              </View>
             </TouchableOpacity>
 
             <View style={styles.viewCard}>

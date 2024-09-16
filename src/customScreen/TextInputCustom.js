@@ -6,7 +6,7 @@ const TextInputCustom = ({ ValueText, ChangeText,Title }) => {
     <View style={styles.container1}>
       <TextInput 
         placeholder={Title}
-        placeholderTextColor='lightgrey'
+        placeholderTextColor='grey'
         value={ValueText}
         onChangeText={ChangeText}
         keyboardType='default'
