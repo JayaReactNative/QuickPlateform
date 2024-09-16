@@ -307,6 +307,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,0.5)',
+        
     },
     modalView: {
         width: '80%',
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
     },
     modalButtons: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         width: '100%',
     },
     modalButton: {
