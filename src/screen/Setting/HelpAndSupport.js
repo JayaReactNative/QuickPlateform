@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.White,
     },
     header: {
-        backgroundColor: Colors.themeColor,
+        // backgroundColor: Colors.themeColor,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
     },
     bannerCard: {
         borderRadius: 10,
-        elevation: 5, 
-        shadowColor: '#000', 
+        elevation: 5,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 5,
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         marginBottom: 120,
     },
     card: {
-        backgroundColor: '#ffff', 
+        backgroundColor: '#ffff',
         borderRadius: 10,
         padding: 15,
         marginBottom: 15,

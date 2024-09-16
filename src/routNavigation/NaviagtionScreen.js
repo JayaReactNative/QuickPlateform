@@ -26,6 +26,7 @@ import Reward from '../screen/Home/Reward';
 import TransactionDeatail from '../screen/Portfolio/TransactionDeatail';
 import DTHScreen from '../screen/Home/DTHScreen';
 import Recharge from '../screen/Home/Recharge';
+import SelectRechargePlan from '../screen/Home/SelectRechargePlan';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator(); 
@@ -225,6 +226,7 @@ const NavigationScreen = () => {
         <Stack.Screen name='TransactionDeatail' component={TransactionDeatail} options={{headerShown:false}}/>
         <Stack.Screen name='DTHScreen' component={DTHScreen} options={{headerShown:false}}/>
         <Stack.Screen name='Recharge' component={Recharge} options={{headerShown:false}}/>
+        <Stack.Screen name='SelectRechargePlan' component={SelectRechargePlan} options={{headerShown:false}}/>
 
         {/* Add Tab Navigation as a screen in Stack Navigator */}
         <Stack.Screen

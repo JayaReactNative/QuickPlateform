@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
         marginBottom: 120,
     },
     header: {
-        backgroundColor: Colors.themeColor,
+        // backgroundColor: Colors.themeColor,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
