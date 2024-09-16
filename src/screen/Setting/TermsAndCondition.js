@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 import { Colors } from '../../assets/Colors';
 import { HelpSupportPng, LeftArrow } from '../../assets/Images';
+import LinearGradient from 'react-native-linear-gradient';
 
 const cardData = [
     {
@@ -84,41 +85,46 @@ export default function TermsAndCondition({ navigation }) {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Image source={LeftArrow} style={styles.backButtonImage} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Terms And Conditions</Text>
-                <View style={styles.backButton} />
-            </View>
+        <LinearGradient colors={[Colors.themeColor, '#34AEA1']}>
+            <SafeAreaView >
+                {/* Header */}
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                        <Image source={LeftArrow} style={styles.backButtonImage} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Terms And Conditions</Text>
+                    <View style={styles.backButton} />
+                </View>
 
-            {/* Body */}
-            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-                <View style={styles.bannerCard}>
-                    <Image source={HelpSupportPng} style={styles.bannerImage} />
-                </View>
-                <View>
-                    <FlatList
-                        data={cardData}
-                        renderItem={renderCard}
-                        keyExtractor={item => item.id}
-                        contentContainerStyle={styles.cardList}
-                    />
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+                {/* Body */}
+                <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+                    <View style={styles.bannerCard}>
+                        <Image source={HelpSupportPng} style={styles.bannerImage} />
+                    </View>
+                    <View style={styles.container}>
+                        <FlatList
+                            data={cardData}
+                            renderItem={renderCard}
+                            keyExtractor={item => item.id}
+                            contentContainerStyle={styles.cardList}
+                        />
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        </LinearGradient>
+
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.White,
+        // backgroundColor: Colors.White,
+        paddingTop: 10,
+        marginBottom: 120,
     },
     header: {
-        backgroundColor: Colors.themeColor,
+        // backgroundColor: Colors.themeColor,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -152,7 +158,6 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 5,
-        marginBottom: 20,
     },
 
     bannerImage: {

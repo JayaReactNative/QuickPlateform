@@ -5,6 +5,7 @@ import {
 } from 'react-native';
 import { FaqBanner, LeftArrow } from '../../assets/Images';
 import { Colors } from '../../assets/Colors';
+import LinearGradient from 'react-native-linear-gradient';
 
 const faqs = [
   { question: 'What is crowdfunding?', answer: 'Crowdfunding is a way of raising money to finance projects by collecting small contributions from a large number of people. This method democratizes the funding process and allows innovators to get support from a broad audience.' },
@@ -23,42 +24,53 @@ const Faq = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.appbarHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Image source={LeftArrow} style={styles.backButtonText} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>FAQ</Text>
-        <View style={styles.backButton} />
-      </View>
-      <ScrollView contentContainerStyle={styles.container}>
-        <View style={styles.bannerContainer}>
-          <Image source={FaqBanner} style={styles.bannerImage} />
+
+    <LinearGradient colors={[Colors.themeColor, '#34AEA1']} style={styles.container}>
+
+      <SafeAreaView >
+        {/* Header */}
+        <View style={styles.appbarHeader}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Image source={LeftArrow} style={styles.backButtonText} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>FAQ</Text>
+          <View style={styles.backButton} />
         </View>
-        <View style={styles.headerContainer}>
-          <Text style={styles.header}>Frequently Asked Questions</Text>
-        </View>
-        <View style={styles.faqContainer}>
-          {faqs.map((faq, index) => (
-            <View key={index} style={styles.faqItem}>
-              <TouchableOpacity onPress={() => toggleExpand(index)} style={styles.questionContainer}>
-                <Text style={styles.question}>{faq.question}</Text>
-              </TouchableOpacity>
-              {expanded === index && <Text style={styles.answer}>{faq.answer}</Text>}
-            </View>
-          ))}
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        <ScrollView contentContainerStyle={styles.bodyContainer}>
+          <View style={styles.bannerContainer}>
+            <Image source={FaqBanner} style={styles.bannerImage} />
+          </View>
+          <View style={styles.headerContainer}>
+            <Text style={styles.header}>Frequently Asked Questions</Text>
+          </View>
+          <View style={styles.faqContainer}>
+            {faqs.map((faq, index) => (
+              <View key={index} style={styles.faqItem}>
+                <TouchableOpacity onPress={() => toggleExpand(index)} style={styles.questionContainer}>
+                  <Text style={styles.question}>{faq.question}</Text>
+                </TouchableOpacity>
+                {expanded === index && <Text style={styles.answer}>{faq.answer}</Text>}
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    // padding: 16,
+    // backgroundColor: '#F9F9F9', 
+    paddingTop: 30,
+  },
+
+  bodyContainer: {
+    flexGrow: 1,
     padding: 16,
-    backgroundColor: '#F9F9F9', 
+    // backgroundColor: '#F9F9F9', 
     paddingTop: 30,
   },
   bannerContainer: {
@@ -78,7 +90,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 22,
     fontWeight: '600', // Medium weight
-    color: '#333',
+    color: '#fff',
   },
   faqContainer: {
     paddingHorizontal: 0,
@@ -125,7 +137,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   appbarHeader: {
-    backgroundColor: Colors.themeColor,
+    // backgroundColor: Colors.themeColor,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

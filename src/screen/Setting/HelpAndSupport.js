@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { Colors } from '../../assets/Colors';
 import { HelpAddress, HelpEmailImage, HelpMobileImage, HelpSupportPng, LeftArrow } from '../../assets/Images'; // Ensure these images exist
+import LinearGradient from 'react-native-linear-gradient';
 
 const helpSupportList = [
     {
@@ -31,34 +32,38 @@ const helpSupportList = [
 ];
 const HelpAndSupport = ({ navigation }) => {
     return (
-        <SafeAreaView style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Image source={LeftArrow} style={styles.backButtonText} />
-                </TouchableOpacity>
-                <Text style={styles.headerTitle}>Help & Support</Text>
-                <View style={styles.backButton} />
-            </View>
+        <LinearGradient colors={[Colors.themeColor, '#34AEA1']} style={styles.container}>
 
-            {/* Body */}
-            <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-                <View style={styles.bannerCard}>
-                    <Image source={HelpSupportPng} style={styles.bannerImage} />
+            <SafeAreaView >
+                {/* Header */}
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                        <Image source={LeftArrow} style={styles.backButtonText} />
+                    </TouchableOpacity>
+                    <Text style={styles.headerTitle}>Help & Support</Text>
+                    <View style={styles.backButton} />
                 </View>
 
-                <View style={styles.cardContainer}>
-                    {helpSupportList.map((data, index) => (
-                        <View style={styles.card}>
-                            <Image source={data.image} style={styles.cardImage} />
-                            <Text style={styles.cardTitle}>{data.title}</Text>
-                            <Text style={styles.cardDetail}>{data.description}</Text>
-                        </View>
-                    ))}
+                {/* Body */}
+                <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+                    <View style={styles.bannerCard}>
+                        <Image source={HelpSupportPng} style={styles.bannerImage} />
+                    </View>
 
-                </View>
-            </ScrollView>
-        </SafeAreaView>
+                    <View style={styles.cardContainer}>
+                        {helpSupportList.map((data, index) => (
+                            <View style={styles.card}>
+                                <Image source={data.image} style={styles.cardImage} />
+                                <Text style={styles.cardTitle}>{data.title}</Text>
+                                <Text style={styles.cardDetail}>{data.description}</Text>
+                            </View>
+                        ))}
+
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        </LinearGradient>
+
     );
 };
 
@@ -68,7 +73,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.White,
     },
     header: {
-        backgroundColor: Colors.themeColor,
+        // backgroundColor: Colors.themeColor,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -97,8 +102,8 @@ const styles = StyleSheet.create({
     },
     bannerCard: {
         borderRadius: 10,
-        elevation: 5, 
-        shadowColor: '#000', 
+        elevation: 5,
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 5,
@@ -113,9 +118,10 @@ const styles = StyleSheet.create({
     },
     cardContainer: {
         marginVertical: 10,
+        marginBottom: 120,
     },
     card: {
-        backgroundColor: '#ffff', 
+        backgroundColor: '#ffff',
         borderRadius: 10,
         padding: 15,
         marginBottom: 15,
