@@ -29,7 +29,8 @@ import Recharge from '../screen/Home/Recharge';
 import SelectRechargePlan from '../screen/Home/SelectRechargePlan';
 import AccountHistory from '../screen/Account/AccountHistory';
 import Ops from '../customScreen/Ops';
-import ReferAndEarnn from '../screen/Home/ReferAndEarnn';
+import AddAmount from '../screen/Home/AddAmount';
+import ReferAndEarn from '../screen/Home/ReferAndEarn';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator(); 
@@ -233,7 +234,8 @@ const NavigationScreen = () => {
         <Stack.Screen name='AccountHistory' component={AccountHistory} options={{headerShown:false}}/>
         <Stack.Screen name='Home' component={Home} options={{headerShown:false}}/>
         <Stack.Screen name='Ops' component={Ops} options={{headerShown:false}}/>
-        <Stack.Screen name='ReferAndEarn' component={ReferAndEarnn} options={{headerShown:false}}/>
+        <Stack.Screen name='ReferAndEarn' component={ReferAndEarn} options={{headerShown:false}}/>
+        <Stack.Screen name='AddAmount' component={AddAmount} options={{headerShown:false}}/>
 
         {/* Add Tab Navigation as a screen in Stack Navigator */}
         <Stack.Screen

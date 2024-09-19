@@ -3,23 +3,19 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   Image,
   TouchableOpacity,
-  FlatList,
+
   SafeAreaView,
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import LinearGradient from 'react-native-linear-gradient';
 import {
-  Downloads,
   LeftArrow,
-  NewScanner,
-  QrImage1,
   RewardImg,
 } from '../../assets/Images';
 
-export default function ReferAndEarnn() {
+export default function ReferAndEarn({navigation}) {
   
     return (
         <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
@@ -33,29 +29,8 @@ export default function ReferAndEarnn() {
             <Text style={styles.headerTitle}>Earn by Refer</Text>
             <View style={styles.backButton} />
             </View>
-            <Image source={RewardImg} style={styles.scanImage} />
 
-            {/* <ScrollView style={{flexGrow: 1}}>
             <Image source={RewardImg} style={styles.scanImage} />
-            <FlatList
-                data={rewardData}
-                keyExtractor={item => item.id}
-                contentContainerStyle={styles.listContainer}
-                showsVerticalScrollIndicator={false}
-                renderItem={({item}) => (
-                <View style={styles.modalGrey}>
-                    <View style={styles.row}>
-                    <Text style={[styles.textBoldStyle]}>Reward: </Text>
-                    <Text style={[styles.textStyle]}>₹{item.reward}</Text>
-                    </View>
-                    <View style={[styles.row, {marginVertical: 5}]}>
-                    <Text style={[styles.textBoldStyle]}>Reason: </Text>
-                    <Text style={[styles.textStyle]}>{item.reason}</Text>
-                    </View>
-                </View>
-                )}
-            />
-            </ScrollView> */}
             </SafeAreaView>
         </LinearGradient>
     );

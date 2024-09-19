@@ -54,22 +54,23 @@ const Home = ({ navigation }) => {
           showsVerticalScrollIndicator={false}>
           <View style={styles.containLog}>
             <Text style={styles.headText}>Hello John</Text>
-            <View style={{marginLeft:-3}}>
+            <View style={{marginLeft:-3,marginTop:'5%'}}>
               <ImageSlider topView={35} ImageWidth={345}/>
             </View>
-            <View style={{marginVertical:10}}>
-              <View style={styles.customCard}>
+
+
+            <View style={{marginVertical:20, marginTop:'10%'}}>
+              <TouchableOpacity style={styles.customCard} onPress={()=>navigation.navigate('AddAmount')}>
                 <Image source={Wallet} style={styles.iconStyle} />
                 <Text style={[styles.iconName, {width:'50%'}]}>Wallet Balance</Text>
                 <Text style={styles.iconName}>Rs 0</Text>
                 <Image source={Add} style={[styles.iconStyle, {height: 25,}]}  />
-              </View>
-              <View style={styles.customCard}>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.customCard,{marginTop:20}]} onPress={()=>navigation.navigate('ReferAndEarn')}>
                 <Image source={TransferIcon} style={styles.iconStyle} />
                 <Text style={[styles.iconName, {width:'62%'}]}>Refer and Earn</Text>
-                {/* <Text style={styles.iconName}>Rs 0</Text> */}
                 <Image source={Share} style={[styles.iconStyle, {height: 20,}]} />
-              </View>
+              </TouchableOpacity>
             </View>
             
 
@@ -187,7 +188,6 @@ const Home = ({ navigation }) => {
                 <Text
                   style={[
                     styles.iconName,
-                    // activeTab === 'Withdrawal' && {color: 'white'},
                   ]}>
                   Withdrawal
                 </Text>
