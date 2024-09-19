@@ -17,6 +17,7 @@ import {Colors} from '../../assets/Colors';
 import {LeftArrow} from '../../assets/Images';
 import BottomSheet from '@gorhom/bottom-sheet';
 
+
 if (
   Platform.OS === 'android' &&
   UIManager.setLayoutAnimationEnabledExperimental

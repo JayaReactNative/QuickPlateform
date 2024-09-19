@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   smallText: {
-    marginTop: 35,
+    marginTop: 15,
     fontSize: 16,
     fontWeight: '700',
     color: Colors.themeColor,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     alignSelf: 'center',
-    marginTop: '45%',
+    marginTop: '5%',
   },
   errorText: {
     color: 'red',
