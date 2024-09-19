@@ -12,7 +12,7 @@ const images = [
   { id: '5', uri: require('../assets/banner/bannerFive.png') },
 ];
 
-const ImageSlider = () => {
+const ImageSlider = ({topView,ImageWidth}) => {
   return (
     <View style={styles.container}>
       <SwiperFlatList
@@ -21,11 +21,12 @@ const ImageSlider = () => {
         autoplayLoop
         index={0}
         showPagination
-        paginationStyleItem={{height:10,width:10, marginTop:25}}
+        paginationStyleItem={{height:10,width:10, marginTop:topView}}
         data={images}
+        style={{alignSelf:'center'}}
         renderItem={({ item }) => (
           <View style={styles.child}>
-            <Image source={item.uri} style={styles.image} />
+            <Image source={item.uri} style={[styles.image,{width: ImageWidth,}]} />
           </View>
         )}
       />
@@ -36,17 +37,19 @@ const ImageSlider = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignSelf:'center',
+    justifyContent:'center'
   },
   child: {
     width: width*1, 
     justifyContent: 'center',
     alignItems: 'center',
   },
-  image: {
-    width: 355, 
-    height: 200, 
+  image: { 
+    height: 190, 
     borderRadius: 10,
-    marginRight:25
+    alignItems:'center',
+    marginLeft:-25
   },
 });
 

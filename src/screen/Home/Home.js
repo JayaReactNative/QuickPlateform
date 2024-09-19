@@ -51,7 +51,9 @@ const Home = ({ navigation }) => {
         showsVerticalScrollIndicator={false}>
         <View style={styles.containLog}>
           <Text style={styles.headText}>Hello John</Text>
-          <ImageSlider />
+          <View style={{marginLeft:-3}}>
+          <ImageSlider topView={35} ImageWidth={345}/>
+          </View>
 
           {/* ----------not get image */}
           <View style={[styles.rowView,{marginTop:40}]}>

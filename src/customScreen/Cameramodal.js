@@ -1,5 +1,3 @@
-// npm install react-native-image-picker
-
 import React, { useState } from 'react';
 import {
   Modal,
@@ -9,50 +7,10 @@ import {
   StyleSheet,
   Alert
 } from 'react-native';
-// import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 
-const Cameramodal = ({ visible, onClose }) => {
-  const [loading, setLoading] = useState(false);
 
-  const openCamera = () => {
-    setLoading(true);
-    // launchCamera(
-    //   {
-    //     mediaType: 'photo',
-    //     quality: 1,
-    //   },
-    //   (response) => {
-    //     setLoading(false);
-    //     if (response.didCancel) {
-    //       console.log('User cancelled camera');
-    //     } else if (response.errorCode) {
-    //       Alert.alert('Error', response.errorMessage);
-    //     } else {
-    //       console.log(response.assets[0]); // Handle the selected image
-    //     }
-    //   }
-    // );
-  };
+const Cameramodal = ({ visible, onClose,showCamera,showGallery}) => {
 
-  const openGallery = () => {
-    setLoading(true);
-    // launchImageLibrary(
-    //   {
-    //     mediaType: 'photo',
-    //     quality: 1,
-    //   },
-    //   (response) => {
-    //     setLoading(false);
-    //     if (response.didCancel) {
-    //       console.log('User cancelled gallery picker');
-    //     } else if (response.errorCode) {
-    //       Alert.alert('Error', response.errorMessage);
-    //     } else {
-    //       console.log(response.assets[0]); // Handle the selected image
-    //     }
-    //   }
-    // );
-  };
 
   return (
     <Modal
@@ -65,11 +23,11 @@ const Cameramodal = ({ visible, onClose }) => {
         <View style={styles.modal}>
           <Text style={styles.title}>Select a Profile Picture</Text>
 
-          <TouchableOpacity style={styles.button} onPress={openCamera}>
+          <TouchableOpacity style={styles.button} onPress={showCamera}>
             <Text style={styles.buttonText}>Open Camera</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={openGallery}>
+          <TouchableOpacity style={styles.button} onPress={showGallery}>
             <Text style={styles.buttonText}>Open Gallery</Text>
           </TouchableOpacity>
 
@@ -104,7 +62,7 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     padding: 15,
-    borderColor: '#007bff',
+    borderColor: 'grey',
     borderWidth:2,
     borderRadius: 8,
     alignItems: 'center',

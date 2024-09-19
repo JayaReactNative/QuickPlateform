@@ -66,7 +66,7 @@ const CapitalWithdrawal = ({ navigation }) => {
 
   const handleSubmit = () => {
     if (selectedItem) {
-      console.log('Selected Item Details:', selectedItem); // Log the selected details
+      console.log('Selected Item Details:', selectedItem); 
     } else {
       console.log('No item selected');
     }
