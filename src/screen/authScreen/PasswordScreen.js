@@ -21,7 +21,6 @@ const PasswordScreen = ({ navigation }) => {
   };
 
   const handleSubmitForm = (values) => {
-    // Alert.alert('Password Submitted', JSON.stringify(values, null, 2));
     navigation.navigate('PersonalInfo');
   };
 
@@ -41,7 +40,6 @@ const PasswordScreen = ({ navigation }) => {
                   placeholder="Enter password"
                   placeholderTextColor={Colors.HolderColor}
                   keyboardType="default"
-                  secureTextEntry={true}
                   style={styles.textStyle}
                   value={values.password}
                   onChangeText={handleChange('password')}

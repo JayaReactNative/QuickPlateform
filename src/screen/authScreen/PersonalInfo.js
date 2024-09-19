@@ -1,31 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
   SafeAreaView,
   Image,
   ScrollView,
-  Alert,
   Text,
+  TouchableOpacity,
+  Platform,
+  Button,
 } from 'react-native';
-import {Formik} from 'formik';
-import {validationSchema} from '../../utility/validationSchema';
-import {Colors} from '../../assets/Colors';
+import { Formik } from 'formik';
+import { validationSchema } from '../../utility/validationSchema';
+import { Colors } from '../../assets/Colors';
 import {
   BirthCalender,
-  Email,
   EmailIcon,
   Exchange,
-  Lock,
   LockIcon,
   LoginImage,
   Placeholder,
   UserIcon,
 } from '../../assets/Images';
 import ButtonCustom from '../../customScreen/ButtonCustom';
+import DatePicker from 'react-native-date-picker';
 import TextImagecustom from '../../customScreen/TextImagecustom';
 
-const PersonalInfo = ({navigation}) => {
+const PersonalInfo = ({ navigation }) => {
   const initialValues = {
     firstName: '',
     lastName: '',
@@ -39,25 +40,30 @@ const PersonalInfo = ({navigation}) => {
     referencePassword: '',
   };
 
-  const handleSubmitForm = values => {
-    // Alert.alert("Form Submitted", JSON.stringify(values, null, 2));
-    navigation.navigate('MainTabs'); // Navigate on success
+  const handleSubmitForm = (values) => {
+    navigation.navigate('MainTabs');
   };
+
+  const [open, setOpen] = useState(false);
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        contentContainerStyle={{flexGrow: 1}}
-        showsVerticalScrollIndicator={false}>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={handleSubmitForm}>
-          {({handleChange, handleSubmit, values, errors, touched}) => (
-            <>
-              <Text style={styles.headText}>Personal Informatoin</Text>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmitForm}
+      >
+        {({ handleChange, handleSubmit, values, setFieldValue, errors, touched }) => (
+          <>
+            <Text style={styles.headText}>Personal Information</Text>
+            <ScrollView
+              contentContainerStyle={{ flexGrow: 1 }}
+              showsVerticalScrollIndicator={false}
+            >
               <Image source={LoginImage} style={styles.imageStyle} />
+
               <View style={styles.containLog}>
+                {/* First Name & Last Name */}
                 <View style={styles.textView}>
                   <TextImagecustom
                     IconAdd={UserIcon}
@@ -79,6 +85,7 @@ const PersonalInfo = ({navigation}) => {
                   />
                 </View>
 
+                {/* Address */}
                 <TextImagecustom
                   IconAdd={Placeholder}
                   shownIcon={true}
@@ -90,6 +97,7 @@ const PersonalInfo = ({navigation}) => {
                   error={touched.address && errors.address}
                 />
 
+                {/* City & State */}
                 <View style={styles.textView}>
                   <TextImagecustom
                     IconAdd={Placeholder}
@@ -113,28 +121,49 @@ const PersonalInfo = ({navigation}) => {
                   />
                 </View>
 
-                <TextImagecustom
-                  IconAdd={BirthCalender}
-                  shownIcon={true}
-                  Title="Date of Birth"
-                  keyboardType="numeric"
-                  TextinuptStyle={styles.fullTextInput}
-                  ValueText={values.dateOfBirth}
-                  ChangeText={handleChange('dateOfBirth')}
-                  error={touched.dateOfBirth && errors.dateOfBirth}
+                {/* Date of Birth with DatePicker Modal */}
+                <TouchableOpacity
+                  onPress={() => setOpen(true)}
+                  style={styles.fullTextInput}
+                >
+                  <TextImagecustom
+                    IconAdd={BirthCalender}
+                    shownIcon={true}
+                    Title="Date of Birth"
+                    keyboardType="numeric"
+                    ValueText={values.dateOfBirth || 'Select Date of Birth'}
+                    error={touched.dateOfBirth && errors.dateOfBirth}
+                  />
+                </TouchableOpacity>
+
+                {/* Date Picker Modal */}
+                <DatePicker
+                  modal
+                  open={open}
+                  date={values.dateOfBirth ? new Date(values.dateOfBirth) : new Date()}
+                  mode="date"
+                  maximumDate={new Date()}
+                  minimumDate={new Date('1900-01-01')}
+                  onConfirm={(date) => {
+                    setFieldValue('dateOfBirth', date.toISOString().split('T')[0]); // Set date in YYYY-MM-DD format
+                    setOpen(false);
+                  }}
+                  onCancel={() => setOpen(false)}
                 />
 
+                {/* Email */}
                 <TextImagecustom
                   IconAdd={EmailIcon}
                   shownIcon={true}
                   Title="Email"
+                  keyboardType="email-address"
                   TextinuptStyle={styles.fullTextInput}
                   ValueText={values.email}
-                  keyboardType="email-address"
                   ChangeText={handleChange('email')}
                   error={touched.email && errors.email}
                 />
 
+                {/* Password & Confirm Password */}
                 <TextImagecustom
                   IconAdd={LockIcon}
                   shownIcon={true}
@@ -144,23 +173,21 @@ const PersonalInfo = ({navigation}) => {
                   TextinuptStyle={styles.fullTextInput}
                   ValueText={values.password}
                   ChangeText={handleChange('password')}
-                  // secureTextEntry={true}
                   error={touched.password && errors.password}
                 />
-
                 <TextImagecustom
                   IconAdd={LockIcon}
                   shownIcon={true}
-                  Title="Re Enter Password"
+                  Title="Re-enter Password"
                   keyboardType="numeric"
                   maxLength={16}
                   TextinuptStyle={styles.fullTextInput}
                   ValueText={values.confirmPassword}
                   ChangeText={handleChange('confirmPassword')}
-                  // secureTextEntry={true}
                   error={touched.confirmPassword && errors.confirmPassword}
                 />
 
+                {/* Reference Code */}
                 <TextImagecustom
                   IconAdd={Exchange}
                   shownIcon={true}
@@ -170,25 +197,22 @@ const PersonalInfo = ({navigation}) => {
                   TextinuptStyle={styles.fullTextInput}
                   ValueText={values.referencePassword}
                   ChangeText={handleChange('referencePassword')}
-                  // secureTextEntry={true}
                   error={touched.referencePassword && errors.referencePassword}
                 />
               </View>
 
+              {/* Submit Button */}
               <ButtonCustom
                 title={'Submit'}
                 onClickButton={handleSubmit}
                 colors={[Colors.themegreen, Colors.ThemelightGreen]}
-                start={{x: 0, y: 0}}
-                end={{x: 0, y: 1.8}}
                 textColor="white"
-                // width={"100%"}
                 Buttonstyle={styles.btnStyle}
               />
-            </>
-          )}
-        </Formik>
-      </ScrollView>
+            </ScrollView>
+          </>
+        )}
+      </Formik>
     </SafeAreaView>
   );
 };
@@ -197,11 +221,12 @@ export default PersonalInfo;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     backgroundColor: Colors.White,
   },
   imageStyle: {
-    width: 150,
+    width: '40%',
     height: 160,
     resizeMode: 'contain',
     alignSelf: 'center',
@@ -215,7 +240,10 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   containLog: {
-    paddingHorizontal: 18,
+    paddingHorizontal: '5%',
+  },
+  inputCointer: {
+    width: 165,
   },
   textView: {
     flexDirection: 'row',
@@ -223,19 +251,19 @@ const styles = StyleSheet.create({
   },
   btnStyle: {
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
     alignSelf: 'center',
     marginTop: 25,
-    width: "90%",
-    // marginHorizontal: 30,
+    width: '90%',
     marginBottom: 100,
   },
-  inputCointer: {
-    width: 165,
+  inputContainer: {
+    width: '48%', // Adjust width for better responsiveness in 2-column layouts
   },
   fullTextInput: {
     width: '100%',
+    marginBottom: 10,
   },
 });

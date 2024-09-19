@@ -15,7 +15,8 @@ import {BirthCalender, NoImage} from '../../assets/Images';
 import ImagePicker from 'react-native-image-crop-picker';
 import Cameramodal from '../../customScreen/Cameramodal';
 import {androidCameraPermission} from '../../utility/Permission';
-import CalendarPicker from 'react-native-calendar-picker';
+import DatePicker from 'react-native-date-picker';
+
 
 const Account = ({navigation}) => {
   const [bName, setBname] = useState('');
@@ -23,8 +24,8 @@ const Account = ({navigation}) => {
   const [ifscCode, setIFSC] = useState('');
   const [holderName, setHolderName] = useState('');
   const [nominName, setNominName] = useState('');
-  const [Dob, setDob] = useState(new Date());
-  const [showPicker, setShowPicker] = useState(false);
+  const [Dob, setDob] = useState('Select Date of Birth');
+  const [open, setOpen] = useState(false);
   const [adharNo, setAdharNo] = useState('');
   const [panNo, setPanNo] = useState('');
   const [state, setState] = useState('');
@@ -104,7 +105,8 @@ const Account = ({navigation}) => {
 
   // -------- CALENDER PICKER-------
   const onDateChange = (date) => {
-    setDob(date);
+    setDob(date.toISOString().split('T')[0])
+    setOpen(false);
   };
 
  
@@ -196,26 +198,28 @@ const Account = ({navigation}) => {
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
                   value={nominName}
-                  onChange={e => setNominName(e)}
+                  onChangeText={setNominName}
                 />
                 <TouchableOpacity
                   style={[styles.borderStyle, styles.rowStyle]}
-                  onPress={() => onDateChange(new Date())}>
-                  <Text
-                    style={{
-                      fontSize: 14,
-                      fontWeight: '500',
-                      color: Colors.Black,
-                    }}>
-                    {Dob.toDateString()} 
-                  </Text>
+                  onPress={() => setOpen(true)}>
+                  <Text style={styles.dateText}>{Dob}</Text>
                   <Image
                     source={BirthCalender}
-                    style={{height: 25, width: 25, resizeMode: 'contain'}}
+                    style={{ height: 25, width: 25, resizeMode: 'contain' }}
                   />
                 </TouchableOpacity>
 
-               
+                <DatePicker
+                  modal
+                  open={open}
+                  date={Dob === 'Date of Birth' ? new Date() : new Date(Dob)}
+                  mode="date"
+                  maximumDate={new Date()}
+                  minimumDate={new Date('1900-01-01')}
+                  onConfirm={onDateChange}
+                  onCancel={() => setOpen(false)}
+                />
                
 
               </View>

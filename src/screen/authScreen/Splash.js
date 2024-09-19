@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, SafeAreaView, Image, View} from 'react-native';
-import {Saving} from '../../assets/Images';
+import { QuickLogo } from '../../assets/Images';
+
 
 const Splash = ({navigation}) => {
   useEffect(() => {
@@ -14,7 +15,7 @@ const Splash = ({navigation}) => {
     <View style={styles.container}>
       <SafeAreaView>
         <Image
-          source={Saving}
+          source={QuickLogo}
           style={styles.imageBackground}
           resizeMode="cover"
         />
@@ -30,9 +31,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imageBackground: {
-    width: 65,
-    height: 65,
+    width: 95,
+    height: 110,
+    resizeMode:"contain"
   },
 });
 
+
 export default Splash;
+
