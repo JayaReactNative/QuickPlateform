@@ -27,6 +27,7 @@ import TransactionDeatail from '../screen/Portfolio/TransactionDeatail';
 import DTHScreen from '../screen/Home/DTHScreen';
 import Recharge from '../screen/Home/Recharge';
 import SelectRechargePlan from '../screen/Home/SelectRechargePlan';
+import AccountHistory from '../screen/Account/AccountHistory';
 import Ops from '../customScreen/Ops';
 import ReferAndEarnn from '../screen/Home/ReferAndEarnn';
 
@@ -229,6 +230,7 @@ const NavigationScreen = () => {
         <Stack.Screen name='DTHScreen' component={DTHScreen} options={{headerShown:false}}/>
         <Stack.Screen name='Recharge' component={Recharge} options={{headerShown:false}}/>
         <Stack.Screen name='SelectRechargePlan' component={SelectRechargePlan} options={{headerShown:false}}/>
+        <Stack.Screen name='AccountHistory' component={AccountHistory} options={{headerShown:false}}/>
         <Stack.Screen name='Home' component={Home} options={{headerShown:false}}/>
         <Stack.Screen name='Ops' component={Ops} options={{headerShown:false}}/>
         <Stack.Screen name='ReferAndEarn' component={ReferAndEarnn} options={{headerShown:false}}/>

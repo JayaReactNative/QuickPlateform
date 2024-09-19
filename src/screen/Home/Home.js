@@ -54,7 +54,9 @@ const Home = ({ navigation }) => {
           showsVerticalScrollIndicator={false}>
           <View style={styles.containLog}>
             <Text style={styles.headText}>Hello John</Text>
-            <ImageSlider />
+            <View style={{marginLeft:-3}}>
+              <ImageSlider topView={35} ImageWidth={345}/>
+            </View>
             <View style={{marginVertical:10}}>
               <View style={styles.customCard}>
                 <Image source={Wallet} style={styles.iconStyle} />
