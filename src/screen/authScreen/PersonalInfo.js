@@ -14,8 +14,10 @@ import {Colors} from '../../assets/Colors';
 import {
   BirthCalender,
   Email,
+  EmailIcon,
   Exchange,
   Lock,
+  LockIcon,
   LoginImage,
   Placeholder,
   UserIcon,
@@ -39,7 +41,7 @@ const PersonalInfo = ({navigation}) => {
 
   const handleSubmitForm = values => {
     // Alert.alert("Form Submitted", JSON.stringify(values, null, 2));
-    navigation.navigate('Home'); // Navigate on success
+    navigation.navigate('MainTabs'); // Navigate on success
   };
 
   return (
@@ -123,7 +125,7 @@ const PersonalInfo = ({navigation}) => {
                 />
 
                 <TextImagecustom
-                  IconAdd={Email}
+                  IconAdd={EmailIcon}
                   shownIcon={true}
                   Title="Email"
                   TextinuptStyle={styles.fullTextInput}
@@ -134,7 +136,7 @@ const PersonalInfo = ({navigation}) => {
                 />
 
                 <TextImagecustom
-                  IconAdd={Lock}
+                  IconAdd={LockIcon}
                   shownIcon={true}
                   Title="Password"
                   keyboardType="numeric"
@@ -147,7 +149,7 @@ const PersonalInfo = ({navigation}) => {
                 />
 
                 <TextImagecustom
-                  IconAdd={Lock}
+                  IconAdd={LockIcon}
                   shownIcon={true}
                   Title="Re Enter Password"
                   keyboardType="numeric"
@@ -180,7 +182,7 @@ const PersonalInfo = ({navigation}) => {
                 start={{x: 0, y: 0}}
                 end={{x: 0, y: 1.8}}
                 textColor="white"
-                width={200}
+                // width={"100%"}
                 Buttonstyle={styles.btnStyle}
               />
             </>
@@ -226,7 +228,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     alignSelf: 'center',
     marginTop: 25,
-    width: 300,
+    width: "90%",
+    // marginHorizontal: 30,
     marginBottom: 100,
   },
   inputCointer: {

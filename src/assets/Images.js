@@ -66,6 +66,8 @@ export const UpArrow = require('../assets/icons/UpArrow.png');
 export const DoubleDown = require('../assets/icons/DoubleDown.png');
 export const DownArrow = require('../assets/icons/DownArrow.png');
 export const LeftArrow = require('../assets/icons/LeftArrow.png');
+export const Add = require('../assets/icons/add.png');
+export const Share = require('../assets/icons/share.png');
 
 // -------App Image ----,
 export const WelcomImg =require('../assets/moneyImage/smartWallet.png')

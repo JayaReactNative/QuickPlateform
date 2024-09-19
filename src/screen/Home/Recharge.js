@@ -61,7 +61,7 @@ const Recharge = ({ navigation }) => {
             .then((contactsList) => {
                 setContacts(contactsList);
                 setLoading(false);
-                console.log(contactsList[0])
+                // console.log(contactsList[0])
             })
             .catch((e) => {
                 console.log(e);

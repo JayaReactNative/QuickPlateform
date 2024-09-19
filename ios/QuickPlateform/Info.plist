@@ -4,6 +4,13 @@
 <dict>
 	<key>NSContactsUsageDescription</key>
 	<string>App users your contacts</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tez</string>
+		<string>phonepe</string>
+		<string>paytm</string>
+		<string>gpay</string>
+	</array>
 	
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
