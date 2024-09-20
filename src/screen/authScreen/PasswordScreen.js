@@ -13,6 +13,8 @@ import { String } from '../../utility/CommonText';
 import ButtonCustom from '../../customScreen/ButtonCustom';
 import { Formik } from 'formik';
 import { validatePassword } from '../../utility/Validation';
+import AuthService from '../../server/AuthService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const PasswordScreen = ({ navigation }) => {
 
@@ -20,8 +22,25 @@ const PasswordScreen = ({ navigation }) => {
     password: '',
   };
 
-  const handleSubmitForm = (values) => {
-    navigation.navigate('PersonalInfo');
+  const handleSubmitForm = async(values) => {
+    try {
+      const userId =await AsyncStorage.getItem('authId')
+        const response = await AuthService.VerfyPassword({
+          authId: userId,
+          password: values.password,
+        });
+        const dataRes = response?.data;
+        const token = dataRes?.items?.token;
+        await AsyncStorage.setItem('userToken', token);
+        if (dataRes?.message === 'Password verified Successfully') {
+          navigation.navigate('MainTabs');
+        } 
+        else{
+          Alert.alert('Error', 'Invalid Password');
+        }
+    } catch (error) {
+      Alert.alert('Error', 'An error occurred while verifying the  password');
+    }
   };
 
   return (
@@ -85,7 +104,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.themeColor,
     marginVertical: 10,
-    alignSelf: 'center',
   },
   smallText: {
     marginTop: 15,

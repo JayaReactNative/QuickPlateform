@@ -1,61 +1,63 @@
-// Create a multiple function's which i can use further as a prop in future.
-// I want functions for: Login(Mobile Number) (Store token locally), SignUp(firstName, lastName, address, city, state, dateOfBirth, email, password, confirmPassword, referencePassword)
-// SendOTP(Mobile Number) (This api will get called at time of login), ForgetPassword(Mobile Number) (With OTP), 
-// User proper error handling and industry standard code.
-// Language: React-Native
-// FileName: AuthService.js
-
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const BASE_URL = 'https://your-api-url.com'; // Replace with your API base URL
+const BASE_URL = 'https://quickly-invest-backend-prod-65cxm.ondigitalocean.app/v1'; 
 
+// ------  loginScreen ------
 const AuthService = {
-  // Function to log in the user
-  async login(mobileNumber) {
-    try {
-      const response = await axios.post(`${BASE_URL}/login`, { mobileNumber });
-      const { token } = response.data;
-
-      // Store the token locally
-      await AsyncStorage.setItem('userToken', token);
-      return response.data;
-    } catch (error) {
-      this.handleError(error);
-    }
-  },
-
-  // Function to sign up a new user
-  async signUp({ firstName, lastName, address, city, state, dateOfBirth, email, password, confirmPassword, referencePassword }) {
-    try {
-      const response = await axios.post(`${BASE_URL}/signup`, {
-        firstName,
-        lastName,
-        address,
-        city,
-        state,
-        dateOfBirth,
-        email,
-        password,
-        confirmPassword,
-        referencePassword,
-      });
-      return response.data;
-    } catch (error) {
-      this.handleError(error);
-    }
-  },
-
-  // Function to send OTP for login
   async sendOTP(mobileNumber) {
     try {
-      const response = await axios.post(`${BASE_URL}/send-otp`, { mobileNumber });
-      return response.data;
+      const response = await axios.get(`${BASE_URL}/auth/verify/sendOtp/${mobileNumber}`);
+      return response;
     } catch (error) {
       this.handleError(error);
     }
   },
+
+
+  async VerfyOTP(dataValue) {
+    try {
+      const response = await axios.post(`${BASE_URL}/auth/verify/verifyOtp`, dataValue); 
+      return response; 
+    } catch (error) {
+      console.error('Verification error:', error);
+      throw error;  
+    }
+  },
+
+  async VerfyPassword(dataValue) {
+    try {
+      console.log('dataValue<<----',dataValue)
+      const response = await axios.post(`${BASE_URL}/auth/verify/verifyPassword`, dataValue); 
+      return response; 
+    } catch (error) {
+      console.error('Verification error:', error);
+      throw error;  
+    }
+  },
+  
+
+  
+
+  // Function to sign up a new user
+  async signUp(data, userToken){
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/register/basicDetails/add`,
+        data,
+        {
+          headers: {
+            'token': `${userToken}`, 
+          },
+        }
+      );
+      return response.data; 
+    } catch (error) {
+      console.error('Sign-up error:', error);
+      throw error; 
+    }
+  },
+
 
   // Function to reset password with OTP
   async forgetPassword(mobileNumber) {
@@ -67,9 +69,7 @@ const AuthService = {
     }
   },
 
-  // Error handling function
   handleError(error) {
-    // You can customize the error handling as needed
     if (axios.isAxiosError(error)) {
       const message = error.response?.data?.message || 'Something went wrong';
       throw new Error(message);
@@ -87,14 +87,7 @@ const AuthService = {
     }
   },
 
-  // Function to log out the user
-  async logout() {
-    try {
-      await AsyncStorage.removeItem('userToken');
-    } catch (error) {
-      console.error('Failed to logout:', error);
-    }
-  },
+ 
 };
 
 export default AuthService;

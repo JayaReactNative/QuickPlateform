@@ -1,15 +1,27 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, SafeAreaView, Image, View} from 'react-native';
 import { QuickLogo } from '../../assets/Images';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const Splash = ({navigation}) => {
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.navigate('WelcomeScreen');
-    }, 3000);
-    return () => clearTimeout(timer);
+    const checkUserToken = async () => {
+      const userToken = await AsyncStorage.getItem('userToken'); 
+      if (userToken) {
+        navigation.navigate('MainTabs'); 
+      } else {
+        const timer = setTimeout(() => {
+          navigation.navigate('WelcomeScreen'); 
+        }, 3000);
+        
+        return () => clearTimeout(timer);
+      }
+    };
+  
+    checkUserToken();
   }, [navigation]);
+  
 
   return (
     <View style={styles.container}>

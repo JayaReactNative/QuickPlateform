@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, SafeAreaVi
 import { CustomerReview, DownArrow, FaqImage, FaqQuestion, Logout, Privacy, ProfileIcon, ReferredImg, SupportImg, UpArrow } from '../../assets/Images';
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../../assets/Colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const userData = {
   "name": "Mr. Dhruv Soni",
@@ -14,10 +15,20 @@ const userData = {
     { "id": "2", "amount": "$50", "date": "2024-09-10" }
   ]
 };
+
 const Profile = ({ navigation }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [user, setUser] = useState(null);
-
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem('userToken');
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Error during logout:', error.message);
+      Alert.alert('Logout Error', 'An error occurred while logging out.');
+    }
+  };
+  
   useEffect(() => {
     setUser(userData);
   }, []);
@@ -27,6 +38,27 @@ const Profile = ({ navigation }) => {
   if (!user) {
     return <Text>Loading...</Text>;
   }
+
+  const confirmLogout = () => {
+    Alert.alert(
+      'Confirm Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Logout cancelled'),
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          onPress: handleLogout,
+          style: 'destructive', // Optional, changes button color to indicate a destructive action
+        },
+      ],
+      { cancelable: true }
+    );
+  };
+
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
@@ -86,7 +118,7 @@ const Profile = ({ navigation }) => {
             <Text style={styles.subtitle}>Help and Support</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.box}>
+          <TouchableOpacity style={styles.box} onPress={confirmLogout}>
             <Image source={Logout} style={styles.iconStyle} />
             <Text style={styles.subtitle}>Sign Out</Text>
           </TouchableOpacity>

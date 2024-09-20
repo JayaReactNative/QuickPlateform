@@ -14,6 +14,9 @@ import {String} from '../../utility/CommonText';
 import ButtonCustom from '../../customScreen/ButtonCustom';
 import { Formik } from 'formik';
 import { validationMobile } from '../../utility/Validation';
+import AuthService from '../../server/AuthService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Login = ({navigation}) => {
 
@@ -21,10 +24,29 @@ const Login = ({navigation}) => {
     number: '',
   };
 
-  const handleSubmitForm = (values) => {
-    // Alert.alert('Form Submitted', JSON.stringify(values, null, 2));
-    navigation.navigate('PasswordScreen');
+  // ------ api  calling
+  const handleSubmitForm = async (values) => {
+    try {
+      const response = await AuthService.sendOTP(values.number);
+      const dataRes = response.data;
+
+      if (dataRes?.message === 'registered') {
+        const userId = dataRes.items?._id;
+        await AsyncStorage.setItem('authId', userId);
+        navigation.navigate('PasswordScreen');
+      } else if (dataRes?.message === 'Otp Sent Successfully') {
+        const otp = dataRes.items?.otp;  
+        const mobileNumber = values.number;  
+        const userId = dataRes.items?.existDetails?._id;
+        await AsyncStorage.setItem('authId', userId);
+        navigation.navigate('OTPscreen', { mobileNumber, otp });
+      }
+    } catch (error) {
+      console.error('Login error:', error.message);
+    }
   };
+  
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,7 +60,14 @@ const Login = ({navigation}) => {
           validationSchema={validationMobile}
           onSubmit={handleSubmitForm}
         >
-          {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          {({ handleChange, handleBlur, handleSubmit, values, errors, touched, resetForm }) => {
+            useFocusEffect(
+              React.useCallback(() => {
+                resetForm();
+              }, [resetForm])
+            );
+
+            return (
             <>
               <View style={styles.textHolder}>
                 <TextInput
@@ -67,7 +96,7 @@ const Login = ({navigation}) => {
                 Buttonstyle={styles.btnStyle}
               />
             </>
-          )}
+          )}}
         </Formik>
       </View>
     </SafeAreaView>

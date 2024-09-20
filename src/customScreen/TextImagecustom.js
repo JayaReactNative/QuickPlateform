@@ -14,7 +14,8 @@ const TextImagecustom = ({
   shownIcon,
   error,
   keyboardType = 'default',
-  maxLength
+  maxLength,
+  onClick
 }) => {
   const [isSecure, setIsSecure] = useState(secureTextEntry || false);
   const [siIconShow, setIsIconShow] = useState(shownIcon || false);
@@ -25,7 +26,7 @@ const TextImagecustom = ({
 
   return (
     <View>
-    <View style={[styles.container1, TextinuptStyle]}>
+    <TouchableOpacity style={[styles.container1, TextinuptStyle]} onPress={onClick}>
       {shownIcon && (
         <Image
           source={IconAdd}
@@ -50,7 +51,7 @@ const TextImagecustom = ({
           />
         </TouchableOpacity>
       )}
-    </View>
+    </TouchableOpacity>
       {error && (
         <Text style={styles.errorText}>{error}</Text>
       )}
