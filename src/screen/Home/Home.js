@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   StyleSheet,
@@ -8,8 +8,9 @@ import {
   Text,
   TouchableOpacity,
   Modal,
+  Alert,BackHandler
 } from 'react-native';
-import { Colors } from '../../assets/Colors';
+import {Colors} from '../../assets/Colors';
 import {
   Add,
   BoardbandIcon,
@@ -39,12 +40,95 @@ import {
   WRemove,
 } from '../../assets/Images';
 import ImageSlider from '../../customScreen/ImageSlider';
-import { colors } from 'react-native-swiper-flatlist/src/themes';
+import {colors} from 'react-native-swiper-flatlist/src/themes';
 import LinearGradient from 'react-native-linear-gradient';
+import Server from '../../server/Server';
 
-const Home = ({ navigation }) => {
+const Home = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Invest');
+  const [totalInvestment, setTotalInvestment] = useState('');
+  const [walletBalance, setWalletBalance] = useState('');
+  const [ProfitBalance, setProfitBalance] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+
+  const handleBackButtonClick = () => {
+    if (navigation.isFocused()) {
+      Alert.alert(
+        'Exit App',
+        'Do you want to exit the app?',
+        [
+          {text: 'Cancel', onPress: () => null, style: 'cancel'},
+          {text: 'YES', onPress: () => BackHandler.exitApp()},
+        ],
+        {cancelable: false},
+      );
+      return true; // This prevents the default back action
+    }
+    return false;
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButtonClick);
+    return () => {
+      BackHandler.removeEventListener(
+        'hardwareBackPress',
+        handleBackButtonClick,
+      );
+    };
+  }, []);
+
+
+  useEffect(() => {
+    getDetail();
+    getInvestment()
+    getWalletDetail()
+    getProfitDetail()
+  }, []);
+
+
+  // ------ user detail -----
+  const getDetail = async () => {
+    try {
+      const response = await Server.getUserDetail();
+      // console.log('responsive-----', response.data);
+    } catch (error) {
+      console.log('Error', 'An error occurred fetching data ');
+    }
+  };
+
+  // ------  total investment ---
+  const getInvestment = async () => {
+    try {
+      const response = await Server.getTotalIvest();
+      const invest= response.data?.items?.totalInvestment
+      setTotalInvestment(invest)
+    } catch (error) {
+     console.log('Error', 'An error occurred fetching data ');
+    }
+  };
+
+  // ------  total Profit ---
+  const getProfitDetail = async () => {
+    try {
+      const response = await Server.getProfitBalance();
+      const Balance= response.data?.items?.walletBalance
+      setProfitBalance(Balance)
+    } catch (error) {
+     console.log('Error', 'An error occurred fetching data ');
+    }
+  };
+
+  // ------  total wallet ---
+  const getWalletDetail = async () => {
+    try {
+      const response = await Server.getWalletBalance();
+      const Balance= response.data?.items?.walletBalance
+      setWalletBalance(Balance)
+    } catch (error) {
+     console.log('Error', 'An error occurred fetching data ');
+    }
+  };
+  
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
@@ -54,25 +138,34 @@ const Home = ({ navigation }) => {
           showsVerticalScrollIndicator={false}>
           <View style={styles.containLog}>
             <Text style={styles.headText}>Hello John</Text>
-            <View style={{marginLeft:-3,marginTop:'5%'}}>
-              <ImageSlider topView={35} ImageWidth={345}/>
+            <View style={{marginLeft: -3, marginTop: '5%'}}>
+              <ImageSlider topView={35} ImageWidth={345} />
             </View>
 
-
-            <View style={{marginVertical:20, marginTop:'10%'}}>
-              <TouchableOpacity style={styles.customCard} onPress={()=>navigation.navigate('AddAmount')}>
+            <View style={{marginVertical: 20, marginTop: '10%'}}>
+              <TouchableOpacity
+                style={styles.customCard}
+                onPress={() => navigation.navigate('AddAmount')}>
                 <Image source={Wallet} style={styles.iconStyle} />
-                <Text style={[styles.iconName, {width:'50%'}]}>Wallet Balance</Text>
-                <Text style={styles.iconName}>Rs 0</Text>
-                <Image source={Add} style={[styles.iconStyle, {height: 25,}]}  />
+                <Text style={[styles.iconName, {width: '50%'}]}>
+                  Wallet Balance
+                </Text>
+                <Text style={styles.iconName}>Rs {walletBalance}</Text>
+                <Image source={Add} style={[styles.iconStyle, {height: 25}]} />
               </TouchableOpacity>
-              <TouchableOpacity style={[styles.customCard,{marginTop:20}]} onPress={()=>navigation.navigate('ReferAndEarn')}>
+              <TouchableOpacity
+                style={[styles.customCard, {marginTop: 20}]}
+                onPress={() => navigation.navigate('ReferAndEarn')}>
                 <Image source={TransferIcon} style={styles.iconStyle} />
-                <Text style={[styles.iconName, {width:'62%'}]}>Refer and Earn</Text>
-                <Image source={Share} style={[styles.iconStyle, {height: 20,}]} />
+                <Text style={[styles.iconName, {width: '62%'}]}>
+                  Refer and Earn
+                </Text>
+                <Image
+                  source={Share}
+                  style={[styles.iconStyle, {height: 20}]}
+                />
               </TouchableOpacity>
             </View>
-            
 
             {/* ----------not get image */}
             <View style={styles.rowView}>
@@ -91,13 +184,15 @@ const Home = ({ navigation }) => {
             </View>
             <Text style={styles.blackText}>Recharge</Text>
             <View style={styles.rowView}>
-              <TouchableOpacity style={styles.viewCard} onPress={() => navigation.navigate('DTHScreen')}>
-
+              <TouchableOpacity
+                style={styles.viewCard}
+                onPress={() => navigation.navigate('DTHScreen')}>
                 <Image source={NetworkIcon} style={styles.iconStyle} />
                 <Text style={styles.iconName}>DTH</Text>
-
               </TouchableOpacity>
-              <TouchableOpacity style={styles.viewCard} onPress={() => navigation.navigate('Recharge')} >
+              <TouchableOpacity
+                style={styles.viewCard}
+                onPress={() => navigation.navigate('Recharge')}>
                 <Image source={RechargeIcon} style={styles.iconStyle} />
                 <Text style={styles.iconName}>Recharge</Text>
               </TouchableOpacity>
@@ -128,7 +223,7 @@ const Home = ({ navigation }) => {
               </View>
             </View>
 
-            <View style={[styles.rowView, { marginTop: 0 }]}>
+            <View style={[styles.rowView, {marginTop: 0}]}>
               <Text style={styles.blackText}>Comming Soon</Text>
               <Text style={styles.blackText}>View More</Text>
             </View>
@@ -154,63 +249,46 @@ const Home = ({ navigation }) => {
             <Text style={styles.blackText}>Favorites</Text>
             <View style={styles.rowView}>
               <TouchableOpacity
-                style={[
-                  styles.viewCard,
-                ]}
+                style={[styles.viewCard]}
                 onPress={() => {
                   setActiveTab('Invest'), setModalVisible(!modalVisible);
                 }}>
-                <Image
-                  source={Invest}
-                  style={[
-                    styles.iconStyle,
-                  ]}
-                />
-                <Text
-                  style={[
-                    styles.iconName]}>
-                  Invest
-                </Text>
+                <Image source={Invest} style={[styles.iconStyle]} />
+                <Text style={[styles.iconName]}>Invest</Text>
               </TouchableOpacity>
 
               {/* Withdrawal Tab */}
               <TouchableOpacity
-                style={[
-                  styles.viewCard,
-                ]}
-                onPress={() => { setActiveTab('Withdrawal'), navigation.navigate('Portfolio') }}>
-                <Image
-                  source={Withdrawal}
-                  style={[
-                    styles.iconStyle
-                  ]}
-                />
-                <Text
-                  style={[
-                    styles.iconName,
-                  ]}>
-                  Withdrawal
-                </Text>
+                style={[styles.viewCard]}
+                onPress={() => {
+                  setActiveTab('Withdrawal'), navigation.navigate('Portfolio');
+                }}>
+                <Image source={Withdrawal} style={[styles.iconStyle]} />
+                <Text style={[styles.iconName]}>Withdrawal</Text>
               </TouchableOpacity>
 
               {/* Reward Tab */}
               <TouchableOpacity
                 style={[
                   styles.viewCard,
-                  activeTab === 'Reward' && { backgroundColor: Colors.themeColor },
+                  activeTab === 'Reward' && {
+                    backgroundColor: Colors.themeColor,
+                  },
                 ]}
-                onPress={() => { setActiveTab('Reward'), navigation.navigate('Reward') }}>
+                onPress={() => {
+                  setActiveTab('Reward'), navigation.navigate('Reward');
+                }}>
                 <Image
                   source={MoreIcon}
                   style={[
                     styles.iconStyle,
-                    activeTab === 'Reward' && { tintColor: 'white' },
+                    activeTab === 'Reward' && {tintColor: 'white'},
                   ]}
                 />
                 <Text
                   style={[
                     styles.iconName,
-                    activeTab === 'Reward' && { color: 'white' },
+                    activeTab === 'Reward' && {color: 'white'},
                   ]}>
                   Reward
                 </Text>
@@ -222,18 +300,20 @@ const Home = ({ navigation }) => {
               <View style={styles.recentCard}>
                 <Image source={TotalInvestImg} style={styles.iconRecentStyle} />
                 <Text style={styles.iconRecentName}>
-                  Total Investment {'\n'}₹ 0
+                  Total Investment {'\n'}₹ {totalInvestment}
                 </Text>
               </View>
               <View style={styles.recentCard}>
                 <Image source={TotalProfitImg} style={styles.iconRecentStyle} />
                 <Text style={styles.iconRecentName}>
-                  Total Profit {'\n'} ₹ 0.00
+                  Total Profit {'\n'} ₹ {ProfitBalance}
                 </Text>
               </View>
             </View>
 
-            <TouchableOpacity style={styles.captialCard} onPress={() => navigation.navigate('CapitalWithdrawal')}>
+            <TouchableOpacity
+              style={styles.captialCard}
+              onPress={() => navigation.navigate('CapitalWithdrawal')}>
               <Image source={WRemove} style={styles.iconRecentStyle} />
               <View
                 style={{
@@ -242,7 +322,9 @@ const Home = ({ navigation }) => {
                   flexDirection: 'row',
                   width: '67%',
                 }}>
-                <Text style={[styles.blackText, { color: Colors.Black }]}>Capital Withdrawal</Text>
+                <Text style={[styles.blackText, {color: Colors.Black}]}>
+                  Capital Withdrawal
+                </Text>
                 <Image
                   source={RightArrowGreen}
                   style={{
@@ -264,17 +346,17 @@ const Home = ({ navigation }) => {
                 <View style={styles.modalGrey}>
                   <View style={styles.modalCart}>
                     <TouchableOpacity
-                      style={{ alignSelf: 'flex-end', marginTop: 7 }}
+                      style={{alignSelf: 'flex-end', marginTop: 7}}
                       onPress={() => setModalVisible(false)}>
                       <Image
                         source={Delete}
-                        style={{ width: 30, height: 23, resizeMode: 'contain' }}
+                        style={{width: 30, height: 23, resizeMode: 'contain'}}
                       />
                     </TouchableOpacity>
                     <Text
                       style={[
                         styles.blackText,
-                        { fontWeight: '700', marginTop: 16, color: Colors.Black },
+                        {fontWeight: '700', marginTop: 16, color: Colors.Black},
                       ]}>
                       Select Payment Mode
                     </Text>
@@ -292,12 +374,15 @@ const Home = ({ navigation }) => {
                           marginTop: 8,
                         },
                       ]}>
-                      <Image source={QrImage2} style={{ height: 50, width: 50 }} />
-                      <View style={{ marginLeft: 17 }}>
+                      <Image
+                        source={QrImage2}
+                        style={{height: 50, width: 50}}
+                      />
+                      <View style={{marginLeft: 17}}>
                         <Text
                           style={[
                             styles.iconRecentName,
-                            { color: colors.headText },
+                            {color: colors.headText},
                           ]}>
                           QR Scan Payment
                         </Text>
@@ -326,7 +411,7 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     flexGrow: 1,
     paddingHorizontal: 15,
-    paddingBottom: 35
+    paddingBottom: 35,
   },
   headText: {
     fontSize: 18,
@@ -472,7 +557,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 25,
   },
   customCard: {
-    
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
@@ -489,5 +573,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 4,
-  }
+  },
 });

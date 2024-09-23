@@ -31,8 +31,14 @@ const PasswordScreen = ({ navigation }) => {
         });
         const dataRes = response?.data;
         const token = dataRes?.items?.token;
-        await AsyncStorage.setItem('userToken', token);
         if (dataRes?.message === 'Password verified Successfully') {
+          Alert.alert('User Registered Successfully')
+          try {
+            await AsyncStorage.setItem('userToken', response.data?.items?.token);
+            await AsyncStorage.setItem('authId', response.data?.items?.authId);
+          } catch (error) {
+            
+          }
           navigation.navigate('MainTabs');
         } 
         else{
