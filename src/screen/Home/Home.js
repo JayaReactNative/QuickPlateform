@@ -8,7 +8,8 @@ import {
   Text,
   TouchableOpacity,
   Modal,
-  Alert,BackHandler
+  Alert,
+  BackHandler,
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import {
@@ -77,14 +78,12 @@ const Home = ({navigation}) => {
     };
   }, []);
 
-
   useEffect(() => {
     getDetail();
-    getInvestment()
-    getWalletDetail()
-    getProfitDetail()
+    getInvestment();
+    getWalletDetail();
+    getProfitDetail();
   }, []);
-
 
   // ------ user detail -----
   const getDetail = async () => {
@@ -100,10 +99,10 @@ const Home = ({navigation}) => {
   const getInvestment = async () => {
     try {
       const response = await Server.getTotalIvest();
-      const invest= response.data?.items?.totalInvestment
-      setTotalInvestment(invest)
+      const invest = response.data?.items?.totalInvestment;
+      setTotalInvestment(invest);
     } catch (error) {
-     console.log('Error', 'An error occurred fetching data ');
+      console.log('Error', 'An error occurred fetching data ');
     }
   };
 
@@ -111,11 +110,11 @@ const Home = ({navigation}) => {
   const getProfitDetail = async () => {
     try {
       const response = await Server.getProfitBalance();
-      const Balance= response.data?.items?.walletBalance
-      console.log('response profit---->',Balance)
-      setProfitBalance(Balance)
+      const Balance = response.data?.items?.walletBalance;
+      console.log('response profit---->', Balance);
+      setProfitBalance(Balance);
     } catch (error) {
-     console.log('Error', 'An error occurred fetching data ');
+      console.log('Error', 'An error occurred fetching data ');
     }
   };
 
@@ -123,14 +122,13 @@ const Home = ({navigation}) => {
   const getWalletDetail = async () => {
     try {
       const response = await Server.getWalletBalance();
-      const Balance= response.data?.items?.walletBalance
-      console.log('response wallet---->',Balance)
-      setWalletBalance(Balance)
+      const Balance = response.data?.items?.walletBalance;
+      console.log('response wallet---->', Balance);
+      setWalletBalance(Balance);
     } catch (error) {
-     console.log('Error', 'An error occurred fetching data ');
+      console.log('Error', 'An error occurred fetching data ');
     }
   };
-  
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
@@ -152,7 +150,9 @@ const Home = ({navigation}) => {
                 <Text style={[styles.iconName, {width: '50%'}]}>
                   Wallet Balance
                 </Text>
-                <Text style={styles.iconName}>Rs {walletBalance}</Text>
+                <Text style={styles.iconName}>
+                  Rs {walletBalance ? walletBalance : 0}
+                </Text>
                 <Image source={Add} style={[styles.iconStyle, {height: 25}]} />
               </TouchableOpacity>
               <TouchableOpacity

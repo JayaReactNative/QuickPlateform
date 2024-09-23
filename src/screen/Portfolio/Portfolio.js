@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import {
 import {Colors} from '../../assets/Colors';
 import {Delete, Invest, Withdrawal} from '../../assets/Images';
 import LinearGradient from 'react-native-linear-gradient';
+import Server from '../../server/Server';
 
 // Expanded investment data
 const investmentData = [
@@ -87,26 +88,50 @@ const capitalWithdrawData = [
 
 const Portfolio = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Investment');
+  const [investmentData, setInvestmentData] = useState([]);
+  const [withdrawlData, setWithdrawlData] = useState([]);
+  const [capitalWithdraw, setCapitalWithdraw] = useState([]);
+  useEffect(() => {
+    getInvesterDetail();
+  }, []);
 
   const renderItem = ({item}) => (
-    <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate('TransactionDeatail')}>
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => navigation.navigate('TransactionDeatail')}>
       <View style={styles.row}>
-        <Text style={[styles.cardLabel, {fontWeight: '600', color: Colors.White,}]}>Date</Text>
+        <Text
+          style={[styles.cardLabel, {fontWeight: '600', color: Colors.White}]}>
+          Date
+        </Text>
         <Text style={styles.cardValue}>{item.date}</Text>
       </View>
       <View style={styles.row}>
-        <Text style={[styles.cardLabel, {fontWeight: '600',color: Colors.White}]}>Amount</Text>
+        <Text
+          style={[styles.cardLabel, {fontWeight: '600', color: Colors.White}]}>
+          Amount
+        </Text>
         <Text style={styles.cardValue}>₹{item.amount}</Text>
       </View>
       {item.interest && (
         <View style={styles.row}>
-          <Text style={[styles.cardLabel, {fontWeight: '600',color: Colors.White}]}>Interest</Text>
+          <Text
+            style={[
+              styles.cardLabel,
+              {fontWeight: '600', color: Colors.White},
+            ]}>
+            Interest
+          </Text>
           <Text style={styles.cardValue}>{item.interest}</Text>
         </View>
       )}
       {item.lockingPeriod && (
         <View style={styles.row}>
-          <Text style={[styles.cardLabel, {fontWeight: '600',color: Colors.White}]}>
+          <Text
+            style={[
+              styles.cardLabel,
+              {fontWeight: '600', color: Colors.White},
+            ]}>
             Locking Period
           </Text>
           <Text style={styles.cardValue}>{item.lockingPeriod}</Text>
@@ -114,7 +139,13 @@ const Portfolio = ({navigation}) => {
       )}
       {item.status && (
         <View style={styles.row}>
-          <Text style={styles.cardLabel}>Status</Text>
+          <Text
+            style={[
+              styles.cardLabel,
+              {fontWeight: '600', color: Colors.White},
+            ]}>
+            Status
+          </Text>
           <Text style={[styles.cardValue]}>{item.status}</Text>
         </View>
       )}
@@ -123,16 +154,19 @@ const Portfolio = ({navigation}) => {
 
   const renderItemTable = ({item}) => (
     <View style={styles.tableRow}>
-      <Text style={[styles.cell, {width: '38%'}]}>{item.date}</Text>
-      <Text style={[styles.cell, {width: '30%'}]}>₹{item.amount}</Text>
+      <Text style={[styles.cell, {width: '25%'}]}>
+        {item.date ? item.date : item.dateOfWithdrawal}
+      </Text>
+      <Text style={[styles.cell, {width: '48%'}]}>₹{item.amount}</Text>
       {item.status && (
         <Text style={[styles.cell, {width: '25%'}]}>{item.status}</Text>
       )}
-      <TouchableOpacity onPress={()=>Alert.alert('Do you want to cancel request?')}>
-      <Image
-        source={item.image}
-        style={{width: 30, height: 23, resizeMode: 'contain'}}
-      />
+      <TouchableOpacity
+        onPress={() => Alert.alert('Do you want to cancel request?')}>
+        <Image
+          source={item.image}
+          style={{width: 30, height: 23, resizeMode: 'contain'}}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -142,9 +176,9 @@ const Portfolio = ({navigation}) => {
       case 'Investment':
         return investmentData;
       case 'Interest Withdrawl':
-        return interestWithdrawlData;
+        return withdrawlData;
       case 'Capital Withdraw':
-        return capitalWithdrawData;
+        return capitalWithdraw;
       default:
         return [];
     }
@@ -154,65 +188,84 @@ const Portfolio = ({navigation}) => {
     return tab === 'Investment' ? Invest : Withdrawal;
   };
 
+
+
+  // ------- api integration ----
+  const getInvesterDetail = async () => {
+    try {
+      const response = await Server.getWithDrawList();
+      const sortedData = response.data?.items.sort((a, b) => {
+        const dateA = new Date(a.date || a.dateOfWithdrawal).getTime();
+        const dateB = new Date(b.date || b.dateOfWithdrawal).getTime();
+        return dateB - dateA; // Most recent date first
+      });
+      setWithdrawlData(sortedData);
+    } catch (error) {
+      console.log('Error', 'An error occurred fetching data ');
+    }
+  };
+
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
-    <View style={styles.container}>
-      <View style={{marginTop:30}}>
-      <Text style={styles.title}>Portfolio</Text>
-      </View>
-
-      <View style={styles.tabsContainer}>
-        {['Investment', 'Interest Withdrawl', 'Capital Withdraw'].map(tab => (
-          <TouchableOpacity
-            key={tab}
-            style={[styles.tab, activeTab === tab && styles.activeTab]}
-            onPress={() => {setActiveTab(tab)}}>
-            <Image
-              source={getTabIcon(tab)}
-              style={[
-                styles.iconStyle,
-                activeTab === tab && styles.activeIconStyle,
-              ]}
-            />
-            <Text
-              style={[
-                styles.tabText,
-                activeTab === tab && styles.activeTabText,
-              ]}>
-              {tab}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
-      {activeTab === 'Interest Withdrawl' ? (
-        <Text style={styles.warning}>
-          Note- The Withdrawl requiest can only be placed on the last days of
-          every month (i.e 28, 29, 30, 31) and may take up to 72 hours to
-          disburse
-        </Text>
-      ) : (
-        <View></View>
-      )}
-
-      {activeTab === 'Investment' ? (
-        <View></View>
-      ) : (
-        <View style={styles.row}>
-          <Text style={styles.menuCell}>Date</Text>
-          <Text style={styles.menuCell}>Amount</Text>
-          <Text style={styles.menuCell}>Status</Text>
+      <View style={styles.container}>
+        <View style={{marginTop: 30}}>
+          <Text style={styles.title}>Portfolio</Text>
         </View>
-      )}
 
-      <FlatList
-        data={getData()}
-        renderItem={activeTab === 'Investment' ? renderItem : renderItemTable}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+        <View style={styles.tabsContainer}>
+          {['Investment', 'Interest Withdrawl', 'Capital Withdraw'].map(tab => (
+            <TouchableOpacity
+              key={tab}
+              style={[styles.tab, activeTab === tab && styles.activeTab]}
+              onPress={() => {
+                setActiveTab(tab);
+              }}>
+              <Image
+                source={getTabIcon(tab)}
+                style={[
+                  styles.iconStyle,
+                  activeTab === tab && styles.activeIconStyle,
+                ]}
+              />
+              <Text
+                style={[
+                  styles.tabText,
+                  activeTab === tab && styles.activeTabText,
+                ]}>
+                {tab}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        {activeTab === 'Interest Withdrawl' ? (
+          <Text style={styles.warning}>
+            Note- The Withdrawl requiest can only be placed on the last days of
+            every month (i.e 28, 29, 30, 31) and may take up to 72 hours to
+            disburse
+          </Text>
+        ) : (
+          <View></View>
+        )}
+
+        {activeTab === 'Investment' ? (
+          <View></View>
+        ) : (
+          <View style={styles.row}>
+            <Text style={styles.menuCell}>Date</Text>
+            <Text style={styles.menuCell}>Amount</Text>
+            <Text style={styles.menuCell}>Status</Text>
+          </View>
+        )}
+
+        <FlatList
+          data={getData()}
+          renderItem={activeTab === 'Investment' ? renderItem : renderItemTable}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.listContainer}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
     </LinearGradient>
   );
 };
@@ -231,14 +284,14 @@ const styles = StyleSheet.create({
     color: Colors.White,
   },
   tabsContainer: {
-    width:'100%',
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 16,
-    alignSelf:'center',
+    alignSelf: 'center',
   },
   tab: {
-    width:110,
+    width: 110,
     alignItems: 'center',
     paddingVertical: 10,
     elevation: 4,
@@ -248,7 +301,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 2, height: 1},
     shadowRadius: 4,
     elevation: 5,
-    borderRadius:15
+    borderRadius: 15,
   },
   activeTab: {
     backgroundColor: Colors.SkyBlue,
@@ -264,7 +317,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   activeTabText: {
-    color:Colors.Black,
+    color: Colors.Black,
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -287,7 +340,8 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
+    alignItems:'center',
     marginBottom: 8,
   },
   cardLabel: {
@@ -309,7 +363,7 @@ const styles = StyleSheet.create({
   activeIconStyle: {
     width: 30,
     height: 30,
-    resizeMode:'contain',
+    resizeMode: 'contain',
     marginBottom: 6,
     tintColor: '#000',
   },
@@ -330,11 +384,11 @@ const styles = StyleSheet.create({
   cell: {
     fontSize: 14,
     color: Colors.White,
-    textAlign: 'left',
+    textAlign: 'center',
     fontWeight: '500',
   },
   menuCell: {
-    flex: 1,
+    // flex: 1,
     fontSize: 16,
     fontWeight: 'bold',
     color: Colors.White,

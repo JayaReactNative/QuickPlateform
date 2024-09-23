@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, {useRef, useState} from 'react';
 import {
   View,
   Text,
@@ -12,22 +12,25 @@ import {
   TextInput,
   LayoutAnimation,
   UIManager,
-  Platform, FlatList
+  Platform,
+  FlatList,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { LeftArrow } from '../../assets/Images';
-import { Colors } from '../../assets/Colors';
+import {LeftArrow} from '../../assets/Images';
+import {Colors} from '../../assets/Colors';
 import ImageSlider from '../../customScreen/ImageSlider';
 import TextInputCustom from '../../customScreen/TextInputCustom';
 import BottomSheet from '@gorhom/bottom-sheet';
 
-
 // Enable LayoutAnimation for Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const DTHScreen = ({ navigation }) => {
+const DTHScreen = ({navigation}) => {
   const [selectedOperator, setSelectedOperator] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [onChangesClick, setChangesClick] = useState(false);
@@ -64,91 +67,183 @@ const DTHScreen = ({ navigation }) => {
 
   const windowHeight = Dimensions.get('window').height;
 
-// -----OPerator item---
-  const handleOperatorSelect = (item) => {
+  // -----OPerator item---
+  const handleOperatorSelect = item => {
     setSelectedOperator(item.key);
     setIsBottomSheetOpen(false);
-    setModalVisible(true); 
+    setModalVisible(true);
     const packageAmount = '350'; // Example package amount
     setAmount(packageAmount);
     LayoutAnimation.easeInEaseOut();
   };
 
-//   ------ 1st modal --
-  const handleSearch = (term) => {
+  //   ------ 1st modal --
+  const handleSearch = term => {
     setSearchTerm(term);
     if (term === '') {
       setFilteredOperators(operatorList);
     } else {
-      const filtered = operatorList.filter((op) =>
-        op.value.toLowerCase().includes(term.toLowerCase())
+      const filtered = operatorList.filter(op =>
+        op.value.toLowerCase().includes(term.toLowerCase()),
       );
       setFilteredOperators(filtered);
     }
   };
 
   const openBottomSheet = () => {
-    setFilteredOperators(operatorList); 
+    setFilteredOperators(operatorList);
     setIsBottomSheetOpen(true);
   };
 
-    const [plans] = useState([
-        { id: '1', name: 'Top Trending True 5G Unlimited Plans', price: '₹3599', validity: '365 Days', data: '2.5 GB/Day', subscriptions: '+1 more', details: 'Top Trending True 5G Unlimited Plans with 2.5 GB/Day data and 365 Days validity.' },
-        { id: '2', name: 'Recharge', price: '₹999', validity: '98 Days', data: '2 GB/Day', subscriptions: '+1 more', details: 'Recharge with 2 GB/Day data and 98 Days validity.' },
-        { id: '3', name: 'HERO 5G', price: '₹899', validity: '90 Days', data: '2 GB/Day +20 GB', subscriptions: '+1 more', details: 'HERO 5G plan with 2 GB/Day data and 20 GB extra data for 90 Days.' },
-        { id: '4', name: 'HERO 5G', price: '₹349', validity: '28 Days', data: '2 GB/Day', subscriptions: '+1 more', details: 'HERO 5G plan with 2 GB/Day data for 28 Days.' },
-        { id: '5', name: 'NETFLIX INCLUDED', price: '₹1299', validity: '84 Days', data: '2 GB/Day', subscriptions: '+2 more', details: 'NETFLIX INCLUDED plan with 2 GB/Day data and 84 Days validity.' },
-        { id: '6', name: 'SONYLIV + ZEE5 INCLUDED', price: '₹1049', validity: '84 Days', data: '2 GB/Day', subscriptions: '+3 more', details: 'SONYLIV + ZEE5 INCLUDED plan with 2 GB/Day data and 84 Days validity.' },
-        { id: '7', name: '84 DAYS PRIME VIDEO', price: '₹1029', validity: '84 Days', data: '2 GB/Day', subscriptions: '+2 more', details: '84 DAYS PRIME VIDEO plan with 2 GB/Day data and 84 Days validity.' },
-        { id: '8', name: '₹50 CASHBACK + SWIGGY ONE LITE', price: '₹1028', validity: '84 Days', data: '2 GB/Day', subscriptions: '+2 more', details: '₹50 CASHBACK + SWIGGY ONE LITE plan with 2 GB/Day data and 84 Days validity.' },
-        { id: '9', name: '12 OTT APPS', price: '₹448', validity: '28 Days', data: '2 GB/Day', subscriptions: '+11 more', details: '12 OTT APPS plan with 2 GB/Day data and 28 Days validity.' },
-        { id: '10', name: '3 MONTHS DISNEY+HOTSTAR', price: '₹949', validity: '84 Days', data: '2 GB/Day', subscriptions: '+2 more', details: '3 MONTHS DISNEY+HOTSTAR plan with 2 GB/Day data and 84 Days validity.' },
-        { id: '11', name: 'Recharge', price: '₹198', validity: '14 Days', data: '2 GB/Day', subscriptions: '+1 more', details: 'Recharge with 2 GB/Day data and 14 Days validity.' },
-    ]);
+  const [plans] = useState([
+    {
+      id: '1',
+      name: 'Top Trending True 5G Unlimited Plans',
+      price: '₹3599',
+      validity: '365 Days',
+      data: '2.5 GB/Day',
+      subscriptions: '+1 more',
+      details:
+        'Top Trending True 5G Unlimited Plans with 2.5 GB/Day data and 365 Days validity.',
+    },
+    {
+      id: '2',
+      name: 'Recharge',
+      price: '₹999',
+      validity: '98 Days',
+      data: '2 GB/Day',
+      subscriptions: '+1 more',
+      details: 'Recharge with 2 GB/Day data and 98 Days validity.',
+    },
+    {
+      id: '3',
+      name: 'HERO 5G',
+      price: '₹899',
+      validity: '90 Days',
+      data: '2 GB/Day +20 GB',
+      subscriptions: '+1 more',
+      details:
+        'HERO 5G plan with 2 GB/Day data and 20 GB extra data for 90 Days.',
+    },
+    {
+      id: '4',
+      name: 'HERO 5G',
+      price: '₹349',
+      validity: '28 Days',
+      data: '2 GB/Day',
+      subscriptions: '+1 more',
+      details: 'HERO 5G plan with 2 GB/Day data for 28 Days.',
+    },
+    {
+      id: '5',
+      name: 'NETFLIX INCLUDED',
+      price: '₹1299',
+      validity: '84 Days',
+      data: '2 GB/Day',
+      subscriptions: '+2 more',
+      details: 'NETFLIX INCLUDED plan with 2 GB/Day data and 84 Days validity.',
+    },
+    {
+      id: '6',
+      name: 'SONYLIV + ZEE5 INCLUDED',
+      price: '₹1049',
+      validity: '84 Days',
+      data: '2 GB/Day',
+      subscriptions: '+3 more',
+      details:
+        'SONYLIV + ZEE5 INCLUDED plan with 2 GB/Day data and 84 Days validity.',
+    },
+    {
+      id: '7',
+      name: '84 DAYS PRIME VIDEO',
+      price: '₹1029',
+      validity: '84 Days',
+      data: '2 GB/Day',
+      subscriptions: '+2 more',
+      details:
+        '84 DAYS PRIME VIDEO plan with 2 GB/Day data and 84 Days validity.',
+    },
+    {
+      id: '8',
+      name: '₹50 CASHBACK + SWIGGY ONE LITE',
+      price: '₹1028',
+      validity: '84 Days',
+      data: '2 GB/Day',
+      subscriptions: '+2 more',
+      details:
+        '₹50 CASHBACK + SWIGGY ONE LITE plan with 2 GB/Day data and 84 Days validity.',
+    },
+    {
+      id: '9',
+      name: '12 OTT APPS',
+      price: '₹448',
+      validity: '28 Days',
+      data: '2 GB/Day',
+      subscriptions: '+11 more',
+      details: '12 OTT APPS plan with 2 GB/Day data and 28 Days validity.',
+    },
+    {
+      id: '10',
+      name: '3 MONTHS DISNEY+HOTSTAR',
+      price: '₹949',
+      validity: '84 Days',
+      data: '2 GB/Day',
+      subscriptions: '+2 more',
+      details:
+        '3 MONTHS DISNEY+HOTSTAR plan with 2 GB/Day data and 84 Days validity.',
+    },
+    {
+      id: '11',
+      name: 'Recharge',
+      price: '₹198',
+      validity: '14 Days',
+      data: '2 GB/Day',
+      subscriptions: '+1 more',
+      details: 'Recharge with 2 GB/Day data and 14 Days validity.',
+    },
+  ]);
 
-   
-
-    const filteredPlans = plans.filter(plan => {
-        const lowercasedSearch = search.toLowerCase();
-        return (
-            plan.name.toLowerCase().includes(lowercasedSearch) ||
-            plan.price.toLowerCase().includes(lowercasedSearch) ||
-            plan.validity.toLowerCase().includes(lowercasedSearch) ||
-            plan.data.toLowerCase().includes(lowercasedSearch) ||
-            plan.subscriptions.toLowerCase().includes(lowercasedSearch) ||
-            plan.details.toLowerCase().includes(lowercasedSearch)
-        );
-    });
-
-    const handleViewDetails = (plan) => {
-        setSelectedPlan(plan);
-        bottomSheetRef.current?.expand();
-    };
-
-
-    const renderPlanItem = ({ item }) => (
-        <View style={styles.planCard}>
-            <View style={styles.planHeader}>
-                <Text style={styles.planPrice}>{item.price}</Text>
-                <View style={styles.planDetails}>
-                    <Text style={styles.planDetail}>{item.data}</Text>
-                    <Text style={styles.planDetail}>{item.validity}</Text>
-                </View>
-            </View>
-            <View style={styles.planBody}>
-                <Text style={styles.planName}>{item.name}</Text>
-                <Text style={styles.planOffer}>{item.details}</Text>
-                <Text style={styles.planSubscriptions}>SUBSCRIPTIONS: {item.subscriptions}</Text>
-                <TouchableOpacity onPress={() => handleViewDetails(item)}>
-                    <Text style={styles.handleViewDetails}>View Details</Text>
-                </TouchableOpacity>
-            </View>
-            <TouchableOpacity style={styles.rechargeButton}>
-                <Text style={styles.buttonText}>Recharge</Text>
-            </TouchableOpacity>
-        </View>
+  const filteredPlans = plans.filter(plan => {
+    const lowercasedSearch = search.toLowerCase();
+    return (
+      plan.name.toLowerCase().includes(lowercasedSearch) ||
+      plan.price.toLowerCase().includes(lowercasedSearch) ||
+      plan.validity.toLowerCase().includes(lowercasedSearch) ||
+      plan.data.toLowerCase().includes(lowercasedSearch) ||
+      plan.subscriptions.toLowerCase().includes(lowercasedSearch) ||
+      plan.details.toLowerCase().includes(lowercasedSearch)
     );
+  });
 
+  const handleViewDetails = plan => {
+    setSelectedPlan(plan);
+    bottomSheetRef.current?.expand();
+  };
+
+  const renderPlanItem = ({item}) => (
+    <View style={styles.planCard}>
+      <View style={styles.planHeader}>
+        <Text style={styles.planPrice}>{item.price}</Text>
+        <View style={styles.planDetails}>
+          <Text style={styles.planDetail}>{item.data}</Text>
+          <Text style={styles.planDetail}>{item.validity}</Text>
+        </View>
+      </View>
+      <View style={styles.planBody}>
+        <Text style={styles.planName}>{item.name}</Text>
+        <Text style={styles.planOffer}>{item.details}</Text>
+        <Text style={styles.planSubscriptions}>
+          SUBSCRIPTIONS: {item.subscriptions}
+        </Text>
+        <TouchableOpacity onPress={() => handleViewDetails(item)}>
+          <Text style={styles.handleViewDetails}>View Details</Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity style={styles.rechargeButton}>
+        <Text style={styles.buttonText}>Recharge</Text>
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
@@ -157,8 +252,7 @@ const DTHScreen = ({ navigation }) => {
         <View style={styles.appbarHeader}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
+            style={styles.backButton}>
             <Image source={LeftArrow} style={styles.backButtonText} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>DTH Recharge</Text>
@@ -168,17 +262,15 @@ const DTHScreen = ({ navigation }) => {
         {/* Scrollable Content */}
         <ScrollView
           contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={true}
-          style={{ flexGrow: 1}}
-        >
+          showsVerticalScrollIndicator={false}
+          style={{flexGrow: 1}}>
           <View style={styles.contentContainer}>
             <View
               style={[
                 styles.imageSliderContainer,
-                { height: windowHeight * 0.35 },
-              ]}
-            >
-              <ImageSlider topView={25} ImageWidth={'93%'}/>
+                {height: windowHeight * 0.35},
+              ]}>
+              <ImageSlider topView={25} ImageWidth={'93%'} />
             </View>
 
             <Text style={styles.label}>DTH Number</Text>
@@ -188,11 +280,10 @@ const DTHScreen = ({ navigation }) => {
             <Text style={styles.label}>Select DTH Operator</Text>
             <TouchableOpacity
               style={styles.dropdownContainer}
-              onPress={openBottomSheet}
-            >
+              onPress={openBottomSheet}>
               <Text style={styles.dropdownText}>
                 {selectedOperator
-                  ? operatorList.find((op) => op.key === selectedOperator)?.value
+                  ? operatorList.find(op => op.key === selectedOperator)?.value
                   : 'Select DTH Operator'}
               </Text>
             </TouchableOpacity>
@@ -200,61 +291,56 @@ const DTHScreen = ({ navigation }) => {
             <Text style={styles.label}>Amount</Text>
             <View style={styles.amountCart}>
               <Text style={styles.dropdownText}>{amount || 'Amount'}</Text>
-              <TouchableOpacity onPress={() => setChangesClick(!onChangesClick)}>
+              <TouchableOpacity
+                onPress={() => setChangesClick(!onChangesClick)}>
                 <LinearGradient
                   colors={['#0C6B72', '#34AEA1']}
                   style={{
                     paddingVertical: 8,
                     paddingHorizontal: 8,
                     borderRadius: 15,
-                  }}
-                >
+                  }}>
                   <Text
                     style={{
                       fontSize: 12,
                       fontWeight: '600',
                       color: Colors.White,
-                    }}
-                  >
+                    }}>
                     Change
                   </Text>
                 </LinearGradient>
               </TouchableOpacity>
             </View>
-          
-          {/* Recharge PLAN ------ */}
 
-                   {onChangesClick && (
-                    <View>
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder="Searc and selet plans..."
-                        value={search}
-                        onChangeText={setSearch}
-                        placeholderTextColor={Colors.Grey}
-                    />
-                    <FlatList
-                        data={filteredPlans}
-                        renderItem={renderPlanItem}
-                        keyExtractor={(item) => item.id}
-                        contentContainerStyle={styles.list}
-                        showsVerticalScrollIndicator={false}
-                    />
-                    </View>)}
+            {/* Recharge PLAN ------ */}
 
+            {onChangesClick && (
+              <View>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Searc and selet plans..."
+                  value={search}
+                  onChangeText={setSearch}
+                  placeholderTextColor={Colors.Grey}
+                />
+                <FlatList
+                  data={filteredPlans}
+                  renderItem={renderPlanItem}
+                  keyExtractor={item => item.id}
+                  contentContainerStyle={styles.list}
+                  showsVerticalScrollIndicator={false}
+                />
+              </View>
+            )}
           </View>
         </ScrollView>
-
-
-
 
         {/* Bottom Sheet Modal for Operator Selection */}
         <Modal
           animationType="slide"
           transparent={true}
           visible={isBottomSheetOpen}
-          onRequestClose={()=> setIsBottomSheetOpen(false)}
-        >
+          onRequestClose={() => setIsBottomSheetOpen(false)}>
           <View style={styles.bottomSheetOneContainer}>
             <View style={styles.bottomSheetContent}>
               {/* Search Bar */}
@@ -267,12 +353,11 @@ const DTHScreen = ({ navigation }) => {
 
               {/* Operator List */}
               <ScrollView showsVerticalScrollIndicator={false}>
-                {filteredOperators.map((item) => (
+                {filteredOperators.map(item => (
                   <TouchableOpacity
                     key={item.key}
                     style={styles.operatorItem}
-                    onPress={() => handleOperatorSelect(item)}
-                  >
+                    onPress={() => handleOperatorSelect(item)}>
                     <Image source={item.image} style={styles.dropdownImage} />
                     <Text style={styles.dropdownText}>{item.value}</Text>
                   </TouchableOpacity>
@@ -280,11 +365,10 @@ const DTHScreen = ({ navigation }) => {
               </ScrollView>
 
               {/* Close Button */}
-              <TouchableOpacity onPress={()=> setIsBottomSheetOpen(false)}>
+              <TouchableOpacity onPress={() => setIsBottomSheetOpen(false)}>
                 <LinearGradient
                   colors={['#0C6B72', '#34AEA1']}
-                  style={styles.closeButtonOper}
-                >
+                  style={styles.closeButtonOper}>
                   <Text style={styles.closeButtonText}>Close</Text>
                 </LinearGradient>
               </TouchableOpacity>
@@ -292,8 +376,8 @@ const DTHScreen = ({ navigation }) => {
           </View>
         </Modal>
 
-     {/* Modal for DTH Information */}
-     <Modal
+        {/* Modal for DTH Information */}
+        <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
@@ -316,34 +400,39 @@ const DTHScreen = ({ navigation }) => {
                   </Text>
                   <Text style={[styles.detailText, {color: Colors.Grey}]}>
                     Balance:
-                    <Text style={[styles.detailText, {color: Colors.themeColor}]}>
+                    <Text
+                      style={[styles.detailText, {color: Colors.themeColor}]}>
                       {' '}
                       Not found
                     </Text>
                   </Text>
                   <Text style={[styles.detailText, {color: Colors.Grey}]}>
                     Name:
-                    <Text style={[styles.detailText, {color: Colors.themeColor}]}>
+                    <Text
+                      style={[styles.detailText, {color: Colors.themeColor}]}>
                       {' '}
                       User Name
                     </Text>
                   </Text>
                   <Text style={[styles.detailText, {color: Colors.Grey}]}>
                     Next Due:
-                    <Text style={[styles.detailText, {color: Colors.themeColor}]}>
+                    <Text
+                      style={[styles.detailText, {color: Colors.themeColor}]}>
                       {' '}
                     </Text>
                   </Text>
                   <Text style={[styles.detailText, {color: Colors.Grey}]}>
                     Status:
-                    <Text style={[styles.detailText, {color: Colors.themeColor}]}>
+                    <Text
+                      style={[styles.detailText, {color: Colors.themeColor}]}>
                       {' '}
                       Active
                     </Text>
                   </Text>
                   <Text style={[styles.detailText, {color: Colors.Grey}]}>
                     Package:
-                    <Text style={[styles.detailText, {color: Colors.themeColor}]}>
+                    <Text
+                      style={[styles.detailText, {color: Colors.themeColor}]}>
                       {' '}
                       Monthly
                     </Text>
@@ -362,32 +451,42 @@ const DTHScreen = ({ navigation }) => {
           </View>
         </Modal>
 
-{/* Bottom Sheet */}
-<BottomSheet
-                    ref={bottomSheetRef}
-                    index={-1} // Initially closed
-                    snapPoints={['40%']} // Height of the bottom sheet
-                    enablePanDownToClose={true}
-                >
-                    <View style={styles.bottomSheetContainer}>
-                        {selectedPlan && (
-                            <View>
-                                <Text style={styles.bottomSheetTitle}>{selectedPlan.name}</Text>
-                                <Text style={styles.bottomSheetDetail}>{selectedPlan.details}</Text>
-                                <Text style={styles.bottomSheetDetail}>Price: {selectedPlan.price}</Text>
-                                <Text style={styles.bottomSheetDetail}>Validity: {selectedPlan.validity}</Text>
-                                <Text style={styles.bottomSheetDetail}>Data: {selectedPlan.data}</Text>
-                                <Text style={styles.bottomSheetDetail}>Subscriptions: {selectedPlan.subscriptions}</Text>
-                            </View>
-                        )}
-                    </View>
-                </BottomSheet>
+        {/* Bottom Sheet */}
+        <BottomSheet
+          ref={bottomSheetRef}
+          index={-1} // Initially closed
+          snapPoints={['40%']} // Height of the bottom sheet
+          enablePanDownToClose={true}>
+          <View style={styles.bottomSheetContainer}>
+            {selectedPlan && (
+              <View>
+                <Text style={styles.bottomSheetTitle}>{selectedPlan.name}</Text>
+                <Text style={styles.bottomSheetDetail}>
+                  {selectedPlan.details}
+                </Text>
+                <Text style={styles.bottomSheetDetail}>
+                  Price: {selectedPlan.price}
+                </Text>
+                <Text style={styles.bottomSheetDetail}>
+                  Validity: {selectedPlan.validity}
+                </Text>
+                <Text style={styles.bottomSheetDetail}>
+                  Data: {selectedPlan.data}
+                </Text>
+                <Text style={styles.bottomSheetDetail}>
+                  Subscriptions: {selectedPlan.subscriptions}
+                </Text>
+              </View>
+            )}
+          </View>
+        </BottomSheet>
 
-       {/* Submit Button */}
-      <TouchableOpacity style={styles.btnStyle} onPress={()=>navigation.goBack('')}>
-        <Text style={styles.submitText}>SUBMIT</Text>
-      </TouchableOpacity>
-
+        {/* Submit Button */}
+        <TouchableOpacity
+          style={styles.btnStyle}
+          onPress={() => navigation.goBack('')}>
+          <Text style={styles.submitText}>SUBMIT</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -421,13 +520,11 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   scrollContent: {
-    flexGrow: 1,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
   contentContainer: {
     alignSelf: 'center',
-    justifyContent: 'center',
   },
   imageSliderContainer: {
     width: '100%',
@@ -476,7 +573,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-//   ------ modal 1st
+  //   ------ modal 1st
   bottomSheetOneContainer: {
     flex: 1,
     justifyContent: 'flex-end',
@@ -517,7 +614,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-//   ------ Modal 2nd -----
+  //   ------ Modal 2nd -----
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -566,12 +663,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: Colors.themeColor,
   },
-  detailText:{
+  detailText: {
     fontSize: 16.5,
     fontWeight: '700',
-    marginBottom:4
+    marginBottom: 4,
   },
-
 
   btnStyle: {
     width: '100%',
@@ -588,10 +684,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-//   -------recharge plan----
+  //   -------recharge plan----
 
-
-searchInput: {
+  searchInput: {
     height: 50,
     borderColor: '#cccccc',
     borderWidth: 1,
@@ -599,23 +694,23 @@ searchInput: {
     paddingHorizontal: 10,
     borderRadius: 15,
     color: Colors.Black,
-    backgroundColor:Colors.White
-},
-list: {
-    paddingBottom: 20,
-},
-planCard: {
+    backgroundColor: Colors.White,
+  },
+  list: {
+    paddingBottom: 40,
+  },
+  planCard: {
     backgroundColor: '#fff',
     marginBottom: 15,
     padding: 15,
     borderRadius: 10,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 8,
-},
-planHeader: {
+  },
+  planHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -623,71 +718,71 @@ planHeader: {
     borderBottomColor: '#f0f0f0',
     paddingBottom: 10,
     marginBottom: 10,
-},
-planPrice: {
+  },
+  planPrice: {
     fontSize: 24,
     fontWeight: 'bold',
     color: Colors.themeColor,
-},
-planDetails: {
+  },
+  planDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '60%',
-},
-planDetail: {
+  },
+  planDetail: {
     fontSize: 14,
     color: Colors.themeColor,
     fontWeight: 'bold',
-},
-planBody: {
+  },
+  planBody: {
     flexDirection: 'column',
-},
-planName: {
+  },
+  planName: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#000',
     marginBottom: 5,
-},
-planOffer: {
+  },
+  planOffer: {
     fontSize: 14,
     color: '#666',
-},
-planSubscriptions: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
-},
-handleViewDetails: {
+  },
+  planSubscriptions: {
     fontSize: 14,
     color: '#666',
     marginTop: 5,
-    fontWeight: 'bold'
-},
-rechargeButton: {
+  },
+  handleViewDetails: {
+    fontSize: 14,
+    color: '#666',
+    marginTop: 5,
+    fontWeight: 'bold',
+  },
+  rechargeButton: {
     marginTop: 15,
     backgroundColor: Colors.themeColor,
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',
-},
-buttonText: {
+  },
+  buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
-},
-bottomSheetContainer: {
+  },
+  bottomSheetContainer: {
     padding: 20,
     backgroundColor: Colors.White,
-},
-bottomSheetTitle: {
+  },
+  bottomSheetTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#000',
     marginBottom: 10,
-},
-bottomSheetDetail: {
+  },
+  bottomSheetDetail: {
     fontSize: 14,
     color: '#666',
     marginBottom: 5,
-},
+  },
 });

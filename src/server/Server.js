@@ -115,5 +115,21 @@ const Server ={
         },
 
 
+      //   ----- Get Interest withdrawel details
+      async getWithDrawList() {
+          let token = await this.getToken();
+          try {
+            const response = await axios.get(`${BASE_URL}/withdrawal/withdrawalDetails`,  {
+              headers: {
+                'token': `${token}`, 
+              },
+            });
+            return response;
+          } catch (error) {
+            this.handleError(error);
+          }
+        },
+
+
 }
 export default Server

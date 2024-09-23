@@ -147,6 +147,7 @@ const SelectRechargePlan = ({ route, navigation }) => {
             <Image source={LeftArrow} style={styles.backButtonImage} />
           </TouchableOpacity>
           <Text style={styles.headerText}>Select Recharge Plan</Text>
+          <View></View>
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollView}>
@@ -280,18 +281,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    // backgroundColor: Colors.themeColor,
     paddingTop: 20,
-    paddingBottom: 10,
+    paddingBottom: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 4,
+    justifyContent: 'space-between'
   },
   backButton: {
-    position: 'absolute',
-    left: 3,
-    // padding: 10,
+    marginLeft: 3,
   },
   backButtonImage: {
     height: 25,
@@ -302,8 +299,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
-    alignItems: 'center',
-    // justifyContent: 'center',
   },
   scrollView: {
     paddingHorizontal: 15,
