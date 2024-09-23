@@ -88,8 +88,8 @@ const SelectRechargePlan = ({ route, navigation }) => {
       const planData = { opcode: resp.company };
       const planResponse = await Server.getRechargeList(data);
       const fetchedPlans = planResponse.data?.items.data.plans || [];
-      setPlans(fetchedPlans); // Store the fetched plans in state
 
+      
     } catch (error) {
       console.log('Error', 'An error occurred fetching data');
     }

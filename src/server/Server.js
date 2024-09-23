@@ -100,6 +100,21 @@ const Server ={
       },
 
       //   ----- Get number details
+      async getOperators() {
+          let token = await this.getToken();
+          try {
+            const response = await axios.get(`${BASE_URL}/operator/getCode/8`, {
+              headers: {
+                'token': `${token}`, 
+              },
+            });
+            return response;
+          } catch (error) {
+            this.handleError(error);
+          }
+        },
+
+      //   ----- Get number details
       async getRechargeList(data) {
           let token = await this.getToken();
           try {
@@ -113,6 +128,21 @@ const Server ={
             this.handleError(error);
           }
         },
+
+        //   ----- Get number details
+        async getCurrentDTHeList(currentPlanData) {
+            let token = await this.getToken();
+                    try {
+              const response = await axios.post(`${BASE_URL}/recharge/dth/dthRecharge/dthRechargePlans`, currentPlanData, {
+                headers: {
+                  'token': `${token}`, 
+                },
+              });
+              return response;
+            } catch (error) {
+              this.handleError(error);
+            }
+          },
 
 
 }
