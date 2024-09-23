@@ -36,9 +36,6 @@ const AuthService = {
     }
   },
   
-
-  
-
   // Function to sign up a new user
   async signUp(data, userToken){
     try {
@@ -57,7 +54,6 @@ const AuthService = {
       throw error; 
     }
   },
-
 
   // Function to reset password with OTP
   async forgetPassword(mobileNumber) {
