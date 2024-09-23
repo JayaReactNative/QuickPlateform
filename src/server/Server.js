@@ -99,6 +99,21 @@ const Server ={
         }
       },
 
+      //   ----- Get number details
+      async getRechargeList(data) {
+          let token = await this.getToken();
+          try {
+            const response = await axios.post(`${BASE_URL}/recharge/mobile/getPlans`, data, {
+              headers: {
+                'token': `${token}`, 
+              },
+            });
+            return response;
+          } catch (error) {
+            this.handleError(error);
+          }
+        },
+
 
 }
 export default Server

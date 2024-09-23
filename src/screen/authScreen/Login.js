@@ -7,10 +7,13 @@ import {
   Image,
   TextInput,
   Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from 'react-native';
-import {Colors} from '../../assets/Colors';
-import {LoginImage} from '../../assets/Images';
-import {String} from '../../utility/CommonText';
+import { Colors } from '../../assets/Colors';
+import { LoginImage } from '../../assets/Images';
+import { String } from '../../utility/CommonText';
 import ButtonCustom from '../../customScreen/ButtonCustom';
 import { Formik } from 'formik';
 import { validationMobile } from '../../utility/Validation';
@@ -18,13 +21,11 @@ import AuthService from '../../server/AuthService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 
-const Login = ({navigation}) => {
-
+const Login = ({ navigation }) => {
   const initialValues = {
     number: '',
   };
 
-  // ------ api  calling
   const handleSubmitForm = async (values) => {
     try {
       const response = await AuthService.sendOTP(values.number);
@@ -35,8 +36,8 @@ const Login = ({navigation}) => {
         await AsyncStorage.setItem('authId', userId);
         navigation.navigate('PasswordScreen');
       } else if (dataRes?.message === 'Otp Sent Successfully') {
-        const otp = dataRes.items?.otp;  
-        const mobileNumber = values.number;  
+        const otp = dataRes.items?.otp;
+        const mobileNumber = values.number;
         const userId = dataRes.items?.existDetails?._id;
         await AsyncStorage.setItem('authId', userId);
         navigation.navigate('OTPscreen', { mobileNumber, otp });
@@ -45,60 +46,66 @@ const Login = ({navigation}) => {
       console.error('Login error:', error.message);
     }
   };
-  
-  
 
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={LoginImage} style={styles.imageStyle} />
-      <View style={styles.containLog}>
-        <Text style={styles.headText}>{String.WELCOME}</Text>
-        <Text style={styles.smallText}>{String.PLEASE_LOGIN}</Text>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <Image source={LoginImage} style={styles.imageStyle} />
+          <View style={styles.containLog}>
+            <Text style={styles.headText}>{String.WELCOME}</Text>
+            <Text style={styles.smallText}>{String.PLEASE_LOGIN}</Text>
 
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationMobile}
-          onSubmit={handleSubmitForm}
-        >
-          {({ handleChange, handleBlur, handleSubmit, values, errors, touched, resetForm }) => {
-            useFocusEffect(
-              React.useCallback(() => {
-                resetForm();
-              }, [resetForm])
-            );
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validationMobile}
+              onSubmit={handleSubmitForm}
+            >
+              {({ handleChange, handleBlur, handleSubmit, values, errors, touched, resetForm }) => {
+                useFocusEffect(
+                  React.useCallback(() => {
+                    resetForm();
+                  }, [resetForm])
+                );
 
-            return (
-            <>
-              <View style={styles.textHolder}>
-                <TextInput
-                  placeholder="Enter Mobile Number"
-                  placeholderTextColor={Colors.HolderColor}
-                  keyboardType="number-pad"
-                  value={values.number}
-                  onChangeText={handleChange('number')}
-                  onBlur={handleBlur('number')}
-                  maxLength={10}
-                  style={styles.textStyle}
-                />
-              </View>
-                {touched.number && errors.number && (
-                  <Text style={styles.errorText}>{errors.number}</Text>
-                )}
+                return (
+                  <>
+                    <View style={styles.textHolder}>
+                      <TextInput
+                        placeholder="Enter Mobile Number"
+                        placeholderTextColor={Colors.HolderColor}
+                        keyboardType="number-pad"
+                        value={values.number}
+                        onChangeText={handleChange('number')}
+                        onBlur={handleBlur('number')}
+                        maxLength={10}
+                        style={styles.textStyle}
+                      />
+                    </View>
+                    {touched.number && errors.number && (
+                      <Text style={styles.errorText}>{errors.number}</Text>
+                    )}
 
-              <ButtonCustom
-                title={String.SIGN_IN}
-                onClickButton={handleSubmit}
-                colors={[Colors.themegreen, Colors.ThemelightGreen]}
-                start={{x: 0, y: 0}}
-                end={{x: 0, y: 1.8}}
-                textColor="white"
-                width={200}
-                Buttonstyle={styles.btnStyle}
-              />
-            </>
-          )}}
-        </Formik>
-      </View>
+                    <ButtonCustom
+                      title={String.SIGN_IN}
+                      onClickButton={handleSubmit}
+                      colors={[Colors.themegreen, Colors.ThemelightGreen]}
+                      start={{ x: 0, y: 0 }}
+                      end={{ x: 0, y: 1.8 }}
+                      textColor="white"
+                      width={200}
+                      Buttonstyle={styles.btnStyle}
+                    />
+                  </>
+                );
+              }}
+            </Formik>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
@@ -108,8 +115,12 @@ export default Login;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.White,
+  },
+  scrollContainer: {
+    flexGrow: 1,
     justifyContent: 'center',
-    backgroundColor: Colors.White
+    paddingBottom: 20, // Added some padding to avoid content being cut off
   },
   headText: {
     fontSize: 25,

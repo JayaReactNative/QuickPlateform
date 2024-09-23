@@ -2,10 +2,10 @@ import React from 'react';
 import { View, Text, StyleSheet, StatusBar, SafeAreaView, Alert, Image } from 'react-native';
 import ButtonCustom from '../../customScreen/ButtonCustom';
 import { Colors } from '../../assets/Colors';
-import {WelcomImg } from '../../assets/Images';
+import { WelcomImg } from '../../assets/Images';
 import { String } from '../../utility/CommonText';
 
-const WelcomeScreen = ({navigation}) => {
+const WelcomeScreen = ({ navigation }) => {
   const handlePress = () => {
     navigation.navigate('Login')
   };
@@ -17,7 +17,7 @@ const WelcomeScreen = ({navigation}) => {
         backgroundColor="#056a6d"
         barStyle="dark-content"
       />
-  <Image source={WelcomImg} style={styles.imageStyle}/>
+      <Image source={WelcomImg} style={styles.imageStyle} />
       <Text style={styles.headText}>Multiply your Income</Text>
       <Text style={styles.smallText}>Save More. Invest More. Earn More.</Text>
       <Text style={styles.smallText}>{String.UTILIZE_SAVING}</Text>
@@ -42,22 +42,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:Colors.White
+    backgroundColor: Colors.White
   },
-  headText:{
-    fontSize:25,
-    fontWeight:'700',
-    color:Colors.themeColor,
-    marginVertical:15,
+  headText: {
+    fontSize: 25,
+    fontWeight: '700',
+    color: Colors.themeColor,
+    marginVertical: 15,
     marginTop: 25,
   },
-  smallText:{
-    fontSize:12,
-    fontWeight:'400',
-    color:Colors.themeColor,
-    marginVertical:5
+  smallText: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: Colors.themeColor,
+    marginVertical: 5
   },
-  imageStyle:{
-    width:300,height:250,resizeMode:'contain'
+  imageStyle: {
+    width: 300, height: 250, resizeMode: 'contain'
   }
 });
