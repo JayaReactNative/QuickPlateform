@@ -1,4 +1,4 @@
-import React, {useState, useRef,useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,139 +13,30 @@ import {
   LayoutAnimation,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {Colors} from '../../assets/Colors';
-import {LeftArrow} from '../../assets/Images';
+import { Colors } from '../../assets/Colors';
+import { LeftArrow } from '../../assets/Images';
 import BottomSheet from '@gorhom/bottom-sheet';
 import Server from '../../server/Server';
 
-
-if (
-  Platform.OS === 'android' &&
-  UIManager.setLayoutAnimationEnabledExperimental
-) {
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const SelectRechargePlan = ({route, navigation}) => {
-  const {contact, ind} = route.params;
+const SelectRechargePlan = ({ route, navigation }) => {
+  const { contact, ind } = route.params;
   const [search, setSearch] = useState('');
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredOperators, setFilteredOperators] = useState([]);
   const [selectedOperator, setSelectedOperator] = useState('');
   const [stateName, setStateName] = useState('');
+  const [plans, setPlans] = useState([]); // State for plans
+  const [selectedPlan, setSelectedPlan] = useState(null);
+  const bottomSheetRef = useRef(null);
 
- useEffect(() => {
-  getNumberName()
- }, []);
-
-  const [plans] = useState([
-    {
-      id: '1',
-      name: 'Top Trending True 5G Unlimited Plans',
-      price: '₹3599',
-      validity: '365 Days',
-      data: '2.5 GB/Day',
-      subscriptions: '+1 more',
-      details:
-        'Top Trending True 5G Unlimited Plans with 2.5 GB/Day data and 365 Days validity.',
-    },
-    {
-      id: '2',
-      name: 'Recharge',
-      price: '₹999',
-      validity: '98 Days',
-      data: '2 GB/Day',
-      subscriptions: '+1 more',
-      details: 'Recharge with 2 GB/Day data and 98 Days validity.',
-    },
-    {
-      id: '3',
-      name: 'HERO 5G',
-      price: '₹899',
-      validity: '90 Days',
-      data: '2 GB/Day +20 GB',
-      subscriptions: '+1 more',
-      details:
-        'HERO 5G plan with 2 GB/Day data and 20 GB extra data for 90 Days.',
-    },
-    {
-      id: '4',
-      name: 'HERO 5G',
-      price: '₹349',
-      validity: '28 Days',
-      data: '2 GB/Day',
-      subscriptions: '+1 more',
-      details: 'HERO 5G plan with 2 GB/Day data for 28 Days.',
-    },
-    {
-      id: '5',
-      name: 'NETFLIX INCLUDED',
-      price: '₹1299',
-      validity: '84 Days',
-      data: '2 GB/Day',
-      subscriptions: '+2 more',
-      details: 'NETFLIX INCLUDED plan with 2 GB/Day data and 84 Days validity.',
-    },
-    {
-      id: '6',
-      name: 'SONYLIV + ZEE5 INCLUDED',
-      price: '₹1049',
-      validity: '84 Days',
-      data: '2 GB/Day',
-      subscriptions: '+3 more',
-      details:
-        'SONYLIV + ZEE5 INCLUDED plan with 2 GB/Day data and 84 Days validity.',
-    },
-    {
-      id: '7',
-      name: '84 DAYS PRIME VIDEO',
-      price: '₹1029',
-      validity: '84 Days',
-      data: '2 GB/Day',
-      subscriptions: '+2 more',
-      details:
-        '84 DAYS PRIME VIDEO plan with 2 GB/Day data and 84 Days validity.',
-    },
-    {
-      id: '8',
-      name: '₹50 CASHBACK + SWIGGY ONE LITE',
-      price: '₹1028',
-      validity: '84 Days',
-      data: '2 GB/Day',
-      subscriptions: '+2 more',
-      details:
-        '₹50 CASHBACK + SWIGGY ONE LITE plan with 2 GB/Day data and 84 Days validity.',
-    },
-    {
-      id: '9',
-      name: '12 OTT APPS',
-      price: '₹448',
-      validity: '28 Days',
-      data: '2 GB/Day',
-      subscriptions: '+11 more',
-      details: '12 OTT APPS plan with 2 GB/Day data and 28 Days validity.',
-    },
-    {
-      id: '10',
-      name: '3 MONTHS DISNEY+HOTSTAR',
-      price: '₹949',
-      validity: '84 Days',
-      data: '2 GB/Day',
-      subscriptions: '+2 more',
-      details:
-        '3 MONTHS DISNEY+HOTSTAR plan with 2 GB/Day data and 84 Days validity.',
-    },
-    {
-      id: '11',
-      name: 'Recharge',
-      price: '₹198',
-      validity: '14 Days',
-      data: '2 GB/Day',
-      subscriptions: '+1 more',
-      details: 'Recharge with 2 GB/Day data and 14 Days validity.',
-    },
-  ]);
+  useEffect(() => {
+    getNumberName();
+  }, []);
 
   const operatorList = [
     {
@@ -170,18 +61,14 @@ const SelectRechargePlan = ({route, navigation}) => {
     },
   ];
 
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const bottomSheetRef = useRef(null);
-
   const filteredPlans = plans.filter(plan => {
     const lowercasedSearch = search.toLowerCase();
     return (
-      plan.name.toLowerCase().includes(lowercasedSearch) ||
-      plan.price.toLowerCase().includes(lowercasedSearch) ||
+      plan.planName.toLowerCase().includes(lowercasedSearch) ||
+      plan.amount.toString().includes(lowercasedSearch) || // Assuming amount is numeric
       plan.validity.toLowerCase().includes(lowercasedSearch) ||
-      plan.data.toLowerCase().includes(lowercasedSearch) ||
-      plan.subscriptions.toLowerCase().includes(lowercasedSearch) ||
-      plan.details.toLowerCase().includes(lowercasedSearch)
+      plan.dataBenefit?.toLowerCase().includes(lowercasedSearch) ||
+      plan.planDescription.toLowerCase().includes(lowercasedSearch)
     );
   });
 
@@ -190,35 +77,35 @@ const SelectRechargePlan = ({route, navigation}) => {
     bottomSheetRef.current?.expand();
   };
 
-  // ------  total reacharge on number ---
- const getNumberName = async () => {
-  try {
-    const data ={mobileNumber: contact.phoneNumbers[ind]?.number.replaceAll(' ','').replaceAll('+91','')} 
-    console.log("mobileNumber---->",data.mobileNumber)
-    const response = await Server.getSimName(data);
-    const resp = response.data?.items
-    console.log("response---->",resp)
-    setSelectedOperator(resp.company)
-    setStateName(resp.circle)
-  } catch (error) {
-   console.log('Error', 'An error occurred fetching data ');
-  }
-};
+  const getNumberName = async () => {
+    try {
+      const data = { mobileNumber: contact.phoneNumbers[ind]?.number.replaceAll(' ', '').replaceAll('+91', '') };
+      const response = await Server.getSimName(data);
+      const resp = response.data?.items;
+      setSelectedOperator(resp.company);
+      setStateName(resp.circle);
 
-  const renderPlanItem = ({item}) => (
+      const planData = { opcode: resp.company };
+      const planResponse = await Server.getRechargeList(data);
+      const fetchedPlans = planResponse.data?.items.data.plans || [];
+      setPlans(fetchedPlans); // Store the fetched plans in state
+
+    } catch (error) {
+      console.log('Error', 'An error occurred fetching data');
+    }
+  };
+
+  const renderPlanItem = ({ item }) => (
     <View style={styles.planCard}>
       <View style={styles.planHeader}>
-        <Text style={styles.planPrice}>{item.price}</Text>
-        <View style={styles.planDetails}>
-          <Text style={styles.planDetail}>{item.data}</Text>
-          <Text style={styles.planDetail}>{item.validity}</Text>
-        </View>
+        <Text style={styles.planPrice}>{`₹${item.amount}`}</Text>
+        <Text style={styles.planDetail}>{item.validity}</Text>
       </View>
       <View style={styles.planBody}>
-        <Text style={styles.planName}>{item.name}</Text>
-        <Text style={styles.planOffer}>{item.details}</Text>
+        <Text style={styles.planName}>{item.planName}</Text>
+        <Text style={styles.planOffer}>{item.planDescription}</Text>
         <Text style={styles.planSubscriptions}>
-          SUBSCRIPTIONS: {item.subscriptions}
+          SUBSCRIPTIONS: {item.subscriptions || 'N/A'}
         </Text>
         <TouchableOpacity onPress={() => handleViewDetails(item)}>
           <Text style={styles.handleViewDetails}>View Details</Text>
@@ -242,7 +129,6 @@ const SelectRechargePlan = ({route, navigation}) => {
     }
   };
 
-  // -----OPerator item---
   const handleOperatorSelect = item => {
     setSelectedOperator(item.value);
     setIsBottomSheetOpen(false);
@@ -281,12 +167,11 @@ const SelectRechargePlan = ({route, navigation}) => {
             </View>
           </View>
 
-          <View
-            style={{
-              flexDirection: 'row',
-              marginVertical: 15,
-              justifyContent: 'space-between',
-            }}>
+          <View style={{
+            flexDirection: 'row',
+            marginVertical: 15,
+            justifyContent: 'space-between',
+          }}>
             <TouchableOpacity
               onPress={() => setIsBottomSheetOpen(true)}
               style={{
@@ -295,40 +180,33 @@ const SelectRechargePlan = ({route, navigation}) => {
                 padding: 10,
                 width: '50%',
               }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                }}>
-                {/* Operator Text */}
-                <Text
-                  style={{color: Colors.Grey, fontSize: 15, fontWeight: '600'}}>
+              <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+                <Text style={{ color: Colors.Grey, fontSize: 15, fontWeight: '600' }}>
                   {selectedOperator}
                 </Text>
-
-                {/* Unicode Character */}
-                <Text
-                  style={{
-                    color: Colors.Grey,
-                    fontSize: 25,
-                    fontWeight: '400',
-                    marginTop: -15,
-                  }}>
+                <Text style={{
+                  color: Colors.Grey,
+                  fontSize: 25,
+                  fontWeight: '400',
+                  marginTop: -15,
+                }}>
                   &#x2304;
                 </Text>
               </View>
             </TouchableOpacity>
-            <View
-              style={{
-                backgroundColor: 'white',
-                borderRadius: 5,
-                padding: 10,
-                width: '45%',
-              }}>
+            <View style={{
+              backgroundColor: 'white',
+              borderRadius: 5,
+              padding: 10,
+              width: '45%',
+            }}>
               <Text numberOfLines={1}
-                style={{color: Colors.Grey, fontSize: 15, fontWeight: '300'}}>
-               {stateName}
+                style={{ color: Colors.Grey, fontSize: 15, fontWeight: '300' }}>
+                {stateName}
               </Text>
             </View>
           </View>
@@ -340,13 +218,25 @@ const SelectRechargePlan = ({route, navigation}) => {
             onChangeText={setSearch}
             placeholderTextColor={Colors.White}
           />
-          <FlatList
-            data={filteredPlans}
-            renderItem={renderPlanItem}
-            keyExtractor={item => item.id}
-            contentContainerStyle={styles.list}
-          />
+          {filteredPlans.length > 0 ? (
+            <FlatList
+              data={filteredPlans}
+              renderItem={renderPlanItem}
+              keyExtractor={item => item.id}
+              contentContainerStyle={styles.list}
+            />
+          ) : (
+            <View>
+              <Text style={{
+                color: Colors.White,
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+              }}>No plans available</Text>
+            </View>
+          )}
         </ScrollView>
+
         {/* Bottom Sheet */}
         <BottomSheet
           ref={bottomSheetRef}
@@ -356,71 +246,26 @@ const SelectRechargePlan = ({route, navigation}) => {
           <View style={styles.bottomSheetContainer}>
             {selectedPlan && (
               <View>
-                <Text style={styles.bottomSheetTitle}>{selectedPlan.name}</Text>
+                <Text style={styles.bottomSheetTitle}>{selectedPlan.planName}</Text>
                 <Text style={styles.bottomSheetDetail}>
-                  {selectedPlan.details}
+                  {selectedPlan.planDescription}
                 </Text>
                 <Text style={styles.bottomSheetDetail}>
-                  Price: {selectedPlan.price}
+                  Price: ₹{selectedPlan.amount}
                 </Text>
                 <Text style={styles.bottomSheetDetail}>
                   Validity: {selectedPlan.validity}
                 </Text>
                 <Text style={styles.bottomSheetDetail}>
-                  Data: {selectedPlan.data}
+                  Data: {selectedPlan.dataBenefit || 'N/A'}
                 </Text>
                 <Text style={styles.bottomSheetDetail}>
-                  Subscriptions: {selectedPlan.subscriptions}
+                  Subscriptions: {selectedPlan.subscriptions || 'N/A'}
                 </Text>
               </View>
             )}
           </View>
         </BottomSheet>
-
-        {/* Bottom Sheet Modal for Operator Selection */}
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isBottomSheetOpen}
-          onRequestClose={() => setIsBottomSheetOpen(false)}>
-          <View style={styles.bottomSheetOneContainer}>
-            <View style={styles.bottomSheetContent}>
-              {/* Search Bar */}
-              <TextInput
-                style={styles.searchBar}
-                placeholder="Search by name..."
-                value={searchTerm}
-                onChangeText={handleSearch}
-              />
-
-              {/* Operator List */}
-              <ScrollView showsVerticalScrollIndicator={false}>
-                {operatorList.length === 0 ? (
-                  <Text>No Operators Found</Text>
-                ) : (
-                  operatorList.map(item => (
-                    <TouchableOpacity
-                      key={item.key}
-                      style={styles.operatorItem}
-                      onPress={() => handleOperatorSelect(item)}>
-                      <Image source={item.image} style={styles.dropdownImage} />
-                      <Text style={styles.dropdownText}>{item.value}</Text>
-                    </TouchableOpacity>
-                  ))
-                )}
-              </ScrollView>
-
-              {/* Close Button */}
-              <TouchableOpacity onPress={() => setIsBottomSheetOpen(false)}>
-                <LinearGradient
-                  colors={['#0C6B72', '#34AEA1']}
-                  style={styles.closeButtonOper}>
-                  <Text style={styles.closeButtonText}>Close</Text>
-                </LinearGradient>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -435,7 +280,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: Colors.themeColor,
+    // backgroundColor: Colors.themeColor,
     paddingTop: 20,
     paddingBottom: 10,
     flexDirection: 'row',
@@ -446,7 +291,7 @@ const styles = StyleSheet.create({
   backButton: {
     position: 'absolute',
     left: 3,
-    padding: 10,
+    // padding: 10,
   },
   backButtonImage: {
     height: 25,
@@ -457,6 +302,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#fff',
+    alignItems: 'center',
+    // justifyContent: 'center',
   },
   scrollView: {
     paddingHorizontal: 15,
@@ -469,7 +316,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     elevation: 2,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
   },
@@ -518,7 +365,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
   },
