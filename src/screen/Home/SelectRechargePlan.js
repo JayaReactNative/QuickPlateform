@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef,useEffect} from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import {Colors} from '../../assets/Colors';
 import {LeftArrow} from '../../assets/Images';
 import BottomSheet from '@gorhom/bottom-sheet';
+import Server from '../../server/Server';
 
 
 if (
@@ -31,7 +32,12 @@ const SelectRechargePlan = ({route, navigation}) => {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredOperators, setFilteredOperators] = useState([]);
-  const [selectedOperator, setSelectedOperator] = useState('Vodafone Idea(VI)');
+  const [selectedOperator, setSelectedOperator] = useState('');
+  const [stateName, setStateName] = useState('');
+
+ useEffect(() => {
+  getNumberName()
+ }, []);
 
   const [plans] = useState([
     {
@@ -184,6 +190,21 @@ const SelectRechargePlan = ({route, navigation}) => {
     bottomSheetRef.current?.expand();
   };
 
+  // ------  total reacharge on number ---
+ const getNumberName = async () => {
+  try {
+    const data ={mobileNumber: contact.phoneNumbers[ind]?.number.replaceAll(' ','').replaceAll('+91','')} 
+    console.log("mobileNumber---->",data.mobileNumber)
+    const response = await Server.getSimName(data);
+    const resp = response.data?.items
+    console.log("response---->",resp)
+    setSelectedOperator(resp.company)
+    setStateName(resp.circle)
+  } catch (error) {
+   console.log('Error', 'An error occurred fetching data ');
+  }
+};
+
   const renderPlanItem = ({item}) => (
     <View style={styles.planCard}>
       <View style={styles.planHeader}>
@@ -305,9 +326,9 @@ const SelectRechargePlan = ({route, navigation}) => {
                 padding: 10,
                 width: '45%',
               }}>
-              <Text
+              <Text numberOfLines={1}
                 style={{color: Colors.Grey, fontSize: 15, fontWeight: '300'}}>
-                Karnataka
+               {stateName}
               </Text>
             </View>
           </View>

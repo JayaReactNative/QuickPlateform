@@ -27,7 +27,6 @@ const AuthService = {
 
   async VerfyPassword(dataValue) {
     try {
-      console.log('dataValue<<----',dataValue)
       const response = await axios.post(`${BASE_URL}/auth/verify/verifyPassword`, dataValue); 
       return response; 
     } catch (error) {
@@ -59,15 +58,6 @@ const AuthService = {
   },
 
 
-  // Function to reset password with OTP
-  async forgetPassword(mobileNumber) {
-    try {
-      const response = await axios.post(`${BASE_URL}/forget-password`, { mobileNumber });
-      return response.data;
-    } catch (error) {
-      this.handleError(error);
-    }
-  },
 
   handleError(error) {
     if (axios.isAxiosError(error)) {
@@ -94,20 +84,3 @@ export default AuthService;
 
 
 
-
-/*
-// EXAMPLE USECASE:
-
-
-import AuthService from './AuthService';
-
-const loginUser = async () => {
-  try {
-    const response = await AuthService.login('1234567890');
-    console.log('Login successful:', response);
-  } catch (error) {
-    console.error('Login error:', error.message);
-  }
-};
-
-*/

@@ -379,6 +379,11 @@ const PersonalInfo = ({ navigation }) => {
       console.error('response------>', response);
       if (response.message === 'User Registered Successfully') {
         Alert.alert('User Registered Successfully')
+        try {
+          await AsyncStorage.setItem('authId', response.data.items.authId);
+        } catch (error) {
+          
+        }
         navigation.navigate('MainTabs'); 
       }
     } catch (error) {
