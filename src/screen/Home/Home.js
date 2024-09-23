@@ -112,6 +112,7 @@ const Home = ({navigation}) => {
     try {
       const response = await Server.getProfitBalance();
       const Balance= response.data?.items?.walletBalance
+      console.log('response profit---->',Balance)
       setProfitBalance(Balance)
     } catch (error) {
      console.log('Error', 'An error occurred fetching data ');
@@ -123,6 +124,7 @@ const Home = ({navigation}) => {
     try {
       const response = await Server.getWalletBalance();
       const Balance= response.data?.items?.walletBalance
+      console.log('response wallet---->',Balance)
       setWalletBalance(Balance)
     } catch (error) {
      console.log('Error', 'An error occurred fetching data ');
