@@ -38,6 +38,22 @@ const Server ={
         }
       },
 
+      // ------ reward list -----
+        async getUserDetail() {
+            let token = await this.getToken();
+            let userId = await this.getUserId();
+            try {
+              const response = await axios.get(`${BASE_URL}/reward/getReward/${userId}`,  {
+                headers: {
+                  'token': `${token}`, 
+                },
+              });
+              return response;
+            } catch (error) {
+              this.handleError(error);
+            }
+          },
+
     async getTotalIvest() {
         let token = await this.getToken();
         let userId = await this.getUserId();

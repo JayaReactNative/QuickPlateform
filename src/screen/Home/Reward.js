@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -15,20 +15,43 @@ import {
   LeftArrow,
   RewardImg,
 } from '../../assets/Images';
+import Server from '../../server/Server';
 
 const Reward = ({navigation}) => {
-  const rewardData = [
-    {
-      id: '1',
-      reward: '10',
-      reason: 'Reward',
-    },
-    {
-      id: '2',
-      reward: '100',
-      reason: 'Refarrel No. 4356457879, Name:- Arun Kumar, Date:- 17-12-23',
-    },
-  ];
+  // const rewardData = [
+  //   {
+  //     id: '1',
+  //     reward: '10',
+  //     reason: 'Reward',
+  //   },
+  //   {
+  //     id: '2',
+  //     reward: '100',
+  //     reason: 'Refarrel No. 4356457879, Name:- Arun Kumar, Date:- 17-12-23',
+  //   },
+  // ];
+  const [rewardData, setRewardData] = useState([]);
+
+
+
+  useEffect(() => {
+    getDetail();
+  }, []);
+
+  // ------ user detail -----
+  const getDetail = async () => {
+    try {
+      const response = await Server.getUserDetail();
+      const rewardData = response.data;
+      console.log('Reward Data: ', rewardData);
+      setRewardData(rewardData.items)
+      // const Number = await AsyncStorage.getItem('mobile')
+      // setMobileNumber(Number)
+      // setUser(detailUser);
+    } catch (error) {
+      console.log('Error', 'An error occurred fetching data');
+    }
+  };
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
@@ -54,7 +77,7 @@ const Reward = ({navigation}) => {
             <View style={styles.modalGrey}>
               <View style={styles.row}>
                 <Text style={[styles.textBoldStyle]}>Reward: </Text>
-                <Text style={[styles.textStyle]}>₹{item.reward}</Text>
+                <Text style={[styles.textStyle]}>₹{item.amount}</Text>
               </View>
               <View style={[styles.row, {marginVertical: 5}]}>
                 <Text style={[styles.textBoldStyle]}>Reason: </Text>
@@ -94,7 +117,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   modalGrey: {
-    width: '90%',
+    width: '94%',
     backgroundColor: 'white',
     alignSelf: 'center',
     padding: 10,
@@ -131,6 +154,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingBottom: 110,
-    marginTop: 20,
+    // marginTop: 10,
   },
 });
