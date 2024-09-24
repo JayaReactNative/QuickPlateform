@@ -94,7 +94,7 @@ const Home = ({navigation}) => {
       const response = await Server.getUserDetail();
       const detailUser = response.data.items;
       setUserName(detailUser.name);
-      console.log('responsive-----', response.data.items);
+      console.log('user Data-----', response.data);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
     } finally {
@@ -137,10 +137,10 @@ const Home = ({navigation}) => {
       setLoading(true)
       const response = await Server.getWalletBalance();
       const Balance = response.data?.items?.walletBalance;
-      console.log('response wallet---->', Balance);
+      console.log('response wallet---->', response.data);
       setWalletBalance(Balance);
     } catch (error) {
-      console.log('Error', 'An error occurred fetching data ');
+      console.log('Error', error);
     } finally {
       setLoading(false)
     }

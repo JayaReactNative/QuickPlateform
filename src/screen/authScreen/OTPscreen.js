@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TextInput,
   Alert,
+  ActivityIndicator, 
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import {String} from '../../utility/CommonText';
@@ -17,6 +18,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const OTPscreen = ({navigation, route}) => {
   const {mobileNumber, otp} = route.params;
+  const [loading, setLoading] = useState(false);
+
   console.log('Mobile Number:', mobileNumber);
 
   const initialValues = {
@@ -41,7 +44,8 @@ const OTPscreen = ({navigation, route}) => {
   const handleSubmitForm = async value => {
     const otpString = value.otp.join('');
     const otpNumber = Number(otpString);
-    try {
+    try {      
+      setLoading(true)
       if (otp === otpNumber) {
         const response = await AuthService.VerfyOTP({
           mobile: mobileNumber,
@@ -62,65 +66,71 @@ const OTPscreen = ({navigation, route}) => {
       }
     } catch (error) {
       Alert.alert('Error', 'An error occurred while verifying the OTP');
+    } finally {
+      setLoading(false)
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.containLog}>
-        <Text style={styles.headText}>{String.ENTER_OTP}</Text>
-        <Text style={styles.smallText}>
-          OTP has been sent to your Mobile, Please verify.
-        </Text>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validateOTP}
-          onSubmit={handleSubmitForm}>
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
-            <>
-              <View style={styles.textHolder}>
-                {values.otp.map((value, index) => (
-                  <TextInput
-                    key={index}
-                    ref={otpInputRefs[index]}
-                    style={styles.input}
-                    value={value}
-                    onChangeText={text =>
-                      handleInputChange(text, index, handleChange)
-                    }
-                    onBlur={handleBlur(`otp[${index}]`)}
-                    keyboardType="numeric"
-                    maxLength={1}
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    textAlign="center"
+      {loading ? (
+          <ActivityIndicator size="large" color="#ffffff" style={styles.loader} /> // Show loader when loading
+        ) : (
+          <View style={styles.containLog}>
+            <Text style={styles.headText}>{String.ENTER_OTP}</Text>
+            <Text style={styles.smallText}>
+              OTP has been sent to your Mobile, Please verify.
+            </Text>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={validateOTP}
+              onSubmit={handleSubmitForm}>
+              {({
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                values,
+                errors,
+                touched,
+              }) => (
+                <>
+                  <View style={styles.textHolder}>
+                    {values.otp.map((value, index) => (
+                      <TextInput
+                        key={index}
+                        ref={otpInputRefs[index]}
+                        style={styles.input}
+                        value={value}
+                        onChangeText={text =>
+                          handleInputChange(text, index, handleChange)
+                        }
+                        onBlur={handleBlur(`otp[${index}]`)}
+                        keyboardType="numeric"
+                        maxLength={1}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        textAlign="center"
+                      />
+                    ))}
+                  </View>
+                  {touched.otp && errors.otp && (
+                    <Text style={styles.errorText}>{errors.otp}</Text>
+                  )}
+                  <ButtonCustom
+                    title="Submit OTP"
+                    onClickButton={handleSubmit}
+                    colors={[Colors.themegreen, Colors.ThemelightGreen]}
+                    start={{x: 0, y: 0}}
+                    end={{x: 0, y: 1.8}}
+                    textColor="white"
+                    width={350}
+                    Buttonstyle={styles.btnStyle}
                   />
-                ))}
-              </View>
-              {touched.otp && errors.otp && (
-                <Text style={styles.errorText}>{errors.otp}</Text>
+                </>
               )}
-              <ButtonCustom
-                title="Submit OTP"
-                onClickButton={handleSubmit}
-                colors={[Colors.themegreen, Colors.ThemelightGreen]}
-                start={{x: 0, y: 0}}
-                end={{x: 0, y: 1.8}}
-                textColor="white"
-                width={350}
-                Buttonstyle={styles.btnStyle}
-              />
-            </>
-          )}
-        </Formik>
-      </View>
+            </Formik>
+          </View>
+        )}
     </SafeAreaView>
   );
 };
@@ -132,6 +142,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     backgroundColor: Colors.White,
+  },
+  loader: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   headText: {
     fontSize: 25,

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   Alert,
+  ActivityIndicator, 
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import {Delete, Invest, Withdrawal} from '../../assets/Images';
@@ -91,6 +92,7 @@ const Portfolio = ({navigation}) => {
   const [investmentData, setInvestmentData] = useState([]);
   const [withdrawlData, setWithdrawlData] = useState([]);
   const [capitalWithdraw, setCapitalWithdraw] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getWithdrawDetail();
@@ -213,6 +215,7 @@ const Portfolio = ({navigation}) => {
   // ------- api integration ----
   const getWithdrawDetail = async () => {
     try {
+      setLoading(true)
       const response = await Server.getWithDrawList();
       const sortedData = response.data?.items.sort((a, b) => {
         const dateA = new Date(a.date || a.dateOfWithdrawal).getTime();
@@ -222,11 +225,14 @@ const Portfolio = ({navigation}) => {
       setWithdrawlData(sortedData);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
+    } finally {
+      setLoading(false)
     }
   };
 
   const getCapitalDetail = async () => {
     try {
+      setLoading(true)
       const response = await Server.getCapitalDrawList();
       const sortedData = response.data?.items.sort((a, b) => {
         const dateA = new Date(
@@ -240,11 +246,14 @@ const Portfolio = ({navigation}) => {
       setCapitalWithdraw(sortedData);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
+    } finally {
+      setLoading(false)
     }
   };
 
   const getInvestmentDetail = async () => {
     try {
+      setLoading(true)
       const response = await Server.getInvestmentList();
       const sortedData = response.data?.items.sort((a, b) => {
         const dateA = new Date(
@@ -270,70 +279,76 @@ const Portfolio = ({navigation}) => {
       // console.log(formattedDate);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
+    } finally {
+      setLoading(false)
     }
   };
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
-      <View style={styles.container}>
-        <View style={{marginTop: 30}}>
-          <Text style={styles.title}>Portfolio</Text>
-        </View>
-
-        <View style={styles.tabsContainer}>
-          {['Investment', 'Interest Withdrawl', 'Capital Withdraw'].map(tab => (
-            <TouchableOpacity
-              key={tab}
-              style={[styles.tab, activeTab === tab && styles.activeTab]}
-              onPress={() => {
-                setActiveTab(tab);
-              }}>
-              <Image
-                source={getTabIcon(tab)}
-                style={[
-                  styles.iconStyle,
-                  activeTab === tab && styles.activeIconStyle,
-                ]}
-              />
-              <Text
-                style={[
-                  styles.tabText,
-                  activeTab === tab && styles.activeTabText,
-                ]}>
-                {tab}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {activeTab === 'Interest Withdrawl' ? (
-          <Text style={styles.warning}>
-            Note- The Withdrawl requiest can only be placed on the last days of
-            every month (i.e 28, 29, 30, 31) and may take up to 72 hours to
-            disburse
-          </Text>
+       {loading ? (
+          <ActivityIndicator size="large" color="#ffffff" style={styles.loader} /> // Show loader when loading
         ) : (
-          <View></View>
-        )}
-
-        {activeTab === 'Investment' ? (
-          <View></View>
-        ) : (
-          <View style={styles.row}>
-            <Text style={styles.menuCell}>Date</Text>
-            <Text style={styles.menuCell}>Amount</Text>
-            <Text style={styles.menuCell}>Status</Text>
+        <View style={styles.container}>
+          <View style={{marginTop: 30}}>
+            <Text style={styles.title}>Portfolio</Text>
           </View>
-        )}
 
-        <FlatList
-          data={getData()}
-          renderItem={activeTab === 'Investment' ? renderItem : renderItemTable}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+          <View style={styles.tabsContainer}>
+            {['Investment', 'Interest Withdrawl', 'Capital Withdraw'].map(tab => (
+              <TouchableOpacity
+                key={tab}
+                style={[styles.tab, activeTab === tab && styles.activeTab]}
+                onPress={() => {
+                  setActiveTab(tab);
+                }}>
+                <Image
+                  source={getTabIcon(tab)}
+                  style={[
+                    styles.iconStyle,
+                    activeTab === tab && styles.activeIconStyle,
+                  ]}
+                />
+                <Text
+                  style={[
+                    styles.tabText,
+                    activeTab === tab && styles.activeTabText,
+                  ]}>
+                  {tab}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {activeTab === 'Interest Withdrawl' ? (
+            <Text style={styles.warning}>
+              Note- The Withdrawl requiest can only be placed on the last days of
+              every month (i.e 28, 29, 30, 31) and may take up to 72 hours to
+              disburse
+            </Text>
+          ) : (
+            <View></View>
+          )}
+
+          {activeTab === 'Investment' ? (
+            <View></View>
+          ) : (
+            <View style={styles.row}>
+              <Text style={styles.menuCell}>Date</Text>
+              <Text style={styles.menuCell}>Amount</Text>
+              <Text style={styles.menuCell}>Status</Text>
+            </View>
+          )}
+
+          <FlatList
+            data={getData()}
+            renderItem={activeTab === 'Investment' ? renderItem : renderItemTable}
+            keyExtractor={item => item.id}
+            contentContainerStyle={styles.listContainer}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+       )}
     </LinearGradient>
   );
 };
@@ -343,6 +358,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 10,
     // backgroundColor: '#F4F4F4',
+  },
+  loader: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 22,

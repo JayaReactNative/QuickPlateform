@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  ActivityIndicator, 
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import LinearGradient from 'react-native-linear-gradient';
@@ -31,6 +32,7 @@ const Reward = ({navigation}) => {
   //   },
   // ];
   const [rewardData, setRewardData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
 
 
@@ -41,6 +43,7 @@ const Reward = ({navigation}) => {
   // ------ user detail -----
   const getDetail = async () => {
     try {
+      setLoading(true)
       const response = await Server.getUserDetail();
       const rewardData = response.data;
       console.log('Reward Data: ', rewardData);
@@ -50,6 +53,8 @@ const Reward = ({navigation}) => {
       // setUser(detailUser);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data');
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -65,28 +70,31 @@ const Reward = ({navigation}) => {
         <Text style={styles.headerTitle}>Reward List</Text>
         <View style={styles.backButton} />
       </View>
-
-      <ScrollView style={{flexGrow: 1}}>
-        <Image source={RewardImg} style={styles.scanImage} />
-        <FlatList
-          data={rewardData}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => (
-            <View style={styles.modalGrey}>
-              <View style={styles.row}>
-                <Text style={[styles.textBoldStyle]}>Reward: </Text>
-                <Text style={[styles.textStyle]}>₹{item.amount}</Text>
+      {loading ? (
+          <ActivityIndicator size="large" color="#ffffff" style={styles.loader} /> // Show loader when loading
+        ) : (
+        <ScrollView style={{flexGrow: 1}}>
+          <Image source={RewardImg} style={styles.scanImage} />
+          <FlatList
+            data={rewardData}
+            keyExtractor={item => item.id}
+            contentContainerStyle={styles.listContainer}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item}) => (
+              <View style={styles.modalGrey}>
+                <View style={styles.row}>
+                  <Text style={[styles.textBoldStyle]}>Reward: </Text>
+                  <Text style={[styles.textStyle]}>₹{item.amount}</Text>
+                </View>
+                <View style={[styles.row, {marginVertical: 5}]}>
+                  <Text style={[styles.textBoldStyle]}>Reason: </Text>
+                  <Text style={[styles.textStyle]}>{item.reason}</Text>
+                </View>
               </View>
-              <View style={[styles.row, {marginVertical: 5}]}>
-                <Text style={[styles.textBoldStyle]}>Reason: </Text>
-                <Text style={[styles.textStyle]}>{item.reason}</Text>
-              </View>
-            </View>
-          )}
-        />
-      </ScrollView>
+            )}
+          />
+        </ScrollView>
+      )}
       </SafeAreaView>
     </LinearGradient>
   );
@@ -97,6 +105,11 @@ export default Reward;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loader: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   appbarHeader: {
     flexDirection: 'row',

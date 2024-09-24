@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  ActivityIndicator, 
 } from 'react-native';
 import { Colors } from '../../assets/Colors';
 import { LoginImage } from '../../assets/Images';
@@ -24,10 +25,13 @@ import { useFocusEffect } from '@react-navigation/native';
 const Login = ({ navigation }) => {
   const initialValues = {
     number: '',
-  };
+  }; 
+  const [loading, setLoading] = useState(false);
+
 
   const handleSubmitForm = async (values) => {
     try {
+      setLoading(true)
       const response = await AuthService.sendOTP(values.number);
       const dataRes = response.data;
 
@@ -45,6 +49,8 @@ const Login = ({ navigation }) => {
       }
     } catch (error) {
       console.error('Login error:', error.message);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -54,58 +60,62 @@ const Login = ({ navigation }) => {
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-          <Image source={LoginImage} style={styles.imageStyle} />
-          <View style={styles.containLog}>
-            <Text style={styles.headText}>{String.WELCOME}</Text>
-            <Text style={styles.smallText}>{String.PLEASE_LOGIN}</Text>
+        {loading ? (
+          <ActivityIndicator size="large" color="#ffffff" style={styles.loader} /> // Show loader when loading
+        ) : (
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <Image source={LoginImage} style={styles.imageStyle} />
+            <View style={styles.containLog}>
+              <Text style={styles.headText}>{String.WELCOME}</Text>
+              <Text style={styles.smallText}>{String.PLEASE_LOGIN}</Text>
 
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationMobile}
-              onSubmit={handleSubmitForm}
-            >
-              {({ handleChange, handleBlur, handleSubmit, values, errors, touched, resetForm }) => {
-                useFocusEffect(
-                  React.useCallback(() => {
-                    resetForm();
-                  }, [resetForm])
-                );
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationMobile}
+                onSubmit={handleSubmitForm}
+              >
+                {({ handleChange, handleBlur, handleSubmit, values, errors, touched, resetForm }) => {
+                  useFocusEffect(
+                    React.useCallback(() => {
+                      resetForm();
+                    }, [resetForm])
+                  );
 
-                return (
-                  <>
-                    <View style={styles.textHolder}>
-                      <TextInput
-                        placeholder="Enter Mobile Number"
-                        placeholderTextColor={Colors.HolderColor}
-                        keyboardType="number-pad"
-                        value={values.number}
-                        onChangeText={handleChange('number')}
-                        onBlur={handleBlur('number')}
-                        maxLength={10}
-                        style={styles.textStyle}
+                  return (
+                    <>
+                      <View style={styles.textHolder}>
+                        <TextInput
+                          placeholder="Enter Mobile Number"
+                          placeholderTextColor={Colors.HolderColor}
+                          keyboardType="number-pad"
+                          value={values.number}
+                          onChangeText={handleChange('number')}
+                          onBlur={handleBlur('number')}
+                          maxLength={10}
+                          style={styles.textStyle}
+                        />
+                      </View>
+                      {touched.number && errors.number && (
+                        <Text style={styles.errorText}>{errors.number}</Text>
+                      )}
+
+                      <ButtonCustom
+                        title={String.SIGN_IN}
+                        onClickButton={handleSubmit}
+                        colors={[Colors.themegreen, Colors.ThemelightGreen]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 0, y: 1.8 }}
+                        textColor="white"
+                        width={200}
+                        Buttonstyle={styles.btnStyle}
                       />
-                    </View>
-                    {touched.number && errors.number && (
-                      <Text style={styles.errorText}>{errors.number}</Text>
-                    )}
-
-                    <ButtonCustom
-                      title={String.SIGN_IN}
-                      onClickButton={handleSubmit}
-                      colors={[Colors.themegreen, Colors.ThemelightGreen]}
-                      start={{ x: 0, y: 0 }}
-                      end={{ x: 0, y: 1.8 }}
-                      textColor="white"
-                      width={200}
-                      Buttonstyle={styles.btnStyle}
-                    />
-                  </>
-                );
-              }}
-            </Formik>
-          </View>
-        </ScrollView>
+                    </>
+                  );
+                }}
+              </Formik>
+            </View>
+          </ScrollView>
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -117,6 +127,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.White,
+  },
+  loader: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scrollContainer: {
     flexGrow: 1,
