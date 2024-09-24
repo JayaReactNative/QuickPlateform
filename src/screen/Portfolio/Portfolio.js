@@ -91,34 +91,56 @@ const Portfolio = ({navigation}) => {
   const [investmentData, setInvestmentData] = useState([]);
   const [withdrawlData, setWithdrawlData] = useState([]);
   const [capitalWithdraw, setCapitalWithdraw] = useState([]);
+
   useEffect(() => {
-    getInvesterDetail();
+    getWithdrawDetail();
+    getCapitalDetail();
+    getInvestmentDetail();
   }, []);
 
   const renderItem = ({item}) => (
     <TouchableOpacity
       style={styles.card}
       onPress={() => navigation.navigate('TransactionDeatail')}>
-      <View style={styles.row}>
+      <View style={[styles.row, {alignSelf: 'flex-start'}]}>
         <Text
-          style={[styles.cardLabel, {fontWeight: '600', color: Colors.White}]}>
+          style={[
+            styles.cardLabel,
+            {fontWeight: '600', color: Colors.White, width: '60%'},
+          ]}>
           Date
         </Text>
-        <Text style={styles.cardValue}>{item.date}</Text>
+        <Text style={styles.cardValue}>
+          {new Date(parseInt(item.dateOfInvest))
+            .getDate()
+            .toString()
+            .padStart(2, '0') +
+            '-' +
+            (new Date(parseInt(item.dateOfInvest)).getMonth() + 1)
+              .toString()
+              .padStart(2, '0') +
+            '-' +
+            new Date(parseInt(item.dateOfInvest)).getFullYear()}
+        </Text>
+
+        {/* <Text style={styles.cardValue}>{Date(item.dateOfInvest).toString().split(' ').slice(2, 4).reverse().join('-') + '-' + new Date(1662374787413).getFullYear()}</Text> */}
       </View>
-      <View style={styles.row}>
+      <View style={[styles.row, {alignSelf: 'flex-start'}]}>
         <Text
-          style={[styles.cardLabel, {fontWeight: '600', color: Colors.White}]}>
+          style={[
+            styles.cardLabel,
+            {fontWeight: '600', color: Colors.White, width: '60%'},
+          ]}>
           Amount
         </Text>
         <Text style={styles.cardValue}>₹{item.amount}</Text>
       </View>
       {item.interest && (
-        <View style={styles.row}>
+        <View style={[styles.row, {alignSelf: 'flex-start'}]}>
           <Text
             style={[
               styles.cardLabel,
-              {fontWeight: '600', color: Colors.White},
+              {fontWeight: '600', color: Colors.White, width: '60%'},
             ]}>
             Interest
           </Text>
@@ -126,11 +148,11 @@ const Portfolio = ({navigation}) => {
         </View>
       )}
       {item.lockingPeriod && (
-        <View style={styles.row}>
+        <View style={[styles.row, {alignSelf: 'flex-start'}]}>
           <Text
             style={[
               styles.cardLabel,
-              {fontWeight: '600', color: Colors.White},
+              {fontWeight: '600', color: Colors.White, width: '60%'},
             ]}>
             Locking Period
           </Text>
@@ -138,11 +160,11 @@ const Portfolio = ({navigation}) => {
         </View>
       )}
       {item.status && (
-        <View style={styles.row}>
+        <View style={[styles.row, {alignSelf: 'flex-start'}]}>
           <Text
             style={[
               styles.cardLabel,
-              {fontWeight: '600', color: Colors.White},
+              {fontWeight: '600', color: Colors.White, width: '60%'},
             ]}>
             Status
           </Text>
@@ -154,10 +176,10 @@ const Portfolio = ({navigation}) => {
 
   const renderItemTable = ({item}) => (
     <View style={styles.tableRow}>
-      <Text style={[styles.cell, {width: '25%'}]}>
+      <Text style={[styles.cell, {width: '27%'}]}>
         {item.date ? item.date : item.dateOfWithdrawal}
       </Text>
-      <Text style={[styles.cell, {width: '48%'}]}>₹{item.amount}</Text>
+      <Text style={[styles.cell, {width: '45%'}]}>₹{item.amount}</Text>
       {item.status && (
         <Text style={[styles.cell, {width: '25%'}]}>{item.status}</Text>
       )}
@@ -188,10 +210,8 @@ const Portfolio = ({navigation}) => {
     return tab === 'Investment' ? Invest : Withdrawal;
   };
 
-
-
   // ------- api integration ----
-  const getInvesterDetail = async () => {
+  const getWithdrawDetail = async () => {
     try {
       const response = await Server.getWithDrawList();
       const sortedData = response.data?.items.sort((a, b) => {
@@ -200,6 +220,54 @@ const Portfolio = ({navigation}) => {
         return dateB - dateA; // Most recent date first
       });
       setWithdrawlData(sortedData);
+    } catch (error) {
+      console.log('Error', 'An error occurred fetching data ');
+    }
+  };
+
+  const getCapitalDetail = async () => {
+    try {
+      const response = await Server.getCapitalDrawList();
+      const sortedData = response.data?.items.sort((a, b) => {
+        const dateA = new Date(
+          a.dateOfWithdrawal || a.dateOfWithdrawal,
+        ).getTime();
+        const dateB = new Date(
+          b.dateOfWithdrawal || b.dateOfWithdrawal,
+        ).getTime();
+        return dateB - dateA;
+      });
+      setCapitalWithdraw(sortedData);
+    } catch (error) {
+      console.log('Error', 'An error occurred fetching data ');
+    }
+  };
+
+  const getInvestmentDetail = async () => {
+    try {
+      const response = await Server.getInvestmentList();
+      const sortedData = response.data?.items.sort((a, b) => {
+        const dateA = new Date(
+          a.dateOfWithdrawal || a.dateOfWithdrawal,
+        ).getTime();
+        const dateB = new Date(
+          b.dateOfWithdrawal || b.dateOfWithdrawal,
+        ).getTime();
+        return dateB - dateA;
+      });
+      setInvestmentData(sortedData);
+      // const formattedDate =
+      //   new Date(parseInt(sortedData[0].dateOfInvest))
+      //     .getDate()
+      //     .toString()
+      //     .padStart(2, '0') +
+      //   '-' +
+      //   (new Date(parseInt(sortedData[0].dateOfInvest)).getMonth() + 1)
+      //     .toString()
+      //     .padStart(2, '0') +
+      //   '-' +
+      //   new Date(parseInt(sortedData[0].dateOfInvest)).getFullYear();
+      // console.log(formattedDate);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
     }
@@ -341,7 +409,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems:'center',
+    alignItems: 'center',
     marginBottom: 8,
   },
   cardLabel: {

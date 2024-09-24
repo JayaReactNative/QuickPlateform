@@ -12,10 +12,7 @@ import {
 import {Colors} from '../../assets/Colors';
 import LinearGradient from 'react-native-linear-gradient';
 import {
-  Downloads,
   LeftArrow,
-  NewScanner,
-  QrImage1,
   RewardImg,
 } from '../../assets/Images';
 

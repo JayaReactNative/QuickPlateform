@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
-  BackHandler,
+  BackHandler,ActivityIndicator, 
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import {
@@ -50,7 +50,9 @@ const Home = ({navigation}) => {
   const [totalInvestment, setTotalInvestment] = useState('');
   const [walletBalance, setWalletBalance] = useState('');
   const [ProfitBalance, setProfitBalance] = useState('');
+  const [userName, setUserName] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleBackButtonClick = () => {
     if (navigation.isFocused()) {
@@ -88,56 +90,73 @@ const Home = ({navigation}) => {
   // ------ user detail -----
   const getDetail = async () => {
     try {
+      setLoading(true)
       const response = await Server.getUserDetail();
-      // console.log('responsive-----', response.data);
+      const detailUser = response.data.items;
+      setUserName(detailUser.name);
+      console.log('responsive-----', response.data.items);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
+    } finally {
+      setLoading(false)
     }
   };
 
   // ------  total investment ---
   const getInvestment = async () => {
     try {
+      setLoading(true)
       const response = await Server.getTotalIvest();
       const invest = response.data?.items?.totalInvestment;
       setTotalInvestment(invest);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
+    } finally {
+      setLoading(false)
     }
   };
 
   // ------  total Profit ---
   const getProfitDetail = async () => {
     try {
+      setLoading(true)
       const response = await Server.getProfitBalance();
       const Balance = response.data?.items?.walletBalance;
       console.log('response profit---->', Balance);
       setProfitBalance(Balance);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
+    } finally {
+      setLoading(false)
     }
   };
 
   // ------  total wallet ---
   const getWalletDetail = async () => {
     try {
+      setLoading(true)
       const response = await Server.getWalletBalance();
       const Balance = response.data?.items?.walletBalance;
       console.log('response wallet---->', Balance);
       setWalletBalance(Balance);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
+    } finally {
+      setLoading(false)
     }
   };
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
       <SafeAreaView style={styles.container}>
+      {loading ? (
+          <ActivityIndicator size="large" color="#ffffff" style={styles.loader} /> // Show loader when loading
+        ) : (
         <ScrollView
           contentContainerStyle={styles.scrollViewContainer}
           showsVerticalScrollIndicator={false}>
           <View style={styles.containLog}>
-            <Text style={styles.headText}>Hello John</Text>
+            <Text style={styles.headText}>{userName}</Text>
             <View style={{marginLeft: -3, marginTop: '5%'}}>
               <ImageSlider topView={35} ImageWidth={345} />
             </View>
@@ -308,7 +327,8 @@ const Home = ({navigation}) => {
               <View style={styles.recentCard}>
                 <Image source={TotalProfitImg} style={styles.iconRecentStyle} />
                 <Text style={styles.iconRecentName}>
-                  Total Profit {'\n'} ₹ {ProfitBalance}
+                  Total Profit {'\n'} ₹{' '}
+                  {ProfitBalance ? ProfitBalance.toFixed(2) : '0.00'}
                 </Text>
               </View>
             </View>
@@ -399,6 +419,7 @@ const Home = ({navigation}) => {
             </Modal>
           </View>
         </ScrollView>
+        )}
       </SafeAreaView>
     </LinearGradient>
   );
@@ -409,6 +430,11 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loader: {
+    flex: 1, 
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   scrollViewContainer: {
     flexGrow: 1,

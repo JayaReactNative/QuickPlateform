@@ -372,15 +372,13 @@ const PersonalInfo = ({ navigation }) => {
         dob: values.dateOfBirth, 
         password: values.password,
         referralBy: values.referencePassword || "",  
-      };
-      console.error('data------>', data);
-  
+      };  
       const response = await AuthService.signUp(data, userToken);   
       console.error('response------>', response);
       if (response.message === 'User Registered Successfully') {
         Alert.alert('User Registered Successfully')
         try {
-          await AsyncStorage.setItem('authId', response.data.items.authId);
+          await AsyncStorage.setItem('authId', response.data.items._id);
         } catch (error) {
           
         }
