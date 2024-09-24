@@ -201,12 +201,12 @@ const Account = ({navigation}) => {
                   onChangeText={setNominName}
                 />
                 <TouchableOpacity
-                  style={[styles.borderStyle, styles.rowStyle]}
+                  style={[styles.borderStyle, styles.rowStyle,{marginTop:0}]}
                   onPress={() => setOpen(true)}>
-                  <Text style={styles.dateText}>{Dob}</Text>
+                  <Text numberOfLines={1} style={[styles.dateText,{width:'80%'}]}>{Dob}</Text>
                   <Image
                     source={BirthCalender}
-                    style={{ height: 25, width: 25, resizeMode: 'contain' }}
+                    style={{ height: 18.5, width: 18.5, resizeMode: 'contain' }}
                   />
                 </TouchableOpacity>
 

@@ -35,7 +35,7 @@ const PasswordScreen = ({ navigation }) => {
           Alert.alert('User Registered Successfully')
           try {
             await AsyncStorage.setItem('userToken', response.data?.items?.token);
-            await AsyncStorage.setItem('authId', response.data?.items?.authId);
+            await AsyncStorage.setItem('authId', response.data?.items?._id);
           } catch (error) {
             
           }

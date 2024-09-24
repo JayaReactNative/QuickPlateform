@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -13,22 +13,25 @@ import {
   LayoutAnimation,
   UIManager,
   Platform,
-  FlatList
+  FlatList,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { LeftArrow } from '../../assets/Images';
-import { Colors } from '../../assets/Colors';
+import {LeftArrow} from '../../assets/Images';
+import {Colors} from '../../assets/Colors';
 import ImageSlider from '../../customScreen/ImageSlider';
 import TextInputCustom from '../../customScreen/TextInputCustom';
 import BottomSheet from '@gorhom/bottom-sheet';
 import Server from '../../server/Server';
 
 // Enable LayoutAnimation for Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+if (
+  Platform.OS === 'android' &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const DTHScreen = ({ navigation }) => {
+const DTHScreen = ({navigation}) => {
   const [selectedOperator, setSelectedOperator] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [onChangesClick, setChangesClick] = useState(false);
@@ -230,12 +233,11 @@ const DTHScreen = ({ navigation }) => {
 
               {/* Operator List */}
               <ScrollView showsVerticalScrollIndicator={false}>
-                {filteredOperators.map((item) => (
+                {filteredOperators.map(item => (
                   <TouchableOpacity
                     key={item.key}
                     style={styles.operatorItem}
-                    onPress={() => handleOperatorSelect(item)}
-                  >
+                    onPress={() => handleOperatorSelect(item)}>
                     <Image source={item.image} style={styles.dropdownImage} />
                     <Text style={styles.dropdownText}>{item.value}</Text>
                   </TouchableOpacity>
@@ -314,6 +316,12 @@ const DTHScreen = ({ navigation }) => {
           <Text style={styles.submitText}>SUBMIT</Text>
         </TouchableOpacity>
 
+        {/* Submit Button */}
+        <TouchableOpacity
+          style={styles.btnStyle}
+          onPress={() => navigation.goBack('')}>
+          <Text style={styles.submitText}>SUBMIT</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -347,7 +355,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
   },
   scrollContent: {
-    flexGrow: 1,
     paddingHorizontal: 12,
     paddingVertical: 10,
   },
@@ -498,7 +505,6 @@ const styles = StyleSheet.create({
     marginBottom: 4
   },
 
-
   btnStyle: {
     width: '100%',
     backgroundColor: Colors.themeColor,
@@ -515,7 +521,6 @@ const styles = StyleSheet.create({
   },
 
   //   -------recharge plan----
-
 
   searchInput: {
     height: 50,
@@ -537,7 +542,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 8,
   },

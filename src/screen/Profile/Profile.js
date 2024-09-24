@@ -4,21 +4,32 @@ import { CustomerReview, DownArrow, FaqImage, FaqQuestion, Logout, Privacy, Prof
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../../assets/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Server from '../../server/Server';
 
-const userData = {
-  "name": "Mr. Dhruv Soni",
-  "email": "dhruv@gmail.com",
-  "mobile": "200022342",
-  "dob": "10-09-2023",
-  "transactions": [
-    { "id": "1", "amount": "$100", "date": "2024-09-01" },
-    { "id": "2", "amount": "$50", "date": "2024-09-10" }
-  ]
-};
 
 const Profile = ({ navigation }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [user, setUser] = useState(null);
+  const [mobileNumber, setMobileNumber] = useState('');
+  
+
+  useEffect(() => {
+    getDetail();
+  }, []);
+
+  // ------ user detail -----
+  const getDetail = async () => {
+    try {
+      const response = await Server.getUserDetail(); 
+      const detailUser = response.data.items;
+      const Number = await AsyncStorage.getItem('mobile')
+      setMobileNumber(Number)
+      setUser(detailUser);
+    } catch (error) {
+      console.log('Error', 'An error occurred fetching data');
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('userToken');
@@ -29,9 +40,6 @@ const Profile = ({ navigation }) => {
     }
   };
   
-  useEffect(() => {
-    setUser(userData);
-  }, []);
 
   const toggleExpand = () => setIsExpanded(prevState => !prevState);
 
@@ -58,6 +66,8 @@ const Profile = ({ navigation }) => {
       { cancelable: true }
     );
   };
+ 
+   
 
 
   return (
@@ -76,10 +86,10 @@ const Profile = ({ navigation }) => {
 
           {isExpanded && (
             <View style={styles.box2}>
-              <Text style={[styles.text, { fontWeight: '600', fontSize: 16 }]}>Name:- {user.name}</Text>
-              <Text style={styles.text}>Email:- {user.email}</Text>
-              <Text style={styles.text}>Mobile:-{user.mobile}</Text>
-              <Text style={styles.text}>D.O.B.- {user.dob}</Text>
+              <Text numberOfLines={1} style={[styles.text, { fontWeight: '600', fontSize: 16 }]}>Name:- {user.name}</Text>
+              <Text numberOfLines={1} style={styles.text}>Email:- {user.email}</Text>
+              <Text numberOfLines={1} style={styles.text}>Mobile:- {mobileNumber}</Text>
+              <Text numberOfLines={1} style={styles.text}>D.O.B.- {user.dob}</Text>
             </View>
           )}
 

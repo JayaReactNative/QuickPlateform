@@ -13,7 +13,7 @@ export const validationMobile =Yup.object().shape({
 
 export const validatePassword =  Yup.object().shape({
     password: Yup.string()
-      .min(4, 'Password must be at least 4 characters')
+      .min(2, 'Password must be at least 2 characters')
       .required('Password is required'),
   });
 

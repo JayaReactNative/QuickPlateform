@@ -34,6 +34,7 @@ const Login = ({ navigation }) => {
       if (dataRes?.message === 'registered') {
         const userId = dataRes.items?._id;
         await AsyncStorage.setItem('authId', userId);
+        await AsyncStorage.setItem('mobile', values.number);
         navigation.navigate('PasswordScreen');
       } else if (dataRes?.message === 'Otp Sent Successfully') {
         const otp = dataRes.items?.otp;

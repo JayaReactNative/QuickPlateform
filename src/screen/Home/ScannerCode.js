@@ -31,9 +31,9 @@ const ScannerCode = ({ navigation }) => {
             <Image source={NewScanner} style={styles.scanImage} />
             <Image source={Downloads} style={styles.downImage} />
             <Text style={[styles.textStyle]}>UPI ID: <Text style={[styles.textStyle, { fontWeight: '700' }]}>quicklyplateforms1@okaxis</Text></Text>
-            <Text style={[styles.textStyle]}>Mobile: <Text style={[styles.textStyle, { fontWeight: '700' }]}>978878878787</Text></Text>
-            <Text style={[styles.textStyle]}>Account No: <Text style={[styles.textStyle, { fontWeight: '700' }]}>0787776544543434</Text></Text>
-            <Text style={[styles.textStyle]}>IFSC Code: <Text style={[styles.textStyle, { fontWeight: '700' }]}>YESB000043434</Text></Text>
+            <Text style={[styles.textStyle]}>Mobile: <Text style={[styles.textStyle, { fontWeight: '700' }]}>9753850880</Text></Text>
+            <Text style={[styles.textStyle]}>Account No: <Text style={[styles.textStyle, { fontWeight: '700' }]}>076263200000267</Text></Text>
+            <Text style={[styles.textStyle]}>IFSC Code: <Text style={[styles.textStyle, { fontWeight: '700' }]}>YESB0000762</Text></Text>
             <Text style={[styles.textStyle]}>Bank Name: <Text style={[styles.textStyle, { fontWeight: '700' }]}>YES BANK</Text></Text>
           </View>
           <Text style={[styles.textStyle, { fontWeight: '700', marginTop: 50, color: 'white' }]}>Minimum Investment amount is Rs 5000/-</Text>

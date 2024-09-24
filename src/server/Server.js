@@ -26,7 +26,6 @@ const Server ={
     async getUserDetail() {
         let token = await this.getToken();
         let userId = await this.getUserId();
-        console.log(`======>>>>>> authId: ${userId}, token: ${token}`);
         try {
           const response = await axios.get(`${BASE_URL}/register/basicDetails/${userId}`,  {
             headers: {
@@ -143,6 +142,56 @@ const Server ={
               this.handleError(error);
             }
           },
+
+
+      //   ----- Get Interest withdrawel details
+      async getWithDrawList() {
+          let token = await this.getToken();
+          let userId = await this.getUserId();
+          try {
+            const response = await axios.get(`${BASE_URL}/withdrawal/withdrawalDetails/${userId}`,  {
+              headers: {
+                'token': `${token}`, 
+              },
+            });
+            return response;
+          } catch (error) {
+            this.handleError(error);
+          }
+        },
+
+        // ----- capitalWithdraw
+      async getCapitalDrawList() {
+          let token = await this.getToken();
+          let userId = await this.getUserId();
+          try {
+            const response = await axios.get(`${BASE_URL}/capitalWithdrawal/getCapitalWithdrawRequest/${userId}`,  {
+              headers: {
+                'token': `${token}`, 
+              },
+            });
+            return response;
+          } catch (error) {
+            this.handleError(error);
+          }
+        },
+
+        // ----- Investment
+      async getInvestmentList() {
+          let token = await this.getToken();
+          let userId = await this.getUserId();
+          console.log(`======>>>>>> authId: ${userId}, token: ${token}`);
+          try {
+            const response = await axios.get(`${BASE_URL}/portfolio/portfolioDetails/list/${userId}`,  {
+              headers: {
+                'token': `${token}`, 
+              },
+            });
+            return response;
+          } catch (error) {
+            this.handleError(error);
+          }
+        },
 
 
 }
