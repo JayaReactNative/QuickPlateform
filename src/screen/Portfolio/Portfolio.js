@@ -256,18 +256,6 @@ const Portfolio = ({navigation}) => {
         return dateB - dateA;
       });
       setInvestmentData(sortedData);
-      // const formattedDate =
-      //   new Date(parseInt(sortedData[0].dateOfInvest))
-      //     .getDate()
-      //     .toString()
-      //     .padStart(2, '0') +
-      //   '-' +
-      //   (new Date(parseInt(sortedData[0].dateOfInvest)).getMonth() + 1)
-      //     .toString()
-      //     .padStart(2, '0') +
-      //   '-' +
-      //   new Date(parseInt(sortedData[0].dateOfInvest)).getFullYear();
-      // console.log(formattedDate);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
     }

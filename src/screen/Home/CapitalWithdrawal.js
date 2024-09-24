@@ -12,34 +12,18 @@ import {
 } from 'react-native';
 import { Colors } from '../../assets/Colors';
 import { LeftArrow } from '../../assets/Images';
+import Server from '../../server/Server';
 
-const investmentData = [
-  {
-    id: '1',
-    date: '13-04-2023',
-    amount: '12',
-    interest: '40%',
-    lockingPeriod: '21 Months',
-  },
-  {
-    id: '2',
-    date: '01-06-2023',
-    amount: '15',
-    interest: '35%',
-    lockingPeriod: '18 Months',
-  },
-  {
-    id: '3',
-    date: '15-07-2023',
-    amount: '20',
-    interest: '45%',
-    lockingPeriod: '24 Months',
-  },
-];
+
 
 const CapitalWithdrawal = ({ navigation }) => {
   const [selectedItem, setSelectedItem] = useState(null);
-  const blinkAnim = useRef(new Animated.Value(1)).current; // For blinking effect
+  const [investmentData, setInvestmentData] = useState([]);
+  const blinkAnim = useRef(new Animated.Value(1)).current; 
+
+  useEffect(() => {
+    getInvestmentDetail();
+  }, []);
 
   useEffect(() => {
     if (selectedItem) {
@@ -72,6 +56,25 @@ const CapitalWithdrawal = ({ navigation }) => {
     }
   };
 
+  const getInvestmentDetail = async () => {
+    try {
+      const response = await Server.getInvestmentList();
+      const sortedData = response.data?.items.sort((a, b) => {
+        const dateA = new Date(
+          a.dateOfWithdrawal || a.dateOfWithdrawal,
+        ).getTime();
+        const dateB = new Date(
+          b.dateOfWithdrawal || b.dateOfWithdrawal,
+        ).getTime();
+        return dateB - dateA;
+      });
+      setInvestmentData(sortedData);
+    } catch (error) {
+      console.log('Error', 'An error occurred fetching data ');
+    }
+  };
+
+
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleItemPress(item)}>
       <Animated.View
@@ -84,22 +87,31 @@ const CapitalWithdrawal = ({ navigation }) => {
       >
         <View style={styles.row}>
           <Text style={[styles.cardLabel]}>Date</Text>
-          <Text style={styles.cardValue}>{item.date}</Text>
+          <Text style={[styles.cardValue,{width:'40%'}]}> {new Date(parseInt(item.dateOfInvest))
+            .getDate()
+            .toString()
+            .padStart(2, '0') +
+            '-' +
+            (new Date(parseInt(item.dateOfInvest)).getMonth() + 1)
+              .toString()
+              .padStart(2, '0') +
+            '-' +
+            new Date(parseInt(item.dateOfInvest)).getFullYear()}</Text>
         </View>
         <View style={styles.row}>
           <Text style={[styles.cardLabel]}>Amount</Text>
-          <Text style={styles.cardValue}>₹{item.amount}</Text>
+          <Text style={[styles.cardValue,{width:'40%'}]}>₹{item.amount}</Text>
         </View>
         {item.interest && (
           <View style={styles.row}>
             <Text style={[styles.cardLabel]}>Interest</Text>
-            <Text style={styles.cardValue}>{item.interest}</Text>
+            <Text style={[styles.cardValue,{width:'40%'}]}>{item.interest}</Text>
           </View>
         )}
         {item.lockingPeriod && (
           <View style={styles.row}>
             <Text style={[styles.cardLabel]}>Locking Period</Text>
-            <Text style={styles.cardValue}>{item.lockingPeriod}</Text>
+            <Text style={[styles.cardValue,{width:'40%'}]}>{item.lockingPeriod}</Text>
           </View>
         )}
       </Animated.View>
