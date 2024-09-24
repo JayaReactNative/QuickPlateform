@@ -68,53 +68,28 @@ const DTHScreen = ({ navigation }) => {
 
   const handleOperatorSelect = async (item) => {
     setSelectedOperator(item.key);
-
-
-
-    // console.log('SELECTED ITEM: ', item.key)
     setIsBottomSheetOpen(false);
-
     LayoutAnimation.easeInEaseOut();
 
-
+    // Fetch Recharge plan list
     const planData = { opcode: 'Jio' };
     const planResponse = await Server.getRechargeList(planData);
     const fetchedPlans = planResponse.data?.items.data.plans || [];
+    setPlans(fetchedPlans);
 
-    console.log(fetchedPlans);
-    setPlans(fetchedPlans); // Store the fetched plans in state
-
-
-
-
-
-
-
-
+    // Fetch Special/Main Recharge
     const currentPlanData = { opcode: item.key, dthNumber: dthNumber };
-    console.log('BODY: ', currentPlanData)
     const currentPlanResponse = await Server.getCurrentDTHeList(currentPlanData);
+    // console.log('Current Plan Data: ', currentPlanResponse.data)
+    // console.log('Message: ', currentPlanResponse.data.items.message)
 
-    // setSelectedOperator(item.operatorCode);
-    console.log('Current Plan Data: ', currentPlanResponse.data)
-
-    console.log('Message: ', currentPlanResponse.data.items.message)
-
-
-
-
-
-
-
+    // Check if special/main recharge exists or not
     if (currentPlanResponse.data.items.message != 'No Plan Found, Try later') {
       setModalVisible(true);
       setAmount('350');
     } else {
       setAmount(fetchedPlans[0].amount);
     }
-    // Example package amount
-    // const fetchedPlans = planResponse.data?.items.data.plans || [];
-    // setPlans(fetchedPlans); // Store the fetched plans in state
   };
 
   const handleSearch = (term) => {
