@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,7 +17,8 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Cameramodal from '../../customScreen/Cameramodal';
 import {androidCameraPermission} from '../../utility/Permission';
 import DatePicker from 'react-native-date-picker';
-
+import Server from '../../server/Server';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Account = ({navigation}) => {
   const [bName, setBname] = useState('');
@@ -38,6 +40,7 @@ const Account = ({navigation}) => {
   const [imagePath, setImagePath] = useState(null);
   const [panPath, setPanPath] = useState(null);
   const [adharTwoPath, setAdharTwoPath] = useState(null);
+  const [updateBtn, setUpdateBtn] = useState(false);
 
   const operatorList = [
     {key: 'Father'},
@@ -104,12 +107,78 @@ const Account = ({navigation}) => {
   };
 
   // -------- CALENDER PICKER-------
-  const onDateChange = (date) => {
-    setDob(date.toISOString().split('T')[0])
+  const onDateChange = date => {
+    setDob(date.toISOString().split('T')[0]);
     setOpen(false);
   };
 
- 
+   useEffect(() => {
+    getAccountDetail()
+   }, []);
+
+  // ------ user detail -----
+  const bankDetail = async () => {
+    try {
+      setLoading(true);
+      const Id = await AsyncStorage.getItem('authId');
+      const data = {
+        userId: Id,
+        accountHolderName: holderName,
+        bankName: bName,
+        accountNumber: account,
+        ifscCode: ifscCode,
+      };
+      const response = await Server.postAccountDetail(data);
+      const detailUser = response.data;
+      console.log('avvout data----->', detailUser);
+    } catch (error) {
+      console.log('Error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getAccountDetail = async () => {
+    try {
+      setLoading(true);
+      const response = await Server.getAccountDetail();
+      const data= response.data?.items
+      setBname(data.bankName)
+      setAccount(data.accountNumber)
+      setIFSC(data.ifscCode)
+      setHolderName(data.accountHolderName)
+      if (response.data.message === 'Account Details'){
+          setUpdateBtn(true)
+      }
+    } catch (error) {
+      console.log('Error', error);
+    }finally {
+      setLoading(false);
+    }
+  };
+
+   // ------ Edit user detail -----
+   const updateAccountDetail = async () => {
+    try {
+      setLoading(true);
+      const Id = await AsyncStorage.getItem('authId');
+      const data = {
+        userId: Id,
+        accountHolderName: holderName,
+        bankName: bName,
+        accountNumber: account,
+        ifscCode: ifscCode,
+      };
+      const response = await Server.postUpdateAccountDetail(data);
+      const detailUser = response.data;
+      getAccountDetail()
+      Alert.alert(detailUser.message)
+    } catch (error) {
+      console.log('Error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <LinearGradient
@@ -140,14 +209,16 @@ const Account = ({navigation}) => {
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
                   value={bName}
-                  onChange={e => setBname(e)}
+                  onChangeText={text => setBname(text)}
                 />
+
                 <TextInput
                   placeholder="Account Number"
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
                   value={account}
-                  onChange={e => setAccount(e)}
+                  maxLength={16}
+                  onChangeText={text => setAccount(text)}
                 />
               </View>
 
@@ -156,35 +227,36 @@ const Account = ({navigation}) => {
                   placeholder="Enter IFSC Code"
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
+                  maxLength={11}
                   value={ifscCode}
-                  onChange={e => setIFSC(e)}
+                  onChangeText={text => setIFSC(text)}
                 />
                 <TextInput
                   placeholder="Holder Name"
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
                   value={holderName}
-                  onChange={e => setHolderName(e)}
+                  onChangeText={text => setHolderName(text)}
                 />
               </View>
 
               <View style={styles.rowStyle}>
-                <LinearGradient
-                  colors={['#0C6B72', '#34AEA1']}
-                  style={styles.closeButtonOper}>
-                  <TouchableOpacity>
-                    <Text style={styles.closeButtonText}>Save</Text>
-                  </TouchableOpacity>
-                </LinearGradient>
+                <TouchableOpacity onPress={() => {updateBtn ?updateAccountDetail() :bankDetail()}} style={{width: "48%"}}>
+                  <LinearGradient
+                    colors={['#0C6B72', '#34AEA1']}
+                    style={[styles.closeButtonOper]}>
+                    <Text style={styles.closeButtonText}>{updateBtn ?"Edit" :"Save"}</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
 
-                <LinearGradient
-                  colors={['#0C6B72', '#34AEA1']}
-                  style={styles.closeButtonOper}>
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('AccountHistory')}>
-                    <Text style={styles.closeButtonText}>View Details</Text>
-                  </TouchableOpacity>
-                </LinearGradient>
+                <TouchableOpacity style={{width: "48%"}}
+                  onPress={() => navigation.navigate('AccountHistory')}>
+                  <LinearGradient
+                    colors={['#0C6B72', '#34AEA1']}
+                    style={[styles.closeButtonOper]}>
+                    <Text style={styles.closeButtonText}>Account Details</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -201,12 +273,16 @@ const Account = ({navigation}) => {
                   onChangeText={setNominName}
                 />
                 <TouchableOpacity
-                  style={[styles.borderStyle, styles.rowStyle,{marginTop:0}]}
+                  style={[styles.borderStyle, styles.rowStyle, {marginTop: 0}]}
                   onPress={() => setOpen(true)}>
-                  <Text numberOfLines={1} style={[styles.dateText,{width:'80%'}]}>{Dob}</Text>
+                  <Text
+                    numberOfLines={1}
+                    style={[styles.dateText, {width: '80%'}]}>
+                    {Dob}
+                  </Text>
                   <Image
                     source={BirthCalender}
-                    style={{ height: 18.5, width: 18.5, resizeMode: 'contain' }}
+                    style={{height: 18.5, width: 18.5, resizeMode: 'contain'}}
                   />
                 </TouchableOpacity>
 
@@ -220,8 +296,6 @@ const Account = ({navigation}) => {
                   onConfirm={onDateChange}
                   onCancel={() => setOpen(false)}
                 />
-               
-
               </View>
 
               <View style={styles.rowStyle}>
@@ -269,18 +343,20 @@ const Account = ({navigation}) => {
               <View style={styles.rowStyle}>
                 <TouchableOpacity
                   onPress={() => setIsBottomSheetOpen(!isBottomSheetOpen)}
-                  style={styles.closeButtonOper}>
+                  style={[styles.closeButtonOper, {width: '48%'}]}>
                   <Text
                     style={[styles.dropdownText, {color: Colors.HolderColor}]}>
                     {relation}
                   </Text>
                 </TouchableOpacity>
 
-                <LinearGradient
-                  colors={['#0C6B72', '#34AEA1']}
-                  style={styles.closeButtonOper}>
-                  <Text style={styles.closeButtonText}>Add Nominee</Text>
-                </LinearGradient>
+                <TouchableOpacity style={{width: '48%'}}>
+                  <LinearGradient
+                    colors={['#0C6B72', '#34AEA1']}
+                    style={styles.closeButtonOper}>
+                    <Text style={styles.closeButtonText}>Add Nominee</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -441,7 +517,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
-    width: '45%',
+    // width: '45%',
     backgroundColor: Colors.White,
   },
   closeButtonText: {
