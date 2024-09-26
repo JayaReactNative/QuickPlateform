@@ -321,9 +321,87 @@ const Server = {
     } catch (error) {
       this.handleError(error);
     }
-  }
-  
+  },
 
+
+//   ------ post Nomine detail
+  async postNomineDetail(data) {
+    let token = await this.getToken();
+  
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/nominee/nomineeDetails/add`,
+       data,
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+  
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+  
+ // ----- Nomine get detail ---
+ async getNomineeList() {
+    let token = await this.getToken();
+    let userId = await this.getUserId();
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/nominee/nomineeDetails/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+  //   ------ post kyc detail ----
+  async postKycDetail(data) {
+    let token = await this.getToken();
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/kyc/kycDetails/add`,
+       data,
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+  
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+  // ----- Kyc get detail ---
+ async getKycList() {
+    let token = await this.getToken();
+    let userId = await this.getUserId();
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/kyc/kycDetails/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
 
 };
 export default Server;

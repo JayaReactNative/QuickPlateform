@@ -14,14 +14,14 @@ import Server from '../../server/Server';
 
 const AccountHistory = ({navigation}) => {
   const [resData, setResData] = useState([]);
-  const [loading, setLoading] = useState(true); // State for loader
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     getDetail();
   }, []);
 
   const getDetail = async () => {
-    setLoading(true); // Start loader when fetching data
+    setLoading(true);
     try {
       const response = await Server.postAccountHistoryDetail();
       console.log("response--->", response.data.items);
@@ -29,7 +29,7 @@ const AccountHistory = ({navigation}) => {
     } catch (error) {
       console.log('Error', error);
     } finally {
-      setLoading(false); // Stop loader after data fetch
+      setLoading(false); 
     }
   };
 

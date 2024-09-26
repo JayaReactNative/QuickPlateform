@@ -19,6 +19,9 @@ import {androidCameraPermission} from '../../utility/Permission';
 import DatePicker from 'react-native-date-picker';
 import Server from '../../server/Server';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import storage from '@react-native-firebase/storage';
+import {SelectList} from 'react-native-dropdown-select-list';
+import RelationPickerDialog from './RelationPickerDialog';
 
 const Account = ({navigation}) => {
   const [bName, setBname] = useState('');
@@ -30,31 +33,30 @@ const Account = ({navigation}) => {
   const [open, setOpen] = useState(false);
   const [adharNo, setAdharNo] = useState('');
   const [panNo, setPanNo] = useState('');
+  const [adharKycNo, setAdharKycNo] = useState('');
+  const [panKycNo, setPanKycNo] = useState('');
   const [state, setState] = useState('');
   const [residentAddress, setResidentAddress] = useState('');
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [profession, setProfession] = useState('');
   const [cameraModal, setCameraModal] = useState(false);
-  const [relation, setSelecteRealtion] = useState('Select Relation');
+  const [relation, setSelecteRealtion] = useState('');
   const [loading, setLoading] = useState(false);
   const [adharPath, setAdharPath] = useState(null);
   const [imagePath, setImagePath] = useState(null);
   const [panPath, setPanPath] = useState(null);
   const [adharTwoPath, setAdharTwoPath] = useState(null);
   const [updateBtn, setUpdateBtn] = useState(false);
+  const [showNomineeBtn, setShowNomineBtn] = useState(false);
+  const [showSubmitBtn, setShowSubmitBtn] = useState(false);
 
   const operatorList = [
-    {key: 'Father'},
-    {key: 'Mother'},
-    {key: 'Son'},
-    {key: 'Daugther'},
-    {key: 'Husband'},
-    {key: 'Wife'},
+    {key: 'Father', value: 'Father'},
+    {key: 'Mother', value: 'Mother'},
+    {key: 'Son', value: 'Son'},
+    {key: 'Daughter', value: 'Daughter'},
+    {key: 'Husband', value: 'Husband'},
+    {key: 'Wife', value: 'Wife'},
   ];
-
-  const handleOperatorSelect = item => {
-    setSelecteRealtion(item.key);
-    setIsBottomSheetOpen(false);
-  };
 
   // ---------Camera picker -----
   const selectCamera = async field => {
@@ -106,15 +108,17 @@ const Account = ({navigation}) => {
     }
   };
 
-  // -------- CALENDER PICKER-------
+  // -------- CALENDAR PICKER-------
   const onDateChange = date => {
-    setDob(date.toISOString().split('T')[0]);
     setOpen(false);
+    setDob(date.toISOString().split('T')[0]);
   };
 
-   useEffect(() => {
-    getAccountDetail()
-   }, []);
+  useEffect(() => {
+    getAccountDetail();
+    getNomineDetail();
+    getKycDetail();
+  }, []);
 
   // ------ user detail -----
   const bankDetail = async () => {
@@ -130,7 +134,7 @@ const Account = ({navigation}) => {
       };
       const response = await Server.postAccountDetail(data);
       const detailUser = response.data;
-      console.log('avvout data----->', detailUser);
+      console.log('account data----->', detailUser);
     } catch (error) {
       console.log('Error', error);
     } finally {
@@ -142,23 +146,23 @@ const Account = ({navigation}) => {
     try {
       setLoading(true);
       const response = await Server.getAccountDetail();
-      const data= response.data?.items
-      setBname(data.bankName)
-      setAccount(data.accountNumber)
-      setIFSC(data.ifscCode)
-      setHolderName(data.accountHolderName)
-      if (response.data.message === 'Account Details'){
-          setUpdateBtn(true)
+      const data = response.data?.items;
+      setBname(data.bankName);
+      setAccount(data.accountNumber);
+      setIFSC(data.ifscCode);
+      setHolderName(data.accountHolderName);
+      if (response.data.message === 'Account Details') {
+        setUpdateBtn(true);
       }
     } catch (error) {
       console.log('Error', error);
-    }finally {
+    } finally {
       setLoading(false);
     }
   };
 
-   // ------ Edit user detail -----
-   const updateAccountDetail = async () => {
+  // ------ Edit user detail -----
+  const updateAccountDetail = async () => {
     try {
       setLoading(true);
       const Id = await AsyncStorage.getItem('authId');
@@ -171,8 +175,140 @@ const Account = ({navigation}) => {
       };
       const response = await Server.postUpdateAccountDetail(data);
       const detailUser = response.data;
-      getAccountDetail()
-      Alert.alert(detailUser.message)
+      getAccountDetail();
+      Alert.alert(detailUser.message);
+    } catch (error) {
+      console.log('Error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ------ Upload images to Firebase Storage -----
+  const uploadImage = async (path, fieldName) => {
+    const reference = storage().ref(fieldName + '/' + Date.now() + '.jpg');
+    const task = reference.putFile(path);
+
+    try {
+      await task;
+      const url = await reference.getDownloadURL();
+      console.log(`Image uploaded to Firebase at: ${url}`);
+      return url;
+    } catch (e) {
+      console.error('Upload failed: ', e);
+    }
+  };
+  
+  // ------ Submit Nominee Details -----
+  const submitNomineeDetails = async () => {
+     try {
+       setLoading(true);
+       const Id = await AsyncStorage.getItem('authId');
+       const adharFrontImgUrl = await uploadImage(adharPath, 'aadhaarFront');
+       const panImgUrl = await uploadImage(panPath, 'panFornt');
+ 
+       const data = {
+         userId: Id,
+         nomineeName: nominName,
+         nomineeRelation: relation,
+         aadhaarNumber: adharNo,
+         aadhaarFrontImg: adharFrontImgUrl,
+         aadhaarBackImg: panImgUrl,
+         panNumber: panNo,
+         dob: Dob,
+       };
+       const response = await Server.postNomineDetail(data);
+       Alert.alert(response.data.message);
+       setShowNomineBtn(true)
+     } catch (error) {
+       console.error('Error submitting nominee details:', error);
+     } finally {
+       setLoading(false);
+     }
+   };
+ 
+  const getNomineDetail = async () => {
+    try {
+      setLoading(true);
+      const response = await Server.getNomineeList();
+      const data = response.data?.items;
+
+      if (data) {
+        setNominName(data?.nomineeName);
+        setDob(data?.dob);
+        setAdharNo(data?.aadhaarNumber);
+        setPanNo(data?.panNumber);
+        setAdharPath(data?.aadhaarFrontImg);
+        setPanPath(data?.aadhaarBackImg);
+
+        const relation = operatorList.find(
+          item => item.key === data?.nomineeRelation,
+        );
+        setSelecteRealtion(relation.value);
+
+        if (response.data.message === 'Account Details') {
+          setUpdateBtn(true);
+        }
+      }
+    } catch (error) {
+      console.log('Error', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // -------- Kyc detail ----
+  const submitKycDetails = async () => {
+    try {
+      setLoading(true);
+      const Id = await AsyncStorage.getItem('authId');
+      const adharFrontImgUrl = await uploadImage(adharTwoPath, 'aadhaarFront');
+      const panImgUrl = await uploadImage(imagePath, 'panFornt');
+
+      const data = {
+        userId: Id,
+        address: residentAddress,
+        aadhaarNumber: adharKycNo,
+        aadhaarFrontImg: adharFrontImgUrl,
+        aadhaarBackImg: panImgUrl,
+        panNumber: panKycNo,
+        whatYouDo:profession,
+        state:state,
+        city:'city'
+      };
+      const response = await Server.postKycDetail(data);
+      Alert.alert(response.data.message);
+      setShowSubmitBtn(true)
+    } catch (error) {
+      console.error('Error submitting nominee details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getKycDetail = async () => {
+    try {
+      setLoading(true);
+      const response = await Server.getKycList();
+      const data = response.data?.items;
+
+      if (data) {
+      setAdharKycNo(data?.aadhaarNumber);
+        setPanKycNo(data?.panNumber);
+        setAdharTwoPath(data?.aadhaarFrontImg);
+        setImagePath(data?.aadhaarBackImg);
+        setState(data?.state)
+        setResidentAddress(data?.address)
+        setProfession(data?.whatYouDo)
+        const relation = operatorList.find(
+          item => item.key === data?.nomineeRelation,
+        );
+        setSelecteRealtion(relation.value);
+
+        if (response.data.message === 'Account Details') {
+          setUpdateBtn(false);
+        }
+      }
     } catch (error) {
       console.log('Error', error);
     } finally {
@@ -241,15 +377,22 @@ const Account = ({navigation}) => {
               </View>
 
               <View style={styles.rowStyle}>
-                <TouchableOpacity onPress={() => {updateBtn ?updateAccountDetail() :bankDetail()}} style={{width: "48%"}}>
+                <TouchableOpacity
+                  onPress={() => {
+                    updateBtn ? updateAccountDetail() : bankDetail();
+                  }}
+                  style={{width: '48%'}}>
                   <LinearGradient
                     colors={['#0C6B72', '#34AEA1']}
                     style={[styles.closeButtonOper]}>
-                    <Text style={styles.closeButtonText}>{updateBtn ?"Edit" :"Save"}</Text>
+                    <Text style={styles.closeButtonText}>
+                      {updateBtn ? 'Edit' : 'Save'}
+                    </Text>
                   </LinearGradient>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={{width: "48%"}}
+                <TouchableOpacity
+                  style={{width: '48%'}}
                   onPress={() => navigation.navigate('AccountHistory')}>
                   <LinearGradient
                     colors={['#0C6B72', '#34AEA1']}
@@ -270,7 +413,7 @@ const Account = ({navigation}) => {
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
                   value={nominName}
-                  onChangeText={setNominName}
+                  onChangeText={text => setNominName(text)}
                 />
                 <TouchableOpacity
                   style={[styles.borderStyle, styles.rowStyle, {marginTop: 0}]}
@@ -289,7 +432,9 @@ const Account = ({navigation}) => {
                 <DatePicker
                   modal
                   open={open}
-                  date={Dob === 'Date of Birth' ? new Date() : new Date(Dob)}
+                  date={
+                    Dob === 'Select Date of Birth' ? new Date() : new Date(Dob)
+                  }
                   mode="date"
                   maximumDate={new Date()}
                   minimumDate={new Date('1900-01-01')}
@@ -304,14 +449,14 @@ const Account = ({navigation}) => {
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
                   value={adharNo}
-                  onChange={e => setAdharNo(e)}
+                  onChangeText={text => setAdharNo(text)}
                 />
                 <TextInput
                   placeholder="Enter Pan No."
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
                   value={panNo}
-                  onChange={e => setPanNo(e)}
+                  onChangeText={text => setPanNo(text)}
                 />
               </View>
 
@@ -339,41 +484,24 @@ const Account = ({navigation}) => {
                     style={styles.imgStyle}></Image>
                 </TouchableOpacity>
               </View>
-
               <View style={styles.rowStyle}>
-                <TouchableOpacity
-                  onPress={() => setIsBottomSheetOpen(!isBottomSheetOpen)}
-                  style={[styles.closeButtonOper, {width: '48%'}]}>
-                  <Text
-                    style={[styles.dropdownText, {color: Colors.HolderColor}]}>
-                    {relation}
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={{width: '48%'}}>
-                  <LinearGradient
-                    colors={['#0C6B72', '#34AEA1']}
-                    style={styles.closeButtonOper}>
-                    <Text style={styles.closeButtonText}>Add Nominee</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
+              <RelationPickerDialog
+                  data={operatorList}
+                  selected={relation}
+                  setSelected={setSelecteRealtion}
+                />
+             {showNomineeBtn && <TouchableOpacity
+                onPress={() => submitNomineeDetails()}>
+                <LinearGradient
+                  colors={['#0C6B72', '#34AEA1']}
+                  style={[styles.closeButtonOper, {width: 150, marginTop: 2}]}>
+                  <Text style={styles.closeButtonText}>Add Nominee</Text>
+                </LinearGradient>
+              </TouchableOpacity> }          
+            </View>
             </View>
 
-            {isBottomSheetOpen && (
-              <View style={styles.bottomSheetContent}>
-                <ScrollView showsVerticalScrollIndicator={false}>
-                  {operatorList.map(item => (
-                    <TouchableOpacity
-                      key={item.key}
-                      style={styles.operatorItem}
-                      onPress={() => handleOperatorSelect(item)}>
-                      <Text style={styles.dropdownText}>{item.key}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
-              </View>
-            )}
+            
 
             <Text style={styles.headingtTEXT}>EKYC</Text>
 
@@ -384,15 +512,15 @@ const Account = ({navigation}) => {
                   placeholder="Enter Aadhar no."
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
-                  value={adharNo}
-                  onChange={e => setAdharNo(e)}
+                  value={adharKycNo}
+                  onChangeText={txt => setAdharKycNo(txt)}
                 />
                 <TextInput
                   placeholder="Enter Pan no."
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
-                  value={panNo}
-                  onChange={e => setPanNo(e)}
+                  value={panKycNo}
+                  onChangeText={txt => setPanKycNo(txt)}
                 />
               </View>
 
@@ -402,14 +530,14 @@ const Account = ({navigation}) => {
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
                   value={state}
-                  onChange={e => setState(e)}
+                  onChangeText={txt => setState(txt)}
                 />
                 <TextInput
                   placeholder="Residential Address"
                   placeholderTextColor={Colors.HolderColor}
                   style={styles.borderStyle}
                   value={residentAddress}
-                  onChange={e => setResidentAddress(e)}
+                  onChangeText={txt => setResidentAddress(txt)}
                 />
               </View>
 
@@ -445,15 +573,18 @@ const Account = ({navigation}) => {
                     styles.borderStyle,
                     {paddingVertical: 10, marginTop: 13, width: '49%'},
                   ]}
-                  value={residentAddress}
-                  onChange={e => setResidentAddress(e)}
+                  value={profession}
+                  onChangeText={txt => setProfession(txt)}
                 />
 
+{showSubmitBtn && <TouchableOpacity
+                onPress={() => submitKycDetails()}>
                 <LinearGradient
                   colors={['#0C6B72', '#34AEA1']}
-                  style={[styles.closeButtonOper, {width: '47%'}]}>
+                  style={[styles.closeButtonOper, {width: 150, marginTop: 14}]}>
                   <Text style={styles.closeButtonText}>Submit KYC</Text>
                 </LinearGradient>
+                </TouchableOpacity>}
               </View>
             </View>
           </View>
@@ -517,7 +648,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
-    // width: '45%',
     backgroundColor: Colors.White,
   },
   closeButtonText: {
@@ -541,9 +671,17 @@ const styles = StyleSheet.create({
     color: Colors.Black,
   },
   operatorItem: {
-    paddingVertical: 6,
+    paddingVertical: 8,
     alignItems: 'center',
     borderBottomColor: Colors.LightGrey,
     borderBottomWidth: 2,
+    backgroundColor: Colors.SkyBlue,
+  },
+  dropdownListStyle: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    backgroundColor: Colors.SkyBlue,
+    padding: 5,
+    maxHeight: 200,
   },
 });
