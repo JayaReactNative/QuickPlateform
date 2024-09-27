@@ -13,6 +13,14 @@ const AuthService = {
       this.handleError(error);
     }
   },
+  async sendForgetOTP(mobileNumber) {
+    try {
+      const response = await axios.get(`${BASE_URL}/auth/verify/forgetPasswordSendOtp/${mobileNumber}`);
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
 
 
   async VerfyOTP(dataValue) {
@@ -25,9 +33,29 @@ const AuthService = {
     }
   },
 
+  async VerfyForgotOTP(dataValue) {
+    try {
+      const response = await axios.post(`${BASE_URL}/auth/verify/verifyOtpForgotPassword`, dataValue); 
+      return response; 
+    } catch (error) {
+      console.error('Verification error:', error);
+      throw error;  
+    }
+  },
+
   async VerfyPassword(dataValue) {
     try {
       const response = await axios.post(`${BASE_URL}/auth/verify/verifyPassword`, dataValue); 
+      return response; 
+    } catch (error) {
+      console.error('Verification error:', error);
+      throw error;  
+    }
+  },
+
+  async postChangePassword(dataValue) {
+    try {
+      const response = await axios.post(`${BASE_URL}/auth/verify/changePassword/add`, dataValue); 
       return response; 
     } catch (error) {
       console.error('Verification error:', error);

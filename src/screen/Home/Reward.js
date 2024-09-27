@@ -11,10 +11,7 @@ import {
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import LinearGradient from 'react-native-linear-gradient';
-import {
-  LeftArrow,
-  RewardImg,
-} from '../../assets/Images';
+import {LeftArrow, RewardImg} from '../../assets/Images';
 
 const Reward = ({navigation}) => {
   const rewardData = [
@@ -32,38 +29,44 @@ const Reward = ({navigation}) => {
 
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
-       <SafeAreaView style={{flex:1}}>    
-      <View style={styles.appbarHeader}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}>
-          <Image source={LeftArrow} style={styles.backButtonText} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Reward List</Text>
-        <View style={styles.backButton} />
-      </View>
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.appbarHeader}>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={styles.backButton}>
+            <Image source={LeftArrow} style={styles.backButtonText} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Reward List</Text>
+          <View style={styles.backButton} />
+        </View>
 
-      <ScrollView style={{flexGrow: 1}}>
-        <Image source={RewardImg} style={styles.scanImage} />
-        <FlatList
-          data={rewardData}
-          keyExtractor={item => item.id}
-          contentContainerStyle={styles.listContainer}
-          showsVerticalScrollIndicator={false}
-          renderItem={({item}) => (
-            <View style={styles.modalGrey}>
-              <View style={styles.row}>
-                <Text style={[styles.textBoldStyle]}>Reward: </Text>
-                <Text style={[styles.textStyle]}>₹{item.reward}</Text>
-              </View>
-              <View style={[styles.row, {marginVertical: 5}]}>
-                <Text style={[styles.textBoldStyle]}>Reason: </Text>
-                <Text style={[styles.textStyle]}>{item.reason}</Text>
-              </View>
-            </View>
+        <ScrollView style={{flexGrow: 1}}>
+          <Image source={RewardImg} style={styles.scanImage} />
+          {rewardData && rewardData.length > 0 ? (
+            <FlatList
+              data={rewardData}
+              keyExtractor={item => item.id}
+              contentContainerStyle={styles.listContainer}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item}) => (
+                <View style={styles.modalGrey}>
+                  <View style={styles.row}>
+                    <Text style={[styles.textBoldStyle]}>Reward: </Text>
+                    <Text style={[styles.textStyle]}>₹{item.reward}</Text>
+                  </View>
+                  <View style={[styles.row, {marginVertical: 5}]}>
+                    <Text style={[styles.textBoldStyle]}>Reason: </Text>
+                    <Text style={[styles.textStyle]}>{item.reason}</Text>
+                  </View>
+                </View>
+              )}
+            />
+          ) : (
+            <Text style={{marginTop: 15, alignSelf: 'center', fontSize: 16}}>
+              No Data Available
+            </Text>
           )}
-        />
-      </ScrollView>
+        </ScrollView>
       </SafeAreaView>
     </LinearGradient>
   );

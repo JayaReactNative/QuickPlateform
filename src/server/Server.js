@@ -211,7 +211,6 @@ const Server = {
   async getInvestmentList() {
     let token = await this.getToken();
     let userId = await this.getUserId();
-    console.log(`======>>>>>> authId: ${userId}, token: ${token}`);
     try {
       const response = await axios.get(
         `${BASE_URL}/portfolio/portfolioDetails/list/${userId}`,

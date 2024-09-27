@@ -93,6 +93,7 @@ const Home = ({navigation}) => {
       setLoading(true)
       const response = await Server.getUserDetail();
       const detailUser = response.data.items;
+      console.log('response profile---->', detailUser);
       setUserName(detailUser.name);
     } catch (error) {
       console.log('Error', error);

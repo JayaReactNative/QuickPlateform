@@ -132,13 +132,22 @@ const CapitalWithdrawal = ({ navigation }) => {
         <Text style={styles.headerTitle}>Capital Withdrawal Request</Text>
       </View>
 
-      <FlatList
-        data={investmentData}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-      />
+      {
+  (investmentData && investmentData.length > 0) 
+  ? (
+    <FlatList
+      data={investmentData}
+      renderItem={renderItem}
+      keyExtractor={(item) => item.id}
+      contentContainerStyle={styles.listContainer}
+      showsVerticalScrollIndicator={false}
+    />
+  ) : (
+    <Text style={{marginTop:15,alignSelf:'center',fontSize:16}}>No Data Available</Text>
+  )
+}
+
+
 
       {/* Submit Button */}
       <TouchableOpacity style={styles.btnStyle} onPress={handleSubmit}>

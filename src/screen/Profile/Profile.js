@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, SafeAreaView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, SafeAreaView, Alert, Linking } from 'react-native';
 import { CustomerReview, DownArrow, FaqImage, FaqQuestion, Logout, Privacy, ProfileIcon, ReferredImg, SupportImg, UpArrow } from '../../assets/Images';
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../../assets/Colors';
@@ -33,7 +33,10 @@ const Profile = ({ navigation }) => {
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('userToken');
-      navigation.navigate('Login');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
     } catch (error) {
       console.error('Error during logout:', error.message);
       Alert.alert('Logout Error', 'An error occurred while logging out.');
@@ -108,12 +111,13 @@ const Profile = ({ navigation }) => {
             <Text style={styles.subtitle}>Referred</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('TermsAndCondition')}>
+          {/* <TouchableOpacity style={styles.box} onPress={() => navigation.navigate('TermsAndCondition')}> */}
+          <TouchableOpacity style={styles.box} onPress={() =>Linking.openURL('http://www.investquicklyplatforms.com/privacy-policy.php')}>
             <Image source={ProfileIcon} style={styles.iconStyle} />
             <Text style={styles.subtitle}>Terms and Conditions</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.box} onPress={() => Alert.alert("Privacy and Policy URL")}>
+          <TouchableOpacity style={styles.box} onPress={() =>Linking.openURL('http://www.investquicklyplatforms.com/privacy-policy.php')}>
             <Image source={Privacy} style={styles.iconStyle} />
             <Text style={styles.subtitle}>Privacy and Policy</Text>
           </TouchableOpacity>

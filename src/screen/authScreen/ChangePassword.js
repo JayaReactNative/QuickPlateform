@@ -6,15 +6,38 @@ import {
   Image,
   TextInput,
   Text,
+  Alert,
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import {ResetPass} from '../../assets/Images';
 import ButtonCustom from '../../customScreen/ButtonCustom';
 import { String } from '../../utility/CommonText';
+import Server from '../../server/Server';
+import AuthService from '../../server/AuthService';
 
-const ChangePassword = ({navigation}) => {
+const ChangePassword = ({navigation,route}) => {
+  const {id} = route.params;
+  console.log("id--->",id);
+  
 const[password,setPassword]=useState('')
 const[confirmPass,setConfirmPass]=useState('')
+const[loader,setLoader]=useState(false)
+
+const postDatails = async()=>{
+  try {
+    setLoader(true)
+    const dataValue ={
+      authId:id,
+      newPassword:password,
+      confirmPassword:confirmPass
+    }  
+    const responeData = await AuthService.postChangePassword(dataValue)
+    Alert.alert(responeData.data?.message)
+    navigation.navigate('Login')
+  } catch (error) {
+    console.log(error)
+  }
+}
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,7 +69,7 @@ const[confirmPass,setConfirmPass]=useState('')
       </View>
       <ButtonCustom
         title='Update Password'
-        onClickButton={() => navigation.navigate('Login')}
+        onClickButton={() =>postDatails()}
         colors={[Colors.themegreen, Colors.ThemelightGreen]}
         start={{x: 0, y: 0}}
         end={{x: 0, y: 1.8}}

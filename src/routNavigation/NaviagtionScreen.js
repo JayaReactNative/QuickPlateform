@@ -31,13 +31,15 @@ import AccountHistory from '../screen/Account/AccountHistory';
 import Ops from '../customScreen/Ops';
 import AddAmount from '../screen/Home/AddAmount';
 import ReferAndEarn from '../screen/Home/ReferAndEarn';
+import OtForgotpassword from '../screen/authScreen/OtForgotpassword';
+import Demo from '../screen/Demo';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator(); 
 
 const TabNavigation = () => {
   return (
-    <Tab.Navigator initialRouteName='Home'
+    <Tab.Navigator 
       screenOptions={{
         tabBarActiveTintColor: '#000',
         tabBarInactiveTintColor: '#ffff',
@@ -185,7 +187,12 @@ const TabNavigation = () => {
 const NavigationScreen = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Splash">
+      <Stack.Navigator initialRouteName="Demo">
+        <Stack.Screen
+          name="Demo"
+          component={Demo}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="Splash"
           component={Splash}
@@ -209,6 +216,11 @@ const NavigationScreen = () => {
         <Stack.Screen
           name="OTPscreen"
           component={OTPscreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="OtForgotpassword"
+          component={OtForgotpassword}
           options={{headerShown: false}}
         />
         <Stack.Screen
