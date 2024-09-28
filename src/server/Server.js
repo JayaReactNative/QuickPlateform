@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-const BASE_URL = 'https://quickly-invest-backend-prod-65cxm.ondigitalocean.app/v1';
+const BASE_URL =
+  'https://quickly-invest-backend-prod-65cxm.ondigitalocean.app/v1';
 
 const Server = {
   // --------- token and userId
@@ -15,8 +16,8 @@ const Server = {
   },
   async getUserId() {
     try {
-      const token = await AsyncStorage.getItem('authId');
-      return token;
+      const id = await AsyncStorage.getItem('authId');
+      return id;
     } catch (error) {
       console.error('Failed to retrieve token:', error);
     }
@@ -26,19 +27,24 @@ const Server = {
   async getUserDetail() {
     let token = await this.getToken();
     let userId = await this.getUserId();
+    console.log(`======>>>>>> authId: ${userId}, token: ${token}`);
     try {
-      
-      const response = await axios.get(`${BASE_URL}/register/basicDetails/${userId}`, {
-        headers: {
-          'token': `${token}`,
+      const response = await axios.get(
+        `${BASE_URL}/register/basicDetails/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
+          },
         },
-      });
-      console.log("User Response", response.data);
+      );
       return response;
     } catch (error) {
       this.handleError(error);
     }
   },
+
+
+
 
   // ------ reward list -----
   async getRewardList() {
@@ -79,7 +85,23 @@ const Server = {
         headers: {
           'token': `${token}`,
         },
-      });
+      }); return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+  async getTotalIvest() {
+    let token = await this.getToken();
+    let userId = await this.getUserId();
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/portfolio/portfolioDetails/totalInvestment/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
       return response;
     } catch (error) {
       this.handleError(error);
@@ -95,6 +117,41 @@ const Server = {
           'token': `${token}`,
         },
       });
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+  async getProfitBalance() {
+    let token = await this.getToken();
+    let userId = await this.getUserId();
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/wallet/walletDetails/totalBalance/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+  async getWalletBalance() {
+    let token = await this.getToken();
+    let userId = await this.getUserId();
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/userWallet/userWallets/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
       return response;
     } catch (error) {
       this.handleError(error);
@@ -161,7 +218,6 @@ const Server = {
     }
   },
 
-
   //   ----- Get Interest withdrawel details
   async getWithDrawList() {
     let token = await this.getToken();
@@ -221,6 +277,181 @@ const Server = {
     throw new Error('An unexpected error occurred');
   },
 
+  // ----- Account detail post/update
+  async postAccountDetail(data) {
+    let token = await this.getToken();
+    console.log(
+      'URL: ',
+      `${BASE_URL}/account/accountDetails/add`,
+      'Data: ',
+      data,
+      'Token: ',
+      token,
+    );
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/account/accountDetails/add`,
+        data,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
 
-}
-export default Server
+  // ----- Account detail update
+  async postUpdateAccountDetail(data) {
+    let token = await this.getToken();
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/account/accountUpdateRequest`,
+        data,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+  // ----- get Account detail
+  async getAccountDetail() {
+    let token = await this.getToken();
+    let userId = await this.getUserId();
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/account/accountDetails/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+  // ----- Account detail History
+  async postAccountHistoryDetail() {
+    let token = await this.getToken();
+    let Id = await this.getUserId();
+
+    console.log(
+      'URL: ',
+      `${BASE_URL}/account/getAccountHistory`,
+      'Data: ',
+      { userId: Id },
+      'Token: ',
+      token,
+    );
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/account/getAccountHistory`,
+        { userId: Id },
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+
+  //   ------ post Nomine detail
+  async postNomineDetail(data) {
+    let token = await this.getToken();
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/nominee/nomineeDetails/add`,
+        data,
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+  // ----- Nomine get detail ---
+  async getNomineeList() {
+    let token = await this.getToken();
+    let userId = await this.getUserId();
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/nominee/nomineeDetails/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+  //   ------ post kyc detail ----
+  async postKycDetail(data) {
+    let token = await this.getToken();
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/kyc/kycDetails/add`,
+        data,
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+  // ----- Kyc get detail ---
+  async getKycList() {
+    let token = await this.getToken();
+    let userId = await this.getUserId();
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/kyc/kycDetails/${userId}`,
+        {
+          headers: {
+            token: `${token}`,
+          },
+        },
+      );
+      return response;
+    } catch (error) {
+      this.handleError(error);
+    }
+  },
+
+};
+export default Server;

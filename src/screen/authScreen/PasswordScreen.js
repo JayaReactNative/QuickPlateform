@@ -22,6 +22,8 @@ const PasswordScreen = ({ navigation }) => {
     password: '',
   };
 
+
+// ------- password verification -------
   const handleSubmitForm = async(values) => {
     try {
       const userId =await AsyncStorage.getItem('authId')
@@ -34,18 +36,38 @@ const PasswordScreen = ({ navigation }) => {
         if (dataRes?.message === 'Password verified Successfully') {
           Alert.alert('User Registered Successfully')
           try {
-            await AsyncStorage.setItem('userToken', response.data?.items?.token);
-            await AsyncStorage.setItem('authId', response.data?.items?._id);
+            await AsyncStorage.setItem('userToken', token);
+            await AsyncStorage.setItem('authId', dataRes.items?._id);
           } catch (error) {
-            
+            console.error('Error saving token:', error.message);
           }
-          navigation.navigate('MainTabs');
+          navigation.navigate('MainTabs', {
+            screen: 'Home', // This tells it to go to the Home tab
+          });
         } 
         else{
           Alert.alert('Error', 'Invalid Password');
         }
     } catch (error) {
       Alert.alert('Error', 'An error occurred while verifying the  password');
+    }
+  };
+
+
+  const handleForgotForm = async () => {
+    try {
+      const mobileNumber= await AsyncStorage.getItem('mobile')
+      const response = await AuthService.sendForgetOTP(mobileNumber);
+      const dataRes = response.data;
+      console.log('data respone ---->',dataRes)
+      const otp = dataRes.items?.otp;
+      const userId = dataRes.items?.existDetails?._id;
+      await AsyncStorage.setItem('authId', userId);
+      console.log('otp---', otp);
+
+      navigation.navigate('OtForgotpassword', { otp });
+    } catch (error) {
+      console.error('Login error:', error.message);
     }
   };
 
@@ -75,7 +97,7 @@ const PasswordScreen = ({ navigation }) => {
                   <Text style={styles.errorText}>{errors.password}</Text>
                 )}
 
-              <TouchableOpacity onPress={() => navigation.navigate('OTPscreen')}>
+              <TouchableOpacity onPress={() =>handleForgotForm()}>
                 <Text style={styles.smallText}>{String.FORGOT_PASSWORD}</Text>
               </TouchableOpacity>
 

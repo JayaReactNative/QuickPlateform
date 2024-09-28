@@ -93,10 +93,11 @@ const Home = ({navigation}) => {
       setLoading(true)
       const response = await Server.getUserDetail();
       const detailUser = response.data.items;
+      console.log('response profile---->', detailUser);
       setUserName(detailUser.name);
       console.log('user Data-----', response.data);
     } catch (error) {
-      console.log('Error', 'An error occurred fetching data ');
+      console.log('Error', error);
     } finally {
       setLoading(false)
     }
