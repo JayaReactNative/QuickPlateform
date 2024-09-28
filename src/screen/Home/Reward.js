@@ -44,7 +44,7 @@ const Reward = ({navigation}) => {
   const getDetail = async () => {
     try {
       setLoading(true)
-      const response = await Server.getUserDetail();
+      const response = await Server.getRewardList();
       const rewardData = response.data;
       console.log('Reward Data: ', rewardData);
       setRewardData(rewardData.items)

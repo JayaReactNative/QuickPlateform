@@ -11,6 +11,7 @@ import {
   ScrollView,
   Modal,
   LayoutAnimation,
+  UIManager,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../../assets/Colors';
@@ -24,53 +25,39 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 
 const SelectRechargePlan = ({ route, navigation }) => {
   const { contact, ind } = route.params;
-  const [search, setSearch] = useState('');
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredOperators, setFilteredOperators] = useState([]);
   const [selectedOperator, setSelectedOperator] = useState('');
   const [stateName, setStateName] = useState('');
-  const [plans, setPlans] = useState([]); // State for plans
   const [selectedPlan, setSelectedPlan] = useState(null);
   const bottomSheetRef = useRef(null);
+  const [plans, setPlans] = useState([]); // All plans
+  const [filteredPlans, setFilteredPlans] = useState([]); // State for filtered plans
 
   useEffect(() => {
     getNumberName();
   }, []);
 
-  const operatorList = [
-    {
-      key: 'bsnl-topup',
-      value: 'BSNL - TOPUP',
-      image: require('../../assets/icons/user_dummy.png'),
-    },
-    {
-      key: 'airtel',
-      value: 'Airtel',
-      image: require('../../assets/icons/user_dummy.png'),
-    },
-    {
-      key: 'jio',
-      value: 'Jio',
-      image: require('../../assets/icons/user_dummy.png'),
-    },
-    {
-      key: 'vodafone',
-      value: 'Vodafone Idea(VI)',
-      image: require('../../assets/icons/user_dummy.png'),
-    },
-  ];
-
-  const filteredPlans = plans.filter(plan => {
-    const lowercasedSearch = search.toLowerCase();
-    return (
-      plan.planName.toLowerCase().includes(lowercasedSearch) ||
-      plan.amount.toString().includes(lowercasedSearch) || // Assuming amount is numeric
-      plan.validity.toLowerCase().includes(lowercasedSearch) ||
-      plan.dataBenefit?.toLowerCase().includes(lowercasedSearch) ||
-      plan.planDescription.toLowerCase().includes(lowercasedSearch)
-    );
-  });
+  useEffect(() => {
+    // Update filtered plans whenever plans or searchTerm changes
+    if (searchTerm) {
+      const filtered = plans.filter(plan =>
+        {
+          const lowercasedSearch = searchTerm.toLowerCase();
+          return (
+            plan.planName.toLowerCase().includes(lowercasedSearch) ||
+            plan.amount.toString().includes(lowercasedSearch) || // Assuming amount is numeric
+            plan.validity.toLowerCase().includes(lowercasedSearch) ||
+            plan.dataBenefit?.toLowerCase().includes(lowercasedSearch) ||
+            plan.planDescription.toLowerCase().includes(lowercasedSearch)
+          );
+        }
+      );
+      setFilteredPlans(filtered);
+    } else {
+      setFilteredPlans(plans);
+    }
+  }, [searchTerm, plans]);
 
   const handleViewDetails = plan => {
     setSelectedPlan(plan);
@@ -86,10 +73,10 @@ const SelectRechargePlan = ({ route, navigation }) => {
       setStateName(resp.circle);
 
       const planData = { opcode: resp.company };
-      const planResponse = await Server.getRechargeList(data);
+      const planResponse = await Server.getRechargeList(planData);
       const fetchedPlans = planResponse.data?.items.data.plans || [];
-
-      
+      setPlans(fetchedPlans);
+      setFilteredPlans(fetchedPlans); // Initialize filtered plans
     } catch (error) {
       console.log('Error', 'An error occurred fetching data');
     }
@@ -117,33 +104,11 @@ const SelectRechargePlan = ({ route, navigation }) => {
     </View>
   );
 
-  const handleSearch = term => {
-    setSearchTerm(term);
-    if (term === '') {
-      setFilteredOperators(operatorList);
-    } else {
-      const filtered = operatorList.filter(op =>
-        op.value.toLowerCase().includes(term.toLowerCase()),
-      );
-      setFilteredOperators(filtered);
-    }
-  };
-
-  const handleOperatorSelect = item => {
-    setSelectedOperator(item.value);
-    setIsBottomSheetOpen(false);
-    LayoutAnimation.easeInEaseOut();
-  };
-
   return (
-    <LinearGradient
-      colors={[Colors.themeColor, '#34AEA1']}
-      style={styles.container}>
+    <LinearGradient colors={[Colors.themeColor, '#34AEA1']} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Image source={LeftArrow} style={styles.backButtonImage} />
           </TouchableOpacity>
           <Text style={styles.headerText}>Select Recharge Plan</Text>
@@ -168,57 +133,14 @@ const SelectRechargePlan = ({ route, navigation }) => {
             </View>
           </View>
 
-          <View style={{
-            flexDirection: 'row',
-            marginVertical: 15,
-            justifyContent: 'space-between',
-          }}>
-            <TouchableOpacity
-              onPress={() => setIsBottomSheetOpen(true)}
-              style={{
-                backgroundColor: 'white',
-                borderRadius: 5,
-                padding: 10,
-                width: '50%',
-              }}>
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-                <Text style={{ color: Colors.Grey, fontSize: 15, fontWeight: '600' }}>
-                  {selectedOperator}
-                </Text>
-                <Text style={{
-                  color: Colors.Grey,
-                  fontSize: 25,
-                  fontWeight: '400',
-                  marginTop: -15,
-                }}>
-                  &#x2304;
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={{
-              backgroundColor: 'white',
-              borderRadius: 5,
-              padding: 10,
-              width: '45%',
-            }}>
-              <Text numberOfLines={1}
-                style={{ color: Colors.Grey, fontSize: 15, fontWeight: '300' }}>
-                {stateName}
-              </Text>
-            </View>
-          </View>
-
           <TextInput
             style={styles.searchInput}
             placeholder="Search plans..."
-            value={search}
-            onChangeText={setSearch}
+            value={searchTerm}
+            onChangeText={setSearchTerm}
             placeholderTextColor={Colors.White}
           />
+
           {filteredPlans.length > 0 ? (
             <FlatList
               data={filteredPlans}
