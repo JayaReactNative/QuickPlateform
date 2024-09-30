@@ -187,7 +187,7 @@ const TabNavigation = () => {
 const NavigationScreen = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Demo">
+      <Stack.Navigator initialRouteName="Splash">
         <Stack.Screen
           name="Demo"
           component={Demo}
