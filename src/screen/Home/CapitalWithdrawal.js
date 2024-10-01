@@ -75,48 +75,65 @@ const CapitalWithdrawal = ({ navigation }) => {
   };
 
 
-  const renderItem = ({ item }) => (
-    <TouchableOpacity onPress={() => handleItemPress(item)}>
-      <Animated.View
-        style={[
-          styles.card,
-          selectedItem?.id === item.id && {
-            backgroundColor: Colors.SkyBlue
-          },
-        ]}
-      >
-        <View style={styles.row}>
-          <Text style={[styles.cardLabel]}>Date</Text>
-          <Text style={[styles.cardValue,{width:'40%'}]}> {new Date(parseInt(item.dateOfInvest))
-            .getDate()
-            .toString()
-            .padStart(2, '0') +
-            '-' +
-            (new Date(parseInt(item.dateOfInvest)).getMonth() + 1)
-              .toString()
-              .padStart(2, '0') +
-            '-' +
-            new Date(parseInt(item.dateOfInvest)).getFullYear()}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={[styles.cardLabel]}>Amount</Text>
-          <Text style={[styles.cardValue,{width:'40%'}]}>₹{item.amount}</Text>
-        </View>
-        {item.interest && (
+  const renderItem = ({ item }) => {
+    console.log('item.id---', item.id);
+  
+    return (
+      <TouchableOpacity onPress={() => handleItemPress(item)}>
+        <Animated.View
+          style={[
+            styles.card,
+            selectedItem?.id === item.id && {
+              backgroundColor: Colors.SkyBlue,  // Changes background on selection
+            },
+          ]}
+        >
           <View style={styles.row}>
-            <Text style={[styles.cardLabel]}>Interest</Text>
-            <Text style={[styles.cardValue,{width:'40%'}]}>{item.interest}</Text>
+            <Text style={styles.cardLabel}>Date</Text>
+            <Text style={[styles.cardValue, { width: '40%' }]}>
+              {new Date(parseInt(item.dateOfInvest))
+                .getDate()
+                .toString()
+                .padStart(2, '0') +
+                '-' +
+                (new Date(parseInt(item.dateOfInvest)).getMonth() + 1)
+                  .toString()
+                  .padStart(2, '0') +
+                '-' +
+                new Date(parseInt(item.dateOfInvest)).getFullYear()}
+            </Text>
           </View>
-        )}
-        {item.lockingPeriod && (
+  
           <View style={styles.row}>
-            <Text style={[styles.cardLabel]}>Locking Period</Text>
-            <Text style={[styles.cardValue,{width:'40%'}]}>{item.lockingPeriod}</Text>
+            <Text style={styles.cardLabel}>Amount</Text>
+            <Text style={[styles.cardValue, { width: '40%' }]}>
+              ₹{item.amount}
+            </Text>
           </View>
-        )}
-      </Animated.View>
-    </TouchableOpacity>
-  );
+  
+          {item.interest && (
+            <View style={styles.row}>
+              <Text style={styles.cardLabel}>Interest</Text>
+              <Text style={[styles.cardValue, { width: '40%' }]}>
+                {item.interest}
+              </Text>
+            </View>
+          )}
+  
+          {item.lockingPeriod && (
+            <View style={styles.row}>
+              <Text style={styles.cardLabel}>Locking Period</Text>
+              <Text style={[styles.cardValue, { width: '40%' }]}>
+                {item.lockingPeriod}
+              </Text>
+            </View>
+          )}
+        </Animated.View>
+      </TouchableOpacity>
+    );
+  };
+  
+  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -149,7 +166,7 @@ const CapitalWithdrawal = ({ navigation }) => {
 
 
 
-      {/* Submit Button */}
+      {/* -------- Submit Button */}
       <TouchableOpacity style={styles.btnStyle} onPress={handleSubmit}>
         <Text style={styles.submitText}>SUBMIT</Text>
       </TouchableOpacity>
@@ -195,7 +212,7 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     marginBottom: 12,
     borderColor: Colors.cardBorder,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FFFF',
     shadowColor: '#000000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 1 },
