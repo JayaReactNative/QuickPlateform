@@ -6,86 +6,16 @@ import {
   FlatList,
   StyleSheet,
   Image,
-  Alert,
+  Alert,Platform, Dimensions
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
-import {Delete, Invest, Withdrawal} from '../../assets/Images';
+import {Invest, Withdrawal} from '../../assets/Images';
 import LinearGradient from 'react-native-linear-gradient';
 import Server from '../../server/Server';
 
-// Expanded investment data
-const investmentData = [
-  {
-    id: '1',
-    date: '13-04-2023',
-    amount: '12',
-    interest: '40%',
-    lockingPeriod: '21 Months',
-  },
-  {
-    id: '2',
-    date: '01-06-2023',
-    amount: '15',
-    interest: '35%',
-    lockingPeriod: '18 Months',
-  },
-  {
-    id: '3',
-    date: '15-07-2023',
-    amount: '20',
-    interest: '45%',
-    lockingPeriod: '24 Months',
-  },
-  {
-    id: '4',
-    date: '20-08-2023',
-    amount: '25',
-    interest: '30%',
-    lockingPeriod: '15 Months',
-  },
-  {
-    id: '5',
-    date: '05-09-2023',
-    amount: '18',
-    interest: '50%',
-    lockingPeriod: '30 Months',
-  },
-];
 
-// Expanded interest withdrawal data
-const interestWithdrawlData = [
-  {id: '1', date: '31-12-2023', amount: '10', status: 'Rejected'},
-  {id: '2', date: '31-12-2023', amount: '10', status: 'Rejected'},
-  {id: '3', date: '31-12-2023', amount: '10', status: 'Paid'},
-  {id: '4', date: '31-12-2023', amount: '10', status: 'Paid'},
-  {id: '5', date: '15-01-2024', amount: '12', status: 'Paid'},
-  {id: '6', date: '15-01-2024', amount: '12', status: 'Rejected'},
-  {id: '7', date: '28-02-2024', amount: '15', status: 'Paid'},
-  {id: '8', date: '28-02-2024', amount: '15', status: 'Rejected'},
-  {id: '9', date: '15-03-2024', amount: '20', status: 'Paid'},
-  {id: '10', date: '15-03-2024', amount: '20', status: 'Rejected'},
-];
 
-// Expanded capital withdrawal data
-const capitalWithdrawData = [
-  {id: '1', date: '31-12-2023', amount: '10', status: 'Paid'},
-  {id: '2', date: '31-12-2023', amount: '10', status: 'Rejected'},
-  {id: '3', date: '31-12-2023', amount: '10', status: 'Paid'},
-  {id: '4', date: '31-12-2023', amount: '10', status: 'Rejected'},
-  {id: '5', date: '15-01-2024', amount: '12', status: 'Paid'},
-  {id: '6', date: '15-01-2024', amount: '12', status: 'Rejected'},
-  {id: '7', date: '28-02-2024', amount: '15', status: 'Paid'},
-  {id: '8', date: '28-02-2024', amount: '15', status: 'Rejected'},
-  {id: '9', date: '15-03-2024', amount: '20', status: 'Paid'},
-  {
-    id: '10',
-    date: '15-03-2024',
-    amount: '20',
-    status: 'Rejected',
-    image: require('../../assets/icons/cancel_red.png'),
-  },
-];
-
+const { width, height } = Dimensions.get('window');
 const Portfolio = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Investment');
   const [investmentData, setInvestmentData] = useState([]);
@@ -123,7 +53,6 @@ const Portfolio = ({navigation}) => {
             new Date(parseInt(item.dateOfInvest)).getFullYear()}
         </Text>
 
-        {/* <Text style={styles.cardValue}>{Date(item.dateOfInvest).toString().split(' ').slice(2, 4).reverse().join('-') + '-' + new Date(1662374787413).getFullYear()}</Text> */}
       </View>
       <View style={[styles.row, {alignSelf: 'flex-start'}]}>
         <Text
@@ -180,9 +109,8 @@ const Portfolio = ({navigation}) => {
         {item.date ? item.date : item.dateOfWithdrawal}
       </Text>
       <Text style={[styles.cell, {width: '45%'}]}>₹{item.amount}</Text>
-      {item.status && (
+      
         <Text style={[styles.cell, {width: '25%'}]}>{item.status}</Text>
-      )}
       <TouchableOpacity
         onPress={() => Alert.alert('Do you want to cancel request?')}>
         <Image
@@ -197,9 +125,9 @@ const Portfolio = ({navigation}) => {
     switch (activeTab) {
       case 'Investment':
         return investmentData;
-      case 'Interest Withdrawl':
+      case 'Interest\nWithdraw':
         return withdrawlData;
-      case 'Capital Withdraw':
+      case 'Capital\nWithdraw':
         return capitalWithdraw;
       default:
         return [];
@@ -264,12 +192,12 @@ const Portfolio = ({navigation}) => {
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
       <View style={styles.container}>
-        <View style={{marginTop: 30}}>
+        <View style={{marginVertical: 10}}>
           <Text style={styles.title}>Portfolio</Text>
         </View>
 
         <View style={styles.tabsContainer}>
-          {['Investment', 'Interest Withdrawl', 'Capital Withdraw'].map(tab => (
+          {['Investment', 'Interest\nWithdraw', 'Capital\nWithdraw'].map(tab => (
             <TouchableOpacity
               key={tab}
               style={[styles.tab, activeTab === tab && styles.activeTab]}
@@ -294,7 +222,7 @@ const Portfolio = ({navigation}) => {
           ))}
         </View>
 
-        {activeTab === 'Interest Withdrawl' ? (
+        {activeTab === 'Interest\nWithdraw' ? (
           <Text style={styles.warning}>
             Note- The Withdrawl requiest can only be placed on the last days of
             every month (i.e 28, 29, 30, 31) and may take up to 72 hours to
@@ -329,7 +257,7 @@ const Portfolio = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
+    paddingHorizontal: 6,
     // backgroundColor: '#F4F4F4',
   },
   title: {
@@ -351,11 +279,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     elevation: 4,
-    backgroundColor: 'rgba(0, 0, 0, 0.35)',
+    backgroundColor:Platform.OS === 'ios' ?'rgba(0, 0, 0, 0.35)':Colors.themegreen,
     shadowColor: '#000',
-    shadowOpacity: 0.3,
-    shadowOffset: {width: 2, height: 1},
-    shadowRadius: 4,
+    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0.35,
+    shadowOffset: Platform.OS === 'ios' ? {width: 2, height: 1} : {width: 0, height: 0},
     elevation: 5,
     borderRadius: 15,
   },
@@ -387,7 +314,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 10,
     borderColor: Colors.cardBorder,
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+     backgroundColor:Platform.OS === 'ios' ?'rgba(0, 0, 0, 0.2)':Colors.themegreen,
     shadowColor: '#000000',
     shadowOpacity: 0.1,
     shadowOffset: {width: 0, height: 1},
@@ -462,7 +389,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingVertical: 10,
     width: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+     backgroundColor:Platform.OS === 'ios' ?'rgba(0, 0, 0, 0.2)':Colors.themegreen,
   },
   warning: {
     fontWeight: 'bold',

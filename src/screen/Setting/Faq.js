@@ -36,6 +36,7 @@ const Faq = ({ navigation }) => {
           <Text style={styles.headerTitle}>FAQ</Text>
           <View style={styles.backButton} />
         </View>
+        
         <ScrollView contentContainerStyle={styles.bodyContainer}>
           <View style={styles.bannerContainer}>
             <Image source={FaqBanner} style={styles.bannerImage} />
@@ -136,8 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
-  appbarHeader: {
-    // backgroundColor: Colors.themeColor,
+  appbarHeader: { 
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

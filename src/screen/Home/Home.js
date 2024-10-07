@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   Alert,
-  BackHandler,ActivityIndicator, 
+  BackHandler,ActivityIndicator,StatusBar,Platform
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import {
@@ -38,12 +38,13 @@ import {
   TransferIcon,
   Wallet,
   Withdrawal,
-  WRemove,
+  WRemove,Dimensions
 } from '../../assets/Images';
 import ImageSlider from '../../customScreen/ImageSlider';
 import {colors} from 'react-native-swiper-flatlist/src/themes';
 import LinearGradient from 'react-native-linear-gradient';
 import Server from '../../server/Server';
+
 
 const Home = ({navigation}) => {
   const [activeTab, setActiveTab] = useState('Invest');
@@ -88,17 +89,17 @@ const Home = ({navigation}) => {
   }, []);
 
   // ------ user detail -----
-  const getDetail = async () => {
+   const getDetail = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await Server.getUserDetail();
       const detailUser = response.data.items;
-      console.log('response profile---->', detailUser);
       setUserName(detailUser.name);
     } catch (error) {
       console.log('Error', error);
+      Alert.alert('Error', 'An error occurred while fetching user details. Please try again later.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -148,6 +149,7 @@ const Home = ({navigation}) => {
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
       <SafeAreaView style={styles.container}>
+      <StatusBar barStyle={'light-content'} backgroundColor={Colors.themeColor}/>
       {loading ? (
           <ActivityIndicator size="large" color="#ffffff" style={styles.loader} /> // Show loader when loading
         ) : (
@@ -156,8 +158,8 @@ const Home = ({navigation}) => {
           showsVerticalScrollIndicator={false}>
           <View style={styles.containLog}>
             <Text style={styles.headText}>{userName}</Text>
-            <View style={{marginLeft: -3, marginTop: '5%'}}>
-              <ImageSlider topView={35} ImageWidth={345} />
+            <View style={{marginLeft: -2, marginTop: '5%'}}>
+              <ImageSlider topView={38}  ImageWidth={Platform.OS === "ios" ? 345 : 390} />
             </View>
 
             <View style={{marginVertical: 20, marginTop: '10%'}}>
@@ -391,7 +393,7 @@ const Home = ({navigation}) => {
                         {
                           backgroundColor: Colors.White,
                           padding: 10,
-                          width: 320,
+                          width: Platform.OS === "ios" ? '90%' : "100%",
                           marginTop: 8,
                         },
                       ]}>
@@ -437,17 +439,19 @@ const styles = StyleSheet.create({
   },
   scrollViewContainer: {
     flexGrow: 1,
-    paddingHorizontal: 15,
-    paddingBottom: 35,
+    paddingHorizontal: Platform.OS === "ios" ? 15 : 9,
+    paddingBottom: Platform.OS === "ios" ? 35 : 75,
   },
   headText: {
     fontSize: 18,
     fontWeight: '600',
     color: Colors.White,
-    marginVertical: 10,
+    marginVertical: Platform.OS === "ios" ? 10 : 25,
   },
   containLog: {
+    marginTop:10,
     paddingBottom: 20,
+    justifyContent:'center',
   },
   imageStyle: {
     width: '100%',
@@ -523,7 +527,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: Colors.White,
     padding: 5,
-    width: 160,
+    width: Platform.OS === "ios" ? 160 : '47%',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -546,7 +550,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: Colors.SkyBlue,
     padding: 5,
-    width: 350,
+    width:Platform.OS === "ios" ? 350 : '100%',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {

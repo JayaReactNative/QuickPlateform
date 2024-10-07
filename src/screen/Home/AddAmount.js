@@ -7,16 +7,23 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Dimensions,
+  StatusBar,
+  Platform
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import {InvestGreen, LeftArrow} from '../../assets/Images';
 import ButtonCustom from '../../customScreen/ButtonCustom';
+
+
+const { width, height } = Dimensions.get('window');
 
 const AddAmount = ({navigation}) => {
  const [amount ,setAmount]=useState('')
 
   return (
       <SafeAreaView style={{flex: 1}}>
+        <StatusBar barStyle={'light-content'} backgroundColor={Colors.themeColor}/>
         <View style={styles.appbarHeader}>
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -26,6 +33,8 @@ const AddAmount = ({navigation}) => {
           <Text style={styles.headerTitle}>Add Amount</Text>
           <View style={styles.backButton} />
         </View>
+
+        
         <View style={{alignItems: 'center',marginTop:17}}>
           <Image source={InvestGreen} style={styles.dollerIcon} />
           <View style={{borderColor:Colors.themeColor,borderBottomWidth:2,
@@ -65,13 +74,20 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  appbarHeader: {
+  headerTitle: {
+    color: Colors.White,
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  appbarHeader: { 
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
     paddingVertical: 15,
-    backgroundColor:Colors.themeColor
+    paddingTop:Platform.OS === "ios"?0: 45,
+    backgroundColor: Colors.themeColor,
   },
   backButtonText: {
     height: 20,

@@ -60,15 +60,15 @@ const AccountHistory = ({navigation}) => {
 
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={styles.appbarHeader}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}>
-          <Image source={LeftArrow} style={styles.backButtonText} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Account History</Text>
-        <View style={styles.backButton} />
-      </View>
+     {/* Header */}
+     <View style={styles.appbarHeader}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Image source={LeftArrow} style={styles.backButtonText} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Account History</Text>
+          <View style={styles.backButton} />
+        </View>
+
       <FlatList
         data={resData}
         renderItem={renderItem}
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 15,
     paddingVertical: 15,
+    paddingTop: Platform.OS === 'ios' ? 0 : 45,
     backgroundColor: Colors.themeColor,
   },
   backButtonText: {

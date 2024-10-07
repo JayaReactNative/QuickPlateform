@@ -16,10 +16,9 @@ const ScannerCode = ({ navigation }) => {
   return (
     <LinearGradient colors={[Colors.themeColor, '#34AEA1']} style={styles.container}>
       <SafeAreaView style={{ flex: 1 }}>
+        {/* Header */}
         <View style={styles.appbarHeader}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Image source={LeftArrow} style={styles.backButtonText} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Scan QR Code</Text>
@@ -49,12 +48,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  appbarHeader: {
+  headerTitle: {
+    color: Colors.White,
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  appbarHeader: { 
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
     paddingVertical: 15,
+    paddingTop:Platform.OS === "ios"?0: 45,
+    backgroundColor:Colors.themeColor
   },
   backButtonText: {
     height: 20,

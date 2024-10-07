@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   TextInput,
-  Image,
   FlatList,
   StyleSheet,
   PermissionsAndroid,
@@ -12,15 +11,19 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Modal,
+  Dimensions,
   Pressable,
+  StatusBar,
+  KeyboardAvoidingView,
+  ScrollView,Image
 } from 'react-native';
 import Contacts from 'react-native-contacts';
-import {LeftArrow} from '../../assets/Images';
-import {Colors} from '../../assets/Colors';
-import LinearGradient from 'react-native-linear-gradient';
-import Server from '../../server/Server';
+import { Colors } from '../../assets/Colors';
+import { LeftArrow } from '../../assets/Images';
 
-const Recharge = ({navigation}) => {
+const { width, height } = Dimensions.get('window');
+
+const Recharge = ({ navigation }) => {
   const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -32,8 +35,6 @@ const Recharge = ({navigation}) => {
       fetchContacts();
     });
   }, []);
-
-
 
   const requestPermissions = async () => {
     if (Platform.OS === 'android') {
@@ -79,13 +80,13 @@ const Recharge = ({navigation}) => {
       contact.familyName.toLowerCase().includes(search.toLowerCase()),
   );
 
-  const renderItem = ({item}) =>
+  const renderItem = ({ item }) =>
     item.phoneNumbers.map((num, index) => (
       <TouchableOpacity
         key={`${item.recordID}-${index}`}
         style={styles.contactItem}
         onPress={() =>
-          navigation.navigate('SelectRechargePlan', {contact: item, ind: index})
+          navigation.navigate('SelectRechargePlan', { contact: item, ind: index })
         }>
         <View style={styles.profileCircle}>
           <Text style={styles.profileText}>
@@ -105,7 +106,6 @@ const Recharge = ({navigation}) => {
 
   const handleAddNumber = () => {
     if (phoneNumber.trim()) {
-      // Create dummy contact object with the provided phone number
       const dummyContact = {
         company: 'Unknown',
         emailAddresses: [],
@@ -115,25 +115,18 @@ const Recharge = ({navigation}) => {
         imAddresses: [],
         jobTitle: '',
         middleName: '',
-        phoneNumbers: [
-          {
-            label: 'mobile',
-            number: phoneNumber.trim(), // Use the phone number entered by the user
-          },
-        ],
+        phoneNumbers: [{ label: 'mobile', number: phoneNumber.trim() }],
         postalAddresses: [],
-        recordID: '', // uuidv4(), // Generate a unique record ID
+        recordID: '',
         thumbnailPath: '',
         urlAddresses: [],
       };
 
-      // Redirect to next screen with the dummy contact
       navigation.navigate('SelectRechargePlan', {
         contact: dummyContact,
         ind: 0,
       });
 
-      // Close the modal and clear the input
       setModalVisible(false);
       setPhoneNumber('');
     } else {
@@ -141,114 +134,107 @@ const Recharge = ({navigation}) => {
     }
   };
 
-
- 
-
   return (
-    <LinearGradient
-      colors={[Colors.themeColor, Colors.themeColor]}
-      style={styles.container}>
-      <SafeAreaView>
-        <View style={styles.bodyContainer}>
-          <View style={styles.header}>
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              style={styles.backButton}>
-              <Image source={LeftArrow} style={styles.backButtonImage} />
-            </TouchableOpacity>
-            <Text style={styles.headerText}>Recharge</Text>
-          </View>
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search contacts..."
-            value={search}
-            onChangeText={setSearch}
-            placeholderTextColor={Colors.Grey}
-          />
-          {loading ? <Text style={styles.loading}>Loading...</Text> : null}
-
-          <FlatList
-            data={filteredContacts}
-            renderItem={renderItem}
-            keyExtractor={item => item.recordID}
-            contentContainerStyle={styles.list}
-          />
-
-          {/* Modal for manual number entry */}
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}>
-            <View style={styles.modalBackground}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Enter Phone Number</Text>
-                <TextInput
-                  style={styles.modalInput}
-                  placeholder="Phone Number"
-                  value={phoneNumber}
-                  onChangeText={setPhoneNumber}
-                  keyboardType="phone-pad"
-                  placeholderTextColor={Colors.Black}
-                  maxLength={10}
-                />
-                <View style={styles.modalButtons}>
-                  <Pressable
-                    style={styles.modalButton}
-                    onPress={() => setModalVisible(false)}>
-                    <Text style={styles.modalButtonText}>Cancel</Text>
-                  </Pressable>
-                  <Pressable
-                    style={styles.modalButton}
-                    onPress={handleAddNumber}>
-                    <Text style={styles.modalButtonText}>Add</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </View>
-          </Modal>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle={'light-content'} backgroundColor={Colors.themeColor} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}>
+        <View style={styles.appbarHeader}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Image source={LeftArrow} style={styles.backButtonStyle} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Recharge</Text>
+          <View style={styles.backButton} />
         </View>
 
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search contacts..."
+          value={search}
+          onChangeText={setSearch}
+          placeholderTextColor={Colors.Grey}
+        />
+        {loading ? <Text style={styles.loading}>Loading...</Text> : null}
+
+        <FlatList
+          data={filteredContacts}
+          renderItem={renderItem}
+          keyExtractor={item => item.recordID}
+          contentContainerStyle={styles.list}
+        />
+
+        {/* Modal for manual number entry */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}>
+          <View style={styles.modalBackground}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>Enter Phone Number</Text>
+              <TextInput
+                style={styles.modalInput}
+                placeholder="Phone Number"
+                value={phoneNumber}
+                onChangeText={setPhoneNumber}
+                keyboardType="phone-pad"
+                placeholderTextColor={Colors.Black}
+                maxLength={10}
+              />
+              <View style={styles.modalButtons}>
+                <Pressable
+                  style={styles.modalButton}
+                  onPress={() => setModalVisible(false)}>
+                  <Text style={styles.modalButtonText}>Cancel</Text>
+                </Pressable>
+                <Pressable
+                  style={styles.modalButton}
+                  onPress={handleAddNumber}>
+                  <Text style={styles.modalButtonText}>Add</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+
         {/* Floating Action Button */}
-        <TouchableOpacity
-          style={styles.fab}
-          onPress={() => setModalVisible(true)}>
+        <TouchableOpacity style={styles.fab} onPress={() => setModalVisible(true)}>
           <Text style={styles.fabText}>+</Text>
         </TouchableOpacity>
-      </SafeAreaView>
-    </LinearGradient>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Colors.White,
+  },
+  headerTitle: {
+    color: Colors.White,
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  appbarHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    paddingTop: Platform.OS === 'ios' ? 0 : 45,
+    backgroundColor: Colors.themeColor,
+  },
+  backButtonStyle:{
+    height: 25,
+    width:25,
+    tintColor: Colors.White,
   },
   loading: {
     alignItems: 'center',
     textAlign: 'center',
-  },
-  bodyContainer: {
-    backgroundColor: Colors.White,
-  },
-  header: {
-    backgroundColor: Colors.themeColor,
-    paddingTop: 20,
-    paddingBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 4,
-  },
-  backButton: {
-    position: 'absolute',
-    left: 10,
-    padding: 10,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#fff',
   },
   searchInput: {
     height: 50,
@@ -296,15 +282,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#000',
   },
-  backButtonImage: {
-    height: 25,
-    width: 25,
-    tintColor: Colors.White,
-    marginTop: 10,
-  },
   fab: {
     position: 'absolute',
-    bottom: 170,
+    bottom: 20,
     right: 20,
     width: 60,
     height: 60,
@@ -312,6 +292,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.themeColor,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 0,
     elevation: 6,
   },
   fabText: {
@@ -332,7 +313,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
@@ -344,24 +325,24 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   modalInput: {
-    height: 40,
+    width: '100%',
+    height: 50,
     borderColor: '#cccccc',
     borderWidth: 1,
-    marginBottom: 15,
     paddingHorizontal: 10,
-    borderRadius: 5,
-    width: '100%',
+    borderRadius: 10,
+    marginBottom: 20,
   },
   modalButtons: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     width: '100%',
   },
   modalButton: {
-    padding: 10,
-    borderRadius: 5,
     backgroundColor: Colors.themeColor,
-    marginHorizontal: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
   modalButtonText: {
     color: '#fff',

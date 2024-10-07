@@ -8,10 +8,13 @@ import {
   TouchableOpacity,
   FlatList,
   SafeAreaView,
+  Dimensions,Platform
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import LinearGradient from 'react-native-linear-gradient';
 import {LeftArrow, RewardImg} from '../../assets/Images';
+
+const { width, height } = Dimensions.get('window');
 
 const Reward = ({navigation}) => {
   const rewardData = [
@@ -30,10 +33,9 @@ const Reward = ({navigation}) => {
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
       <SafeAreaView style={{flex: 1}}>
+        {/* Header */}
         <View style={styles.appbarHeader}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Image source={LeftArrow} style={styles.backButtonText} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>Reward List</Text>
@@ -78,12 +80,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  appbarHeader: {
+  headerTitle: {
+    color: Colors.White,
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  appbarHeader: { 
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
     paddingVertical: 15,
+    paddingTop:Platform.OS === "ios"?0: 45,
   },
   backButtonText: {
     height: 20,
@@ -110,8 +119,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   scanImage: {
-    width: 350,
-    height: 160,
+    width:Platform.OS === "ios" ? 350:width * 1.5,
+    height:Platform.OS === "ios" ? 160 :height * 0.2,
+    resizeMode:'center',
     alignSelf: 'center',
     marginTop: 10,
   },

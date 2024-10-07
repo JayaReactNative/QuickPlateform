@@ -45,7 +45,7 @@ const RelationPickerDialog = ({data, selected, setSelected}) => {
                 <TouchableOpacity
                   style={styles.modalItem}
                   onPress={() => handleSelection(item.value)}>
-                  <Text>{item.value}</Text>
+                  <Text style={{color:'black',fontSize:17 ,fontWeight:'600'}}>{item.value}</Text>
                 </TouchableOpacity>
               )}
             />

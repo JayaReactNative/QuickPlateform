@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-
+  Platform,
   SafeAreaView,
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
@@ -21,14 +21,12 @@ export default function ReferAndEarn({navigation}) {
         <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
             <SafeAreaView style={{flex:1}}>    
             <View style={styles.appbarHeader}>
-            <TouchableOpacity
-                onPress={() => navigation.goBack()}
-                style={styles.backButton}>
-                <Image source={LeftArrow} style={styles.backButtonText} />
-            </TouchableOpacity>
-            <Text style={styles.headerTitle}>Earn by Refer</Text>
-            <View style={styles.backButton} />
-            </View>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Image source={LeftArrow} style={styles.backButtonText} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Refer & Earn</Text>
+          <View style={styles.backButton} />
+        </View>
 
             <Image source={RewardImg} style={styles.scanImage} />
             </SafeAreaView>
@@ -42,23 +40,24 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
     },
-    appbarHeader: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: 15,
-      paddingVertical: 15,
-    },
-    backButtonText: {
-      height: 20,
-      width: 20,
-      tintColor: Colors.White,
-    },
     headerTitle: {
       color: Colors.White,
       fontSize: 18,
       fontWeight: '600',
       textAlign: 'center',
+    },
+    appbarHeader: { 
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: 15,
+      paddingVertical: 15,
+      paddingTop:Platform.OS === "ios"?0: 45,
+    },
+    backButtonText: {
+      height: 20,
+      width: 20,
+      tintColor: Colors.White,
     },
     modalGrey: {
       width: '90%',

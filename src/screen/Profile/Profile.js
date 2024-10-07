@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, SafeAreaView, Alert, Linking } from 'react-native';
-import { CustomerReview, DownArrow, FaqImage, FaqQuestion, Logout, Privacy, ProfileIcon, ReferredImg, SupportImg, UpArrow } from '../../assets/Images';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, SafeAreaView, Alert, Linking ,Platform} from 'react-native';
+import { CustomerReview, DownArrow, FaqQuestion, Logout, Privacy, ProfileIcon, ReferredImg, SupportImg, UpArrow } from '../../assets/Images';
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../../assets/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -146,12 +146,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: 6,
-    paddingTop: 15,
+    paddingTop: Platform.OS === 'ios' ?15:25,
   },
   box: {
     borderRadius: 10,
     padding: 8,
-    marginTop: 4,
+    marginTop: Platform.OS === 'ios' ?4:15,
+    backgroundColor:Platform.OS === 'ios' ?'rgba(0, 0, 0, 0.2)':Colors.themegreen,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

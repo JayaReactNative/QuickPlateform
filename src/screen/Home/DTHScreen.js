@@ -171,7 +171,7 @@ const DTHScreen = ({navigation}) => {
         <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false} style={{ flexGrow: 1 }}>
           <View style={styles.contentContainer}>
             <View style={[styles.imageSliderContainer, { height: windowHeight * 0.35 }]}>
-              <ImageSlider topView={25} ImageWidth={'93%'} />
+              <ImageSlider topView={10} ImageWidth={'93%'} />
             </View>
 
             <Text style={styles.label}>DTH Number</Text>
@@ -347,12 +347,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textAlign: 'center',
   },
-  appbarHeader: {
+  appbarHeader: { 
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
     paddingVertical: 15,
+    paddingTop:Platform.OS === "ios"?0: 45,
   },
   scrollContent: {
     paddingHorizontal: 12,

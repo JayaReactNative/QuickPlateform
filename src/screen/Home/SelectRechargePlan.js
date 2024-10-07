@@ -9,7 +9,7 @@ import {
   SafeAreaView,
   Image,
   ScrollView,
-  Modal,
+  UIManager,
   LayoutAnimation,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -17,6 +17,7 @@ import { Colors } from '../../assets/Colors';
 import { LeftArrow } from '../../assets/Images';
 import BottomSheet from '@gorhom/bottom-sheet';
 import Server from '../../server/Server';
+
 
 if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -140,14 +141,13 @@ const SelectRechargePlan = ({ route, navigation }) => {
       colors={[Colors.themeColor, '#34AEA1']}
       style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}>
-            <Image source={LeftArrow} style={styles.backButtonImage} />
+       {/* Header */}
+       <View style={styles.appbarHeader}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Image source={LeftArrow} style={styles.backButtonText} />
           </TouchableOpacity>
-          <Text style={styles.headerText}>Select Recharge Plan</Text>
-          <View></View>
+          <Text style={styles.headerTitle}>Select Recharge Plan</Text>
+          <View style={styles.backButton} />
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollView}>
@@ -280,12 +280,25 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
-  header: {
-    paddingTop: 20,
-    paddingBottom: 15,
+  backButtonText: {
+    height: 20,
+    width: 20,
+    tintColor: Colors.White,
+  },
+  headerTitle: {
+    color: Colors.White,
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  appbarHeader: { 
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
+    paddingVertical: 15,
+    paddingTop:Platform.OS === "ios"?0: 45,
+    backgroundColor:Colors.themeColor
   },
   backButton: {
     marginLeft: 3,
@@ -378,11 +391,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: Colors.themeColor,
   },
-  planDetails: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '60%',
-  },
   planDetail: {
     fontSize: 14,
     color: Colors.themeColor,
@@ -439,51 +447,7 @@ const styles = StyleSheet.create({
     color: '#666',
     marginBottom: 5,
   },
-  //   ------ modal 1st
-  bottomSheetOneContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  bottomSheetContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    maxHeight: '60%',
-  },
-  searchBar: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    marginBottom: 10,
-    padding: 10,
-  },
-  operatorItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
-  dropdownImage: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
-  },
-  dropdownText: {
-    fontSize: 16,
-    color: '#000',
-  },
-  closeButtonOper: {
-    marginTop: 10,
-    padding: 10,
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  closeButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
+ 
 });
 
 export default SelectRechargePlan;

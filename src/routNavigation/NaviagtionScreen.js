@@ -41,6 +41,7 @@ const TabNavigation = () => {
   return (
     <Tab.Navigator 
       screenOptions={{
+        tabBarHideOnKeyboard: true,
         tabBarActiveTintColor: '#000',
         tabBarInactiveTintColor: '#ffff',
         tabBarLabelStyle: {
@@ -63,7 +64,8 @@ const TabNavigation = () => {
             style={{flex: 1,borderTopLeftRadius:25,borderTopRightRadius:25}}
           />
         ),
-      }}>
+      }}
+      >
       {/* Home Tab */}
       <Tab.Screen
         name="Home"

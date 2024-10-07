@@ -73,12 +73,11 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.White,
     },
     header: {
-        // backgroundColor: Colors.themeColor,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingHorizontal: 15,
-        paddingVertical: 15,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            paddingHorizontal: 15,
+            paddingVertical: 15,
     },
     backButton: {
         justifyContent: 'center',
@@ -94,8 +93,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: '600',
         textAlign: 'center',
-        flex: 1,
-    },
+      },
     scrollContainer: {
         flexGrow: 1,
         paddingHorizontal: 15,

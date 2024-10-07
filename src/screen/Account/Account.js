@@ -9,6 +9,9 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  KeyboardAvoidingView,
+  Dimensions,
+  Platform,
 } from 'react-native';
 import {Colors} from '../../assets/Colors';
 import LinearGradient from 'react-native-linear-gradient';
@@ -20,8 +23,9 @@ import DatePicker from 'react-native-date-picker';
 import Server from '../../server/Server';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import storage from '@react-native-firebase/storage';
-import {SelectList} from 'react-native-dropdown-select-list';
 import RelationPickerDialog from './RelationPickerDialog';
+
+const {width, height} = Dimensions.get('window');
 
 const Account = ({navigation}) => {
   const [bName, setBname] = useState('');
@@ -198,35 +202,35 @@ const Account = ({navigation}) => {
       console.error('Upload failed: ', e);
     }
   };
-  
+
   // ------ Submit Nominee Details -----
   const submitNomineeDetails = async () => {
-     try {
-       setLoading(true);
-       const Id = await AsyncStorage.getItem('authId');
-       const adharFrontImgUrl = await uploadImage(adharPath, 'aadhaarFront');
-       const panImgUrl = await uploadImage(panPath, 'panFornt');
- 
-       const data = {
-         userId: Id,
-         nomineeName: nominName,
-         nomineeRelation: relation,
-         aadhaarNumber: adharNo,
-         aadhaarFrontImg: adharFrontImgUrl,
-         aadhaarBackImg: panImgUrl,
-         panNumber: panNo,
-         dob: Dob,
-       };
-       const response = await Server.postNomineDetail(data);
-       Alert.alert(response.data.message);
-       setShowNomineBtn(true)
-     } catch (error) {
-       console.error('Error submitting nominee details:', error);
-     } finally {
-       setLoading(false);
-     }
-   };
- 
+    try {
+      setLoading(true);
+      const Id = await AsyncStorage.getItem('authId');
+      const adharFrontImgUrl = await uploadImage(adharPath, 'aadhaarFront');
+      const panImgUrl = await uploadImage(panPath, 'panFornt');
+
+      const data = {
+        userId: Id,
+        nomineeName: nominName,
+        nomineeRelation: relation,
+        aadhaarNumber: adharNo,
+        aadhaarFrontImg: adharFrontImgUrl,
+        aadhaarBackImg: panImgUrl,
+        panNumber: panNo,
+        dob: Dob,
+      };
+      const response = await Server.postNomineDetail(data);
+      Alert.alert(response.data.message);
+      setShowNomineBtn(true);
+    } catch (error) {
+      console.error('Error submitting nominee details:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getNomineDetail = async () => {
     try {
       setLoading(true);
@@ -272,13 +276,13 @@ const Account = ({navigation}) => {
         aadhaarFrontImg: adharFrontImgUrl,
         aadhaarBackImg: panImgUrl,
         panNumber: panKycNo,
-        whatYouDo:profession,
-        state:state,
-        city:'city'
+        whatYouDo: profession,
+        state: state,
+        city: 'city',
       };
       const response = await Server.postKycDetail(data);
       Alert.alert(response.data.message);
-      setShowSubmitBtn(true)
+      setShowSubmitBtn(true);
     } catch (error) {
       console.error('Error submitting nominee details:', error);
     } finally {
@@ -293,13 +297,13 @@ const Account = ({navigation}) => {
       const data = response.data?.items;
 
       if (data) {
-      setAdharKycNo(data?.aadhaarNumber);
+        setAdharKycNo(data?.aadhaarNumber);
         setPanKycNo(data?.panNumber);
         setAdharTwoPath(data?.aadhaarFrontImg);
         setImagePath(data?.aadhaarBackImg);
-        setState(data?.state)
-        setResidentAddress(data?.address)
-        setProfession(data?.whatYouDo)
+        setState(data?.state);
+        setResidentAddress(data?.address);
+        setProfession(data?.whatYouDo);
         const relation = operatorList.find(
           item => item.key === data?.nomineeRelation,
         );
@@ -310,7 +314,7 @@ const Account = ({navigation}) => {
         }
       }
     } catch (error) {
-      console.log('Error', error);
+      console.log('Error --123', error);
     } finally {
       setLoading(false);
     }
@@ -321,274 +325,352 @@ const Account = ({navigation}) => {
       colors={[Colors.themeColor, '#34AEA1']}
       style={styles.container}>
       <SafeAreaView>
-        <Cameramodal
-          visible={cameraModal}
-          showCamera={selectCamera}
-          showGallery={selectGallery}
-          onClose={() => setCameraModal(false)}
-        />
-        <View style={styles.appbarHeader}>
-          <Text style={styles.headingtTEXT}>Account</Text>
-        </View>
-
-        <ScrollView
-          style={{flexGrow: 1, marginBottom: 140}}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.mainContain}>
-            <Text style={styles.headingtTEXT}>Manage Bank</Text>
-
-            <View style={styles.cardFill}>
-              <Text style={styles.titleHead}>Fill all the fields</Text>
-              <View style={styles.rowStyle}>
-                <TextInput
-                  placeholder="Bank Name"
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={bName}
-                  onChangeText={text => setBname(text)}
-                />
-
-                <TextInput
-                  placeholder="Account Number"
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={account}
-                  maxLength={16}
-                  onChangeText={text => setAccount(text)}
-                />
-              </View>
-
-              <View style={styles.rowStyle}>
-                <TextInput
-                  placeholder="Enter IFSC Code"
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  maxLength={11}
-                  value={ifscCode}
-                  onChangeText={text => setIFSC(text)}
-                />
-                <TextInput
-                  placeholder="Holder Name"
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={holderName}
-                  onChangeText={text => setHolderName(text)}
-                />
-              </View>
-
-              <View style={styles.rowStyle}>
-                <TouchableOpacity
-                  onPress={() => {
-                    updateBtn ? updateAccountDetail() : bankDetail();
-                  }}
-                  style={{width: '48%'}}>
-                  <LinearGradient
-                    colors={['#0C6B72', '#34AEA1']}
-                    style={[styles.closeButtonOper]}>
-                    <Text style={styles.closeButtonText}>
-                      {updateBtn ? 'Edit' : 'Save'}
-                    </Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{width: '48%'}}
-                  onPress={() => navigation.navigate('AccountHistory')}>
-                  <LinearGradient
-                    colors={['#0C6B72', '#34AEA1']}
-                    style={[styles.closeButtonOper]}>
-                    <Text style={styles.closeButtonText}>Account Details</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            <Text style={styles.headingtTEXT}>Add Nomine</Text>
-
-            <View style={styles.cardFill}>
-              <Text style={styles.titleHead}>Fill all the fields</Text>
-              <View style={styles.rowStyle}>
-                <TextInput
-                  placeholder="Enter Nominee Name"
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={nominName}
-                  onChangeText={text => setNominName(text)}
-                />
-                <TouchableOpacity
-                  style={[styles.borderStyle, styles.rowStyle, {marginTop: 0}]}
-                  onPress={() => setOpen(true)}>
-                  <Text
-                    numberOfLines={1}
-                    style={[styles.dateText, {width: '80%'}]}>
-                    {Dob}
-                  </Text>
-                  <Image
-                    source={BirthCalender}
-                    style={{height: 18.5, width: 18.5, resizeMode: 'contain'}}
-                  />
-                </TouchableOpacity>
-
-                <DatePicker
-                  modal
-                  open={open}
-                  date={
-                    Dob === 'Select Date of Birth' ? new Date() : new Date(Dob)
-                  }
-                  mode="date"
-                  maximumDate={new Date()}
-                  minimumDate={new Date('1900-01-01')}
-                  onConfirm={onDateChange}
-                  onCancel={() => setOpen(false)}
-                />
-              </View>
-
-              <View style={styles.rowStyle}>
-                <TextInput
-                  placeholder="Enter Aadhar no."
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={adharNo}
-                  onChangeText={text => setAdharNo(text)}
-                />
-                <TextInput
-                  placeholder="Enter Pan No."
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={panNo}
-                  onChangeText={text => setPanNo(text)}
-                />
-              </View>
-
-              <View style={styles.rowStyle}>
-                <TouchableOpacity
-                  style={{borderRadius: 15, alignItems: 'center', padding: 3}}
-                  onPress={() => {
-                    setCameraModal(true);
-                    selectCamera('adhar');
-                    selectGallery('adhar');
-                  }}>
-                  <Image
-                    source={adharPath ? {uri: adharPath} : NoImage}
-                    style={styles.imgStyle}></Image>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  onPress={() => {
-                    setCameraModal(true);
-                    selectCamera('pan');
-                    selectGallery('pan');
-                  }}>
-                  <Image
-                    source={panPath ? {uri: panPath} : NoImage}
-                    style={styles.imgStyle}></Image>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.rowStyle}>
-              <RelationPickerDialog
-                  data={operatorList}
-                  selected={relation}
-                  setSelected={setSelecteRealtion}
-                />
-             {showNomineeBtn && <TouchableOpacity
-                onPress={() => submitNomineeDetails()}>
-                <LinearGradient
-                  colors={['#0C6B72', '#34AEA1']}
-                  style={[styles.closeButtonOper, {width: 150, marginTop: 2}]}>
-                  <Text style={styles.closeButtonText}>Add Nominee</Text>
-                </LinearGradient>
-              </TouchableOpacity> }          
-            </View>
-            </View>
-
-            
-
-            <Text style={styles.headingtTEXT}>EKYC</Text>
-
-            <View style={styles.cardFill}>
-              <Text style={styles.titleHead}>Fill all the fields</Text>
-              <View style={styles.rowStyle}>
-                <TextInput
-                  placeholder="Enter Aadhar no."
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={adharKycNo}
-                  onChangeText={txt => setAdharKycNo(txt)}
-                />
-                <TextInput
-                  placeholder="Enter Pan no."
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={panKycNo}
-                  onChangeText={txt => setPanKycNo(txt)}
-                />
-              </View>
-
-              <View style={styles.rowStyle}>
-                <TextInput
-                  placeholder="Enter State Name"
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={state}
-                  onChangeText={txt => setState(txt)}
-                />
-                <TextInput
-                  placeholder="Residential Address"
-                  placeholderTextColor={Colors.HolderColor}
-                  style={styles.borderStyle}
-                  value={residentAddress}
-                  onChangeText={txt => setResidentAddress(txt)}
-                />
-              </View>
-
-              <View style={styles.rowStyle}>
-                <TouchableOpacity
-                  style={{borderRadius: 15, alignItems: 'center', padding: 3}}
-                  onPress={() => {
-                    setCameraModal(true);
-                    selectCamera('adharTwo');
-                    selectGallery('adharTwo');
-                  }}>
-                  <Image
-                    source={adharTwoPath ? {uri: adharTwoPath} : NoImage}
-                    style={styles.imgStyle}></Image>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
-                    setCameraModal(true);
-                    selectCamera('image');
-                    selectGallery('image');
-                  }}>
-                  <Image
-                    source={imagePath ? {uri: imagePath} : NoImage}
-                    style={styles.imgStyle}></Image>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.rowStyle}>
-                <TextInput
-                  placeholder="What you do"
-                  placeholderTextColor={Colors.HolderColor}
-                  style={[
-                    styles.borderStyle,
-                    {paddingVertical: 10, marginTop: 13, width: '49%'},
-                  ]}
-                  value={profession}
-                  onChangeText={txt => setProfession(txt)}
-                />
-
-{showSubmitBtn && <TouchableOpacity
-                onPress={() => submitKycDetails()}>
-                <LinearGradient
-                  colors={['#0C6B72', '#34AEA1']}
-                  style={[styles.closeButtonOper, {width: 150, marginTop: 14}]}>
-                  <Text style={styles.closeButtonText}>Submit KYC</Text>
-                </LinearGradient>
-                </TouchableOpacity>}
-              </View>
-            </View>
+        <KeyboardAvoidingView
+          // style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 100}>
+          <Cameramodal
+            visible={cameraModal}
+            showCamera={selectCamera}
+            showGallery={selectGallery}
+            onClose={() => setCameraModal(false)}
+          />
+          {/* Header */}
+          <View style={styles.appbarHeader}>
+            <TouchableOpacity
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}>
+              {/* <Image source={LeftArrow} style={styles.backButtonText} /> */}
+            </TouchableOpacity>
+            <Text style={styles.headerTitle}>Account</Text>
+            <View style={styles.backButton} />
           </View>
-        </ScrollView>
+
+          <ScrollView
+            style={{
+              flexGrow: 1,
+              marginBottom: Platform.OS == 'ios' ? 140 : height * 0.1,
+            }}
+            showsVerticalScrollIndicator={false}>
+            <View style={styles.mainContain}>
+              <Text style={styles.headingtTEXT}>Manage Bank</Text>
+
+              <View style={styles.cardFill}>
+                <Text style={styles.titleHead}>Fill all the fields</Text>
+                <View style={styles.rowStyle}>
+                  <TextInput
+                    placeholder="Bank Name"
+                    placeholderTextColor={Colors.HolderColor}
+                    style={styles.borderStyle}
+                    value={bName}
+                    onChangeText={text => setBname(text)}
+                  />
+
+                  <TextInput
+                    placeholder="Account Number"
+                    placeholderTextColor={Colors.HolderColor}
+                    style={styles.borderStyle}
+                    value={account}
+                    maxLength={16}
+                    onChangeText={text => setAccount(text)}
+                  />
+                </View>
+
+                <View style={styles.rowStyle}>
+                  <TextInput
+                    placeholder="Enter IFSC Code"
+                    placeholderTextColor={Colors.HolderColor}
+                    style={styles.borderStyle}
+                    maxLength={11}
+                    value={ifscCode}
+                    onChangeText={text => setIFSC(text)}
+                  />
+                  <TextInput
+                    placeholder="Holder Name"
+                    placeholderTextColor={Colors.HolderColor}
+                    style={styles.borderStyle}
+                    value={holderName}
+                    onChangeText={text => setHolderName(text)}
+                  />
+                </View>
+
+                <View style={styles.rowStyle}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      updateBtn ? updateAccountDetail() : bankDetail();
+                    }}
+                    style={{width: '48%'}}>
+                    <LinearGradient
+                      colors={['#0C6B72', '#34AEA1']}
+                      style={[styles.closeButtonOper]}>
+                      <Text style={styles.closeButtonText}>
+                        {updateBtn ? 'Edit' : 'Save'}
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={{width: '48%'}}
+                    onPress={() => navigation.navigate('AccountHistory')}>
+                    <LinearGradient
+                      colors={['#0C6B72', '#34AEA1']}
+                      style={[styles.closeButtonOper]}>
+                      <Text style={styles.closeButtonText}>
+                        Account Details
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              <Text style={styles.headingtTEXT}>Add Nomine</Text>
+
+              <View style={styles.cardFill}>
+                <Text style={styles.titleHead}>Fill all the fields</Text>
+                <View style={styles.rowStyle}>
+                  <TextInput
+                    placeholder="Enter Nominee Name"
+                    placeholderTextColor={Colors.HolderColor}
+                    style={styles.borderStyle}
+                    value={nominName}
+                    onChangeText={text => setNominName(text)}
+                  />
+                  <TouchableOpacity
+                    style={[
+                      styles.borderStyle,
+                      styles.rowStyle,
+                      {marginTop: 0},
+                    ]}
+                    onPress={() => setOpen(true)}>
+                    <Text
+                      numberOfLines={1}
+                      style={[styles.dateText, {width: '80%'}]}>
+                      {Dob}
+                    </Text>
+                    <Image
+                      source={BirthCalender}
+                      style={{height: 18.5, width: 18.5, resizeMode: 'contain'}}
+                    />
+                  </TouchableOpacity>
+
+                  <DatePicker
+                    modal
+                    open={open}
+                    date={
+                      Dob === 'Select Date of Birth'
+                        ? new Date()
+                        : new Date(Dob)
+                    }
+                    mode="date"
+                    maximumDate={new Date()}
+                    minimumDate={new Date('1900-01-01')}
+                    onConfirm={onDateChange}
+                    onCancel={() => setOpen(false)}
+                  />
+                </View>
+
+                <View style={styles.rowStyle}>
+                  <TextInput
+                    placeholder="Enter Aadhar no."
+                    placeholderTextColor={Colors.HolderColor}
+                    style={styles.borderStyle}
+                    value={adharNo}
+                    onChangeText={text => setAdharNo(text)}
+                  />
+                  <TextInput
+                    placeholder="Enter Pan No."
+                    placeholderTextColor={Colors.HolderColor}
+                    style={styles.borderStyle}
+                    value={panNo}
+                    onChangeText={text => setPanNo(text)}
+                  />
+                </View>
+
+                <View style={[styles.rowStyle, {width: '96%'}]}>
+                  <TouchableOpacity
+                    style={{borderRadius: 15, alignItems: 'center'}}
+                    onPress={() => {
+                      setCameraModal(true);
+                      selectCamera('adhar');
+                      selectGallery('adhar');
+                    }}>
+                    <Image
+                      source={adharPath ? {uri: adharPath} : NoImage}
+                      style={styles.imgStyle}></Image>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      setCameraModal(true);
+                      selectCamera('pan');
+                      selectGallery('pan');
+                    }}>
+                    <Image
+                      source={panPath ? {uri: panPath} : NoImage}
+                      style={styles.imgStyle}></Image>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.rowStyle}>
+                  <RelationPickerDialog
+                    data={operatorList}
+                    selected={relation}
+                    setSelected={setSelecteRealtion}
+                  />
+                  {showNomineeBtn && (
+                    <TouchableOpacity onPress={() => submitNomineeDetails()}>
+                      <LinearGradient
+                        colors={['#0C6B72', '#34AEA1']}
+                        style={[
+                          styles.closeButtonOper,
+                          {width: 150, marginTop: 2},
+                        ]}>
+                        <Text style={styles.closeButtonText}>Add Nomine</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+
+              <Text style={styles.headingtTEXT}>EKYC</Text>
+
+              <View
+                style={[
+                  styles.cardFill,
+                  {
+                    marginBottom:
+                      Platform.OS == 'ios' ? height * 0.5 : height * 0.25,
+                  },
+                ]}>
+                <Text style={styles.titleHead}>Fill all the fields</Text>
+                <View style={styles.rowStyle}>
+                  {showSubmitBtn ? (
+                    <TextInput
+                      placeholder="Enter Aadhar no."
+                      placeholderTextColor={Colors.HolderColor}
+                      style={styles.borderStyle}
+                      value={adharKycNo}
+                      onChangeText={txt => setAdharKycNo(txt)}
+                    />
+                  ) : (
+                    <Text style={styles.borderStyle}>{adharKycNo}</Text>
+                  )}
+                  {showSubmitBtn ? (
+                    <TextInput
+                      placeholder="Enter Pan no."
+                      placeholderTextColor={Colors.HolderColor}
+                      style={styles.borderStyle}
+                      value={panKycNo}
+                      onChangeText={txt => setPanKycNo(txt)}
+                    />
+                  ) : (
+                    <Text style={styles.borderStyle}>{panKycNo}</Text>
+                  )}
+                </View>
+
+                <View style={styles.rowStyle}>
+                {showSubmitBtn ? (<TextInput
+                    placeholder="Enter State Name"
+                    placeholderTextColor={Colors.HolderColor}
+                    style={styles.borderStyle}
+                    value={state}
+                    onChangeText={txt => setState(txt)}
+                  />)
+                  :( <Text style={styles.borderStyle}>{panKycNo}</Text>)}
+                  <TextInput
+                    placeholder="Residential Address"
+                    placeholderTextColor={Colors.HolderColor}
+                    style={styles.borderStyle}
+                    value={residentAddress}
+                    onChangeText={txt => setResidentAddress(txt)}
+                  />
+                </View>
+
+                <View style={[styles.rowStyle, {width: '95%'}]}>
+                  {showSubmitBtn ? (
+                    <TouchableOpacity
+                      style={{borderRadius: 15, alignItems: 'center'}}
+                      onPress={() => {
+                        setCameraModal(true);
+                        selectCamera('adharTwo');
+                        selectGallery('adharTwo');
+                      }}>
+                      <Image
+                        source={adharTwoPath ? {uri: adharTwoPath} : NoImage}
+                        style={styles.imgStyle}></Image>
+                    </TouchableOpacity>
+                  ) : (
+                    <View
+                      style={{borderRadius: 15, alignItems: 'center'}}
+                      onPress={() => {
+                        setCameraModal(true);
+                        selectCamera('adharTwo');
+                        selectGallery('adharTwo');
+                      }}>
+                      <Image
+                        source={adharTwoPath ? {uri: adharTwoPath} : NoImage}
+                        style={styles.imgStyle}></Image>
+                    </View>
+                  )}
+
+                  {showSubmitBtn ? (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setCameraModal(true);
+                        selectCamera('image');
+                        selectGallery('image');
+                      }}>
+                      <Image
+                        source={imagePath ? {uri: imagePath} : NoImage}
+                        style={styles.imgStyle}></Image>
+                    </TouchableOpacity>
+                  ) : (
+                    <View>
+                      <Image
+                        source={imagePath ? {uri: imagePath} : NoImage}
+                        style={styles.imgStyle}></Image>
+                    </View>
+                  )}
+                </View>
+
+                <View style={styles.rowStyle}>
+                  {showSubmitBtn ? (
+                    <TextInput
+                      placeholder="What you do"
+                      placeholderTextColor={Colors.HolderColor}
+                      style={[
+                        styles.borderStyle,
+                        {paddingVertical: 10, marginTop: 13, width: '49%'},
+                      ]}
+                      value={profession}
+                      onChangeText={txt => setProfession(txt)}
+                    />
+                  ) : (
+                    <Text
+                      style={[
+                        styles.borderStyle,
+                        {paddingVertical: 10, marginTop: 13, width: '49%'},
+                      ]}>
+                      {profession}
+                    </Text>
+                  )}
+
+                  {showSubmitBtn && (
+                    <TouchableOpacity onPress={() => submitKycDetails()}>
+                      <LinearGradient
+                        colors={['#0C6B72', '#34AEA1']}
+                        style={[
+                          styles.closeButtonOper,
+                          {width: 150, marginTop: 14},
+                        ]}>
+                        <Text style={styles.closeButtonText}>Submit KYC</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                  )}
+                </View>
+              </View>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -604,6 +686,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 15,
     paddingVertical: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: Platform.OS === 'ios' ? 0 : 45,
+    // backgroundColor:Colors.themeColor
+  },
+  headerTitle: {
+    color: Colors.White,
+    fontSize: 18,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   headingtTEXT: {
     color: Colors.White,
@@ -613,7 +706,7 @@ const styles = StyleSheet.create({
   },
   mainContain: {alignSelf: 'flex-start', paddingHorizontal: 15},
   cardFill: {
-    width: 350,
+    width: Platform.OS == 'ios' ? width * 0.9 : width * 0.93,
     backgroundColor: Colors.SkyBlue,
     borderRadius: 10,
     padding: 10,
@@ -655,7 +748,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
-  imgStyle: {width: 157, height: 140, resizeMode: 'cover', borderRadius: 15},
+  imgStyle: {width: 163, height: 140, resizeMode: 'cover', borderRadius: 15},
   bottomSheetContent: {
     width: 150,
     backgroundColor: '#fff',

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "619899970834",
+    "project_id": "quickly-investment-app-d1fa5",
+    "storage_bucket": "quickly-investment-app-d1fa5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:619899970834:android:1dd38f70a7868d0bd03fcb",
+        "android_client_info": {
+          "package_name": "com.quickplateform"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAESYcdJ5JW719TIbY5_jsjGqvrFuIlgmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -9,6 +9,7 @@ import {
   FlatList,
   StatusBar,
   Animated,
+  Platform
 } from 'react-native';
 import { Colors } from '../../assets/Colors';
 import { LeftArrow } from '../../assets/Images';
@@ -45,7 +46,8 @@ const CapitalWithdrawal = ({ navigation }) => {
   }, [selectedItem]);
 
   const handleItemPress = (item) => {
-    setSelectedItem(item); // Update the selected item state
+    console.log('item.id---', item._id),
+    setSelectedItem(item); 
   };
 
   const handleSubmit = () => {
@@ -68,6 +70,8 @@ const CapitalWithdrawal = ({ navigation }) => {
         ).getTime();
         return dateB - dateA;
       });
+      console.log('sortedData--',sortedData);
+      
       setInvestmentData(sortedData);
     } catch (error) {
       console.log('Error', 'An error occurred fetching data ');
@@ -75,16 +79,14 @@ const CapitalWithdrawal = ({ navigation }) => {
   };
 
 
-  const renderItem = ({ item }) => {
-    console.log('item.id---', item.id);
-  
+  const renderItem = ({ item }) => { 
     return (
       <TouchableOpacity onPress={() => handleItemPress(item)}>
         <Animated.View
           style={[
             styles.card,
-            selectedItem?.id === item.id && {
-              backgroundColor: Colors.SkyBlue,  // Changes background on selection
+            selectedItem?._id === item._id && {
+              backgroundColor: Colors.SkyBlue, 
             },
           ]}
         >
@@ -138,16 +140,15 @@ const CapitalWithdrawal = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={Colors.themeColor} />
-      {/* Header */}
-      <View style={styles.appbarHeader}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Image source={LeftArrow} style={styles.backButtonText} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Capital Withdrawal Request</Text>
-      </View>
+
+    {/* Header */}
+    <View style={styles.appbarHeader}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Image source={LeftArrow} style={styles.backButtonText} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Capital Withdrawl Request</Text>
+          <View style={styles.backButton} />
+        </View>
 
       {
   (investmentData && investmentData.length > 0) 
@@ -189,6 +190,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 15,
     paddingVertical: 15,
+    paddingTop:Platform.OS === "ios"?0: 45,
   },
   backButton: {
     justifyContent: 'center',
@@ -227,13 +229,13 @@ const styles = StyleSheet.create({
   },
   cardLabel: {
     fontSize: 15,
-    color: Colors.textColor,
+    color: Colors.Black,
     fontWeight: '600',
   },
   cardValue: {
     fontSize: 15,
     fontWeight: '400',
-    color: Colors.textColor,
+    color: Colors.Black,
   },
   listContainer: {
     paddingTop: 23,
