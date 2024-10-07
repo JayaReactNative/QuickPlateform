@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, SafeAreaView, Alert, Linking } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, SafeAreaView, Alert, Linking, ActivityIndicator } from 'react-native';
 import { CustomerReview, DownArrow, FaqImage, FaqQuestion, Logout, Privacy, ProfileIcon, ReferredImg, SupportImg, UpArrow } from '../../assets/Images';
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../../assets/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Server from '../../server/Server';
 
-
 const Profile = ({ navigation }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [user, setUser] = useState(null);
   const [mobileNumber, setMobileNumber] = useState('');
   const [loading, setLoading] = useState(false);
-
 
   useEffect(() => {
     getDetail();
@@ -50,7 +48,6 @@ const Profile = ({ navigation }) => {
     }
   };
   
-
   const toggleExpand = () => setIsExpanded(prevState => !prevState);
 
   if (!user) {
@@ -77,9 +74,6 @@ const Profile = ({ navigation }) => {
     );
   };
  
-   
-
-
   return (
     <LinearGradient colors={['#0C6B72', '#34AEA1']} style={styles.container}>
       <SafeAreaView>
@@ -218,6 +212,5 @@ const styles = StyleSheet.create({
     tintColor: '#fff'
   },
 });
-
 
 export default Profile;
